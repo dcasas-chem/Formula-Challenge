@@ -26,7 +26,7 @@
             background: linear-gradient(to bottom right, var(--grad-from), var(--grad-to));
             transition: background 0.5s ease-in-out;
         }
-        .main-card { min-height: 350px; }
+        .main-card { min-height: 300px; }
         #question sub { font-size: 0.6em; vertical-align: sub; }
         .feedback-text sub { font-size: 0.8em; }
         .type-radio:checked + label, .mode-radio:checked + label {
@@ -38,53 +38,58 @@
         .themed-focus-ring:focus{ --tw-ring-color: var(--focus-ring) !important; }
     </style>
 </head>
-<body class="theme-inorganic flex items-start sm:items-center justify-center min-h-screen p-4 pt-8 sm:p-4">
+<body class="theme-inorganic flex items-start sm:items-center justify-center min-h-screen p-4 pt-6 sm:p-4">
 
-    <div class="w-full max-w-3xl bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 transition-all duration-500">
+    <div class="w-full max-w-3xl bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-4 sm:p-6 transition-all duration-500">
 
         <div id="setup-view">
-            <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 text-center bg-gradient-to-r" style="background-image: linear-gradient(to right, var(--grad-from), var(--grad-to)); -webkit-background-clip: text; color: transparent;">Formula Challenge</h1>
-            <p class="text-slate-600 mb-8 text-center">Selecciona las opciones para empezar a practicar.</p>
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-1 text-center bg-gradient-to-r" style="background-image: linear-gradient(to right, var(--grad-from), var(--grad-to)); -webkit-background-clip: text; color: transparent;">Formula Challenge</h1>
+            <p class="text-slate-600 mb-6 text-center">Selecciona las opciones para empezar a practicar.</p>
             
-            <div class="space-y-8">
+            <div class="space-y-6">
                 <!-- 1. Selector de Tipo de Formulación -->
                 <div>
-                    <h2 class="text-lg font-semibold text-slate-700 mb-3 text-center">1. Elige la formulación</h2>
-                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <h2 class="text-base font-semibold text-slate-700 mb-2 text-center">1. Elige la formulación</h2>
+                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <input type="radio" name="type" value="inorganic" id="type_inorganic" class="hidden type-radio" checked>
-                        <label for="type_inorganic" class="text-center p-4 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-blue-400 transition-all duration-300">
+                        <label for="type_inorganic" class="text-center p-3 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-blue-400 transition-all duration-300">
                             <span class="text-slate-800 font-semibold">Inorgánica</span>
                         </label>
                         <input type="radio" name="type" value="organic" id="type_organic" class="hidden type-radio">
-                        <label for="type_organic" class="text-center p-4 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-green-400 transition-all duration-300">
+                        <label for="type_organic" class="text-center p-3 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-green-400 transition-all duration-300">
                            <span class="text-slate-800 font-semibold">Orgánica</span>
                         </label>
                     </div>
                 </div>
 
                 <!-- 2 & 3. Modo y Categoría -->
-                <div id="secondary-setup" class="space-y-8">
+                <div id="secondary-setup" class="space-y-6">
                     <div>
-                        <h2 class="text-lg font-semibold text-slate-700 mb-3 text-center">2. Elige el modo de práctica</h2>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <h2 class="text-base font-semibold text-slate-700 mb-2 text-center">2. Elige el modo de práctica</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <input type="radio" name="mode" value="name_formula" id="mode_name" class="hidden mode-radio" checked>
-                            <label for="mode_name" class="text-center p-4 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
+                            <label for="mode_name" class="text-center p-3 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
                                 <span class="text-slate-800 font-semibold">Nombrar la fórmula</span>
                             </label>
                             <input type="radio" name="mode" value="write_formula" id="mode_write" class="hidden mode-radio">
-                            <label for="mode_write" class="text-center p-4 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
+                            <label for="mode_write" class="text-center p-3 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
                                 <span class="text-slate-800 font-semibold">Formular el nombre</span>
                             </label>
                         </div>
                     </div>
                     <div>
-                        <h2 class="text-lg font-semibold text-slate-700 mb-3 text-center">3. Elige la categoría</h2>
+                        <h2 class="text-base font-semibold text-slate-700 mb-2 text-center">3. Elige la categoría</h2>
                         <select id="category" class="w-full p-3 border-2 border-slate-300 rounded-lg focus:ring-2 themed-focus-ring focus:border-transparent transition-all text-slate-800 font-medium"></select>
                     </div>
                 </div>
             </div>
 
-            <div id="total-score" class="text-center text-amber-500 font-bold mt-8 text-lg bg-amber-500/10 p-3 rounded-lg"></div>
+            <div class="mt-6 flex items-center justify-center gap-2">
+                <div id="total-score" class="text-center text-amber-500 font-bold text-base bg-amber-500/10 p-3 rounded-lg flex-grow"></div>
+                <button id="reset-score-btn" class="p-3 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors" title="Reiniciar puntuación total">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                </button>
+            </div>
 
             <button id="start-btn" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 themed-focus-ring mt-4 shadow-lg" style="background-image: linear-gradient(to right, var(--grad-from), var(--grad-to));">
                 Comenzar a Practicar
@@ -94,32 +99,32 @@
         <div id="quiz-view" class="hidden">
              <div class="flex justify-between items-start mb-4">
                 <div>
-                    <h1 id="quiz-title" class="text-2xl sm:text-3xl font-bold text-slate-800"></h1>
+                    <h1 id="quiz-title" class="text-xl sm:text-2xl font-bold text-slate-800"></h1>
                     <p id="quiz-subtitle" class="text-slate-500 mt-1"></p>
                 </div>
                 <button id="back-to-setup" class="text-sm bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-300 transition-colors">Cambiar</button>
             </div>
             
-            <div class="bg-gradient-to-br from-slate-100 to-slate-200 border border-slate-200 rounded-lg p-6 text-center main-card flex flex-col justify-center shadow-inner">
+            <div class="bg-gradient-to-br from-slate-100 to-slate-200 border border-slate-200 rounded-lg p-4 text-center main-card flex flex-col justify-center shadow-inner">
                 <p id="question-label" class="text-sm font-medium themed-text mb-2 tracking-widest"></p>
-                <div id="question" class="text-3xl sm:text-4xl font-extrabold text-slate-900 break-words tracking-tight flex items-center justify-center flex-wrap"></div>
+                <div id="question" class="text-2xl sm:text-3xl font-extrabold text-slate-900 break-words tracking-tight flex items-center justify-center flex-wrap"></div>
             </div>
 
-            <div class="mt-6">
-                <input type="text" id="answer" placeholder="Escribe tu respuesta aquí..." class="w-full p-4 border-2 border-slate-300 rounded-lg text-lg focus:ring-2 themed-focus-ring focus:border-transparent transition-all" autocomplete="off" spellcheck="false">
-                <div id="feedback" class="mt-3 min-h-[52px] text-center text-slate-600"></div>
-                <button id="check-btn" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-4 themed-focus-ring mt-3 shadow-lg" style="background-image: linear-gradient(to right, var(--grad-from), var(--grad-to));">
+            <div class="mt-4">
+                <input type="text" id="answer" placeholder="Escribe tu respuesta aquí..." class="w-full p-3 border-2 border-slate-300 rounded-lg text-base focus:ring-2 themed-focus-ring focus:border-transparent transition-all" autocomplete="off" spellcheck="false">
+                <div id="feedback" class="mt-2 min-h-[48px] text-center text-slate-600"></div>
+                <button id="check-btn" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-4 themed-focus-ring mt-2 shadow-lg" style="background-image: linear-gradient(to right, var(--grad-from), var(--grad-to));">
                     Comprobar
                 </button>
             </div>
             
-            <div id="score" class="text-center mt-4 font-semibold text-slate-600"></div>
+            <div id="score" class="text-center mt-3 font-semibold text-slate-600"></div>
         </div>
         
         <div id="final-score-view" class="hidden text-center">
-            <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 bg-gradient-to-r" style="background-image: linear-gradient(to right, var(--grad-from), var(--grad-to)); -webkit-background-clip: text; color: transparent;">¡Prueba finalizada!</h1>
-            <p id="final-score-text" class="text-2xl text-slate-700 mb-2"></p>
-            <p id="final-message" class="text-lg text-slate-500 mb-8"></p>
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-4 bg-gradient-to-r" style="background-image: linear-gradient(to right, var(--grad-from), var(--grad-to)); -webkit-background-clip: text; color: transparent;">¡Prueba finalizada!</h1>
+            <p id="final-score-text" class="text-xl text-slate-700 mb-2"></p>
+            <p id="final-message" class="text-base text-slate-500 mb-6"></p>
             <button id="restart-btn" class="w-full max-w-xs mx-auto text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 themed-focus-ring mt-4 shadow-lg" style="background-image: linear-gradient(to right, var(--grad-from), var(--grad-to));">
                 Volver a empezar
             </button>
@@ -178,6 +183,7 @@
         const typeRadios = document.querySelectorAll('input[name="type"]');
         const questionEl = document.getElementById('question');
         const totalScoreEl = document.getElementById('total-score');
+        const resetScoreBtn = document.getElementById('reset-score-btn');
 
         let currentCompound = null;
         let quizSessionCompounds = [];
@@ -204,6 +210,12 @@
             localStorage.setItem('totalPlayed', totalPlayed);
         };
 
+        const resetTotalScore = () => {
+            localStorage.removeItem('totalCorrect');
+            localStorage.removeItem('totalPlayed');
+            loadTotalScore();
+        };
+
         const populateCategories = (type) => {
             const categories = type === 'inorganic' ? inorganicCategories : organicCategories;
             categorySelect.innerHTML = '';
@@ -222,13 +234,11 @@
 
         const normalizeText = (str) => {
             if (typeof str !== 'string') return '';
-            // Se mantiene la lógica de normalización que elimina espacios antes de paréntesis
             return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+\(/g, '(').replace(/\s*=\s*/g, "=").replace(/\s*≡\s*/g, "≡").replace(/\s*-\s*/g, "-").replace(/,/g, '');
         };
         
         const capitalize = (str) => {
             if (typeof str !== 'string' || str.length === 0) return '';
-            // Capitaliza solo la primera letra de toda la cadena
             return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
         };
         
@@ -238,16 +248,15 @@
             if (formula === 'C6H6' || formula === 'C10H8' || formula.startsWith('C6H5') || formula.startsWith('C6H4')) return benzeneSVG;
             if (type === 'inorganic' || !formula.includes('-') && !formula.includes('=')) return simpleRender(formula);
 
-            // Renderizado de orgánicas
             let finalHtml = '';
             const parts = formula.split(/(-|=)/);
             parts.forEach(part => {
                 if (part === '=') {
-                    finalHtml += '<span class="text-3xl font-bold mx-1">=</span>';
+                    finalHtml += '<span class="mx-1">=</span>';
                 } else if (part === '-') {
-                    finalHtml += '<span class="text-3xl font-light mx-1">-</span>';
+                    finalHtml += '<span class="mx-1">-</span>';
                 } else {
-                    finalHtml += `<span class="text-3xl">${simpleRender(part)}</span>`;
+                    finalHtml += `<span>${simpleRender(part)}</span>`;
                 }
             });
             return finalHtml;
@@ -265,7 +274,6 @@
             else if (currentType === 'inorganic' && currentCategory === 10) filteredCompounds = [...allCompounds];
             else filteredCompounds = allCompounds.filter(c => c.category === currentCategory);
             
-            // Lógica para no repetir preguntas
             let shuffled = [...filteredCompounds];
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -273,7 +281,6 @@
             }
             quizSessionCompounds = shuffled.slice(0, 10);
 
-            // Si no hay suficientes compuestos para 10 preguntas, el test será más corto
             if (quizSessionCompounds.length === 0) {
                  alert("No hay compuestos en esta categoría para empezar el test.");
                  return;
@@ -325,7 +332,6 @@
             let isCorrect = false;
             
             if (currentMode === 'name_formula') {
-                // La validación es insensible a mayúsculas/minúsculas para mejor UX.
                 const userNormalized = normalizeText(userAnswer);
                 isCorrect = currentCompound.names.some(name => normalizeText(name) === userNormalized);
             } else {
@@ -343,7 +349,6 @@
                 answerInput.classList.add('border-green-500');
             } else {
                 let correctAnswerHTML = currentMode === 'name_formula' 
-                    // Muestra la respuesta formateada correctamente (mayúscula inicial y sin espacio en paréntesis)
                     ? `<p class="text-sm feedback-text">Respuesta correcta: ${capitalize(currentCompound.names[0])}</p>`
                     : `<p class="text-sm feedback-text">Respuesta correcta: ${currentCompound.formula}</p>`;
                 feedbackEl.innerHTML = `<div class="flex items-center justify-center gap-2 text-red-600 font-bold"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg><span>Incorrecto.</span></div>${correctAnswerHTML}`;
@@ -386,6 +391,8 @@
             loadTotalScore();
         });
 
+        resetScoreBtn.addEventListener('click', resetTotalScore);
+
         typeRadios.forEach(radio => radio.addEventListener('change', (e) => {
             setTheme(e.target.value);
             populateCategories(e.target.value);
@@ -424,5 +431,4 @@
     </script>
 </body>
 </html>
-
 
