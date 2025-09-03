@@ -182,53 +182,89 @@
                 inorganicCompounds = [
                     // Cat 1: Hidruros
                     { formula: 'NaH', names: ['hidruro de sodio'], category: 1, explanation: 'El sodio (Na) tiene valencia +1 y el hidrógeno (H) -1.' },
+                    { formula: 'LiH', names: ['hidruro de litio'], category: 1 },
                     { formula: 'CaH2', names: ['hidruro de calcio'], category: 1, explanation: 'El calcio (Ca) tiene valencia +2, que se cruza como subíndice del hidrógeno.' },
+                    { formula: 'MgH2', names: ['hidruro de magnesio'], category: 1 },
                     { formula: 'FeH3', names: ['hidruro de hierro(iii)', 'trihidruro de hierro'], category: 1, hint: 'El hierro está actuando con su valencia más alta.', explanation: 'La valencia del hierro es +3.', incorrectName: 'hidruro de hierro(ii)' },
+                    { formula: 'CuH', names: ['hidruro de cobre(i)', 'monohidruro de cobre'], category: 1, incorrectName: 'hidruro de cobre(ii)'},
                     { formula: 'HCl', names: ['cloruro de hidrógeno', 'ácido clorhídrico'], category: 1, hint: 'Es un hidruro no metálico de la familia de los halógenos.'},
+                    { formula: 'H2S', names: ['sulfuro de hidrógeno', 'ácido sulfhídrico'], category: 1 },
                     { formula: 'NH3', names: ['amoniaco', 'trihidruro de nitrógeno'], category: 1, incorrectName: 'hidruro de nitrógeno(iii)'},
                     // Cat 2: Óxidos
                     { formula: 'Na2O', names: ['óxido de sodio'], category: 2 },
+                    { formula: 'Li2O', names: ['óxido de litio'], category: 2 },
+                    { formula: 'MgO', names: ['óxido de magnesio'], category: 2 },
                     { formula: 'Fe2O3', names: ['óxido de hierro(iii)', 'trióxido de dihierro'], category: 2, hint: 'El oxígeno tiene valencia -2.', explanation: 'Al cruzar las valencias, el 3 del hierro va al oxígeno y el 2 del oxígeno va al hierro.', incorrectName: 'óxido de hierro(ii)'},
+                    { formula: 'CuO', names: ['óxido de cobre(ii)'], category: 2, incorrectName: 'óxido de cobre(i)'},
                     { formula: 'SO3', names: ['trióxido de azufre', 'óxido de azufre(vi)'], category: 2, hint: 'Es un óxido de un no metal (anhídrido).', incorrectName: 'óxido de azufre(iv)'},
+                    { formula: 'N2O5', names: ['pentaóxido de dinitrógeno', 'óxido de nitrógeno(v)'], category: 2, incorrectName: 'trióxido de dinitrógeno' },
                     { formula: 'CO2', names: ['dióxido de carbono'], category: 2, incorrectName: 'monóxido de carbono'},
                     // Cat 3: Sales Binarias
                     { formula: 'NaCl', names: ['cloruro de sodio'], category: 3 },
+                    { formula: 'KBr', names: ['bromuro de potasio'], category: 3 },
+                    { formula: 'CaF2', names: ['fluoruro de calcio'], category: 3 },
                     { formula: 'FeCl3', names: ['cloruro de hierro(iii)', 'tricloruro de hierro'], category: 3, explanation: 'El cloro tiene valencia -1 y el hierro +3. Se cruzan las valencias.', incorrectName: 'cloruro de hierro(ii)' },
+                    { formula: 'CuS', names: ['sulfuro de cobre(ii)'], category: 3, incorrectName: 'sulfuro de cobre(i)'},
                     // Cat 5: Hidróxidos
                     { formula: 'NaOH', names: ['hidróxido de sodio'], category: 5 },
+                    { formula: 'LiOH', names: ['hidróxido de litio'], category: 5 },
+                    { formula: 'Mg(OH)2', names: ['hidróxido de magnesio'], category: 5 },
                     { formula: 'Fe(OH)3', names: ['hidróxido de hierro(iii)'], category: 5, hint: 'El grupo hidróxido (OH) tiene carga -1.', incorrectName: 'hidróxido de hierro(ii)' },
+                    { formula: 'Cu(OH)2', names: ['hidróxido de cobre(ii)'], category: 5, incorrectName: 'hidróxido de cobre(i)'},
                     // Cat 6: Oxoácidos
                     { formula: 'H2SO4', names: ['ácido sulfúrico'], category: 6, hint: 'Es el oxoácido del azufre con su valencia más alta (+6).', incorrectName: 'ácido sulfuroso' },
                     { formula: 'HNO3', names: ['ácido nítrico'], category: 6, incorrectName: 'ácido nitroso'},
+                    { formula: 'H2CO3', names: ['ácido carbónico'], category: 6 },
+                    { formula: 'H3PO4', names: ['ácido fosfórico'], category: 6, incorrectName: 'ácido fosforoso' },
+                    { formula: 'HClO4', names: ['ácido perclórico'], category: 6, hint: 'El cloro con su mayor valencia (+7).', incorrectName: 'ácido clórico' },
                     // Cat 7: Oxisales
                     { formula: 'Na2SO4', names: ['sulfato de sodio'], category: 7},
+                    { formula: 'Li2CO3', names: ['carbonato de litio'], category: 7 },
+                    { formula: 'Ca3(PO4)2', names: ['fosfato de calcio'], category: 7, incorrectName: 'fosfito de calcio' },
                     { formula: 'Fe2(SO4)3', names: ['sulfato de hierro(iii)'], category: 7, explanation: 'El anión sulfato (SO4) tiene carga -2, y el hierro (Fe) actúa con +3.', incorrectName: 'sulfato de hierro(ii)'},
                     { formula: 'KNO3', names: ['nitrato de potasio'], category: 7, explanation: 'El anión nitrato (NO3) tiene carga -1, y el potasio (K) tiene +1.', incorrectName: 'nitrito de potasio' },
+                    { formula: 'NaClO4', names: ['perclorato de sodio'], category: 7, incorrectName: 'clorato de sodio' },
                     // Cat 8: Sales Ácidas
                     { formula: 'NaHCO3', names: ['hidrogenocarbonato de sodio', 'bicarbonato de sodio'], category: 8, hint: 'También conocido comúnmente como bicarbonato.' },
-                    { formula: 'KHSO4', names: ['hidrogenosulfato de potasio'], category: 8}
+                    { formula: 'KHSO4', names: ['hidrogenosulfato de potasio'], category: 8},
+                    { formula: 'Ca(HCO3)2', names: ['hidrogenocarbonato de calcio'], category: 8 },
+                    { formula: 'NaH2PO4', names: ['dihidrogenofosfato de sodio'], category: 8 }
                 ];
             } else if (type === 'organic' && !organicCompounds) {
                 organicCompounds = [
                     // Cat 1: Hidrocarburos
+                    { formula: 'CH4', names: ['metano'], category: 1, incorrectName: 'etano'},
                     { formula: 'CH3-CH2-CH3', names: ['propano'], category: 1, incorrectName: 'butano' },
                     { formula: 'CH2=CH2', names: ['eteno'], category: 1, hint: 'El sufijo indica un doble enlace.', incorrectName: 'etino'},
+                    { formula: 'CH3-CH=CH2', names: ['propeno'], category: 1, incorrectName: 'propano'},
                     { formula: 'CH≡CH', names: ['etino'], category: 1, hint: 'El sufijo indica un triple enlace.', incorrectName: 'eteno'},
+                    { formula: 'CH3-C≡CH', names: ['propino'], category: 1, incorrectName: 'propeno'},
                     // Cat 2: Aromáticos y Derivados Halogenados
                     { formula: 'C6H6', names: ['benceno'], category: 2, incorrectName: 'ciclohexano' },
+                    { formula: 'C6H5-CH3', names: ['metilbenceno', 'tolueno'], category: 2, incorrectName: 'etilbenceno' },
                     { formula: 'CHCl3', names: ['triclorometano', 'cloroformo'], category: 2, incorrectName: 'diclorometano'},
+                    { formula: 'CH3-Cl', names: ['clorometano', 'cloruro de metilo'], category: 2 },
                     // Cat 3: Alcoholes y Éteres
+                    { formula: 'CH3-OH', names: ['metanol'], category: 3, incorrectName: 'etanol'},
                     { formula: 'CH3-CH2-OH', names: ['etanol'], category: 3, hint: 'La terminación -ol indica la presencia del grupo -OH.', incorrectName: 'propanol'},
                     { formula: 'CH3-O-CH3', names: ['metoximetano', 'dimetil éter'], category: 3, incorrectName: 'etoxietano'},
+                    { formula: 'CH3-CH2-O-CH2-CH3', names: ['etoxietano', 'dietil éter'], category: 3 },
                     // Cat 4: Aldehídos y Cetonas
+                    { formula: 'HCHO', names: ['metanal', 'formaldehído'], category: 4, incorrectName: 'etanal'},
                     { formula: 'CH3-CHO', names: ['etanal', 'acetaldehído'], category: 4, hint: 'El grupo -CHO al final de la cadena es característico.', incorrectName: 'propanal'},
                     { formula: 'CH3-CO-CH3', names: ['propanona', 'acetona'], category: 4, hint: 'El grupo C=O en un carbono secundario es característico.', incorrectName: 'butanona'},
+                    { formula: 'CH3-CH2-CO-CH3', names: ['butanona'], category: 4, incorrectName: 'pentan-2-ona'},
                     // Cat 5: Ácidos carboxílicos y Ésteres
+                    { formula: 'HCOOH', names: ['ácido metanoico', 'ácido fórmico'], category: 5, incorrectName: 'ácido etanoico' },
                     { formula: 'CH3-COOH', names: ['ácido etanoico', 'ácido acético'], category: 5, hint: 'El grupo -COOH es el grupo carboxilo.', incorrectName: 'ácido propanoico'},
+                    { formula: 'HCOO-CH3', names: ['metanoato de metilo'], category: 5 },
                     { formula: 'CH3-COO-CH3', names: ['etanoato de metilo'], category: 5, incorrectName: 'propanoato de metilo'},
                     // Cat 6: Aminas, Amidas y Nitroderivados
                     { formula: 'CH3-NH2', names: ['metanamina'], category: 6, incorrectName: 'etanamina'},
-                    { formula: 'CH3-CO-NH2', names: ['etanamida'], category: 6, incorrectName: 'propanamida'}
+                    { formula: 'CH3-CH2-NH2', names: ['etanamina'], category: 6 },
+                    { formula: 'HCO-NH2', names: ['metanamida'], category: 6 },
+                    { formula: 'CH3-CO-NH2', names: ['etanamida'], category: 6, incorrectName: 'propanamida'},
+                    { formula: 'CH3-NO2', names: ['nitrometano'], category: 6 }
                 ];
             }
         };
@@ -329,7 +365,14 @@
             let filteredCompounds;
             // Filtro especial para modo "Identificar el error"
             if (currentMode === 'find_error') {
-                 filteredCompounds = allCompounds.filter(c => c.incorrectName);
+                 let compoundsWithError = allCompounds.filter(c => c.incorrectName);
+                 if (currentCategory <= 10) { // Asumiendo que 10 es el máximo de inorgánica
+                    if (currentType === 'inorganic' && currentCategory === 4) compoundsWithError = compoundsWithError.filter(c => [1, 2, 3].includes(c.category));
+                    else if (currentType === 'inorganic' && currentCategory === 9) compoundsWithError = compoundsWithError.filter(c => [5, 6, 7, 8].includes(c.category));
+                    else if (currentType === 'inorganic' && currentCategory === 10) {} // No filter
+                    else compoundsWithError = compoundsWithError.filter(c => c.category === currentCategory);
+                 }
+                 filteredCompounds = compoundsWithError;
             } else {
                  if (currentType === 'inorganic' && currentCategory === 4) filteredCompounds = allCompounds.filter(c => [1, 2, 3].includes(c.category));
                 else if (currentType === 'inorganic' && currentCategory === 9) filteredCompounds = allCompounds.filter(c => [5, 6, 7, 8].includes(c.category));
@@ -508,12 +551,12 @@
             const container = document.getElementById('results-table-container');
             let tableHTML = `<table class="w-full text-sm"><thead><tr class="border-b"><th class="p-2 text-left">Pregunta</th><th class="p-2 text-left">Tu Respuesta</th><th class="p-2 text-left">Correcta</th></tr></thead><tbody>`;
             sessionResults.forEach(result => {
-                const mode = result.question.incorrectName ? 'find_error' : (document.querySelector('input[name="mode"]:checked').value); // Simplificación
+                const mode = result.question.incorrectName ? 'find_error' : (document.querySelector('input[name="mode"]:checked').value);
                 
                 let questionText = '';
                 if(mode === 'write_formula') questionText = capitalize(result.question.names[0]);
-                else if (mode === 'find_error') questionText = `${result.question.formula} (${result.question.incorrectName})`;
-                else questionText = result.question.formula;
+                else if (mode === 'find_error') questionText = `${renderFormula(result.question.formula)} <span class="text-red-500 font-medium">${capitalize(result.question.incorrectName)}</span>`;
+                else questionText = renderFormula(result.question.formula);
 
                 const correctAnswer = (mode === 'write_formula') ? result.question.formula : capitalize(result.question.names[0]);
                 const isCorrectClass = result.isCorrect ? 'text-green-600' : 'text-red-600';
