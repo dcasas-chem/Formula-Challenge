@@ -38,9 +38,9 @@
         .themed-focus-ring:focus{ --tw-ring-color: var(--focus-ring) !important; }
     </style>
 </head>
-<body class="theme-inorganic flex items-center justify-center min-h-screen p-4">
+<body class="theme-inorganic flex items-start sm:items-center justify-center min-h-screen p-4 pt-8 sm:p-4">
 
-    <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 transition-all duration-500">
+    <div class="w-full max-w-3xl bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 transition-all duration-500">
 
         <div id="setup-view">
             <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 text-center bg-gradient-to-r" style="background-image: linear-gradient(to right, var(--grad-from), var(--grad-to)); -webkit-background-clip: text; color: transparent;">Formula Challenge</h1>
@@ -130,52 +130,38 @@
         // --- DATOS ---
         const inorganicCategories = [ { value: 1, text: "1. Hidruros" }, { value: 2, text: "2. Óxidos" }, { value: 3, text: "3. Sales Binarias" }, { value: 4, text: "4. Compuestos Binarios (1-3)" }, { value: 5, text: "5. Hidróxidos" }, { value: 6, text: "6. Oxoácidos" }, { value: 7, text: "7. Oxisales" }, { value: 8, text: "8. Sales Ácidas" }, { value: 9, text: "9. Compuestos Terciarios y Cuaternarios (5-8)" }, { value: 10, text: "10. Todos los compuestos" } ];
         
-        // Categorías de orgánica (sin ramificados)
-        const organicCategories = [ 
-            { value: 1, text: "1. Hidrocarburos" }, 
-            { value: 2, text: "2. Aromáticos y Derivados Halogenados" },
-            { value: 3, text: "3. Alcoholes y Éteres" }, 
-            { value: 4, text: "4. Aldehídos y Cetonas" }, 
-            { value: 5, text: "5. Ácidos carboxílicos y Ésteres" }, 
-            { value: 6, text: "6. Aminas, Amidas y Nitroderivados" } 
+        const organicCategories = [ { value: 1, text: "1. Hidrocarburos" }, { value: 2, text: "2. Aromáticos y Derivados Halogenados" }, { value: 3, text: "3. Alcoholes y Éteres" }, { value: 4, text: "4. Aldehídos y Cetonas" }, { value: 5, text: "5. Ácidos carboxílicos y Ésteres" }, { value: 6, text: "6. Aminas, Amidas y Nitroderivados" } ];
+        
+        const inorganicCompounds = [
+            // Cat 1: Hidruros
+            { formula: 'NaH', names: ['hidruro de sodio'], category: 1 }, { formula: 'CaH2', names: ['hidruro de calcio'], category: 1 }, { formula: 'AlH3', names: ['hidruro de aluminio'], category: 1 }, { formula: 'FeH3', names: ['hidruro de hierro(iii)', 'trihidruro de hierro'], category: 1 }, { formula: 'FeH2', names: ['hidruro de hierro(ii)', 'dihidruro de hierro'], category: 1 }, { formula: 'LiH', names: ['hidruro de litio'], category: 1 }, { formula: 'MgH2', names: ['hidruro de magnesio'], category: 1 }, { formula: 'CuH', names: ['hidruro de cobre(i)'], category: 1 }, { formula: 'SnH4', names: ['hidruro de estaño(iv)', 'estannano'], category: 1 }, { formula: 'PbH4', names: ['hidruro de plomo(iv)', 'plumbano'], category: 1 }, { formula: 'BaH2', names: ['hidruro de bario'], category: 1 }, { formula: 'CsH', names: ['hidruro de cesio'], category: 1 }, { formula: 'HCl', names: ['cloruro de hidrógeno', 'ácido clorhídrico'], category: 1 }, { formula: 'HF', names: ['fluoruro de hidrógeno', 'ácido fluorhídrico'], category: 1 }, { formula: 'HBr', names: ['bromuro de hidrógeno', 'ácido bromhídrico'], category: 1 }, { formula: 'H2S', names: ['sulfuro de hidrógeno', 'ácido sulfhídrico'], category: 1 }, { formula: 'NH3', names: ['amoniaco', 'trihidruro de nitrógeno'], category: 1 }, { formula: 'PH3', names: ['fosfano', 'fosfina'], category: 1 }, { formula: 'AsH3', names: ['arsano', 'arsina'], category: 1 }, { formula: 'SbH3', names: ['estibano', 'estibina'], category: 1 }, { formula: 'CH4', names: ['metano'], category: 1 }, { formula: 'SiH4', names: ['silano'], category: 1 }, { formula: 'GeH4', names: ['germano'], category: 1 },
+            // Cat 2: Óxidos
+            { formula: 'Na2O', names: ['óxido de sodio'], category: 2 }, { formula: 'CaO', names: ['óxido de calcio'], category: 2 }, { formula: 'Al2O3', names: ['óxido de aluminio'], category: 2 }, { formula: 'Fe2O3', names: ['óxido de hierro(iii)', 'trióxido de dihierro'], category: 2 }, { formula: 'FeO', names: ['óxido de hierro(ii)', 'monóxido de hierro'], category: 2 }, { formula: 'CuO', names: ['óxido de cobre(ii)'], category: 2 }, { formula: 'Cu2O', names: ['óxido de cobre(i)'], category: 2 }, { formula: 'Li2O', names: ['óxido de litio'], category: 2 }, { formula: 'K2O', names: ['óxido de potasio'], category: 2 }, { formula: 'SrO', names: ['óxido de estroncio'], category: 2 }, { formula: 'BaO', names: ['óxido de bario'], category: 2 }, { formula: 'PbO2', names: ['óxido de plomo(iv)', 'dióxido de plomo'], category: 2 }, { formula: 'SnO2', names: ['óxido de estaño(iv)'], category: 2 }, { formula: 'CrO3', names: ['óxido de cromo(vi)'], category: 2 }, { formula: 'Mn2O7', names: ['heptaóxido de dimanganeso', 'óxido de manganeso(vii)'], category: 2 }, { formula: 'CO2', names: ['dióxido de carbono'], category: 2 }, { formula: 'CO', names: ['monóxido de carbono'], category: 2 }, { formula: 'SO3', names: ['trióxido de azufre', 'óxido de azufre(vi)'], category: 2 }, { formula: 'SO2', names: ['dióxido de azufre', 'óxido de azufre(iv)'], category: 2 }, { formula: 'N2O5', names: ['pentaóxido de dinitrógeno', 'óxido de nitrógeno(v)'], category: 2 }, { formula: 'N2O3', names: ['trióxido de dinitrógeno', 'óxido de nitrógeno(iii)'], category: 2 }, { formula: 'Cl2O7', names: ['heptaóxido de dicloro', 'óxido de cloro(vii)'], category: 2 }, { formula: 'Cl2O', names: ['monóxido de dicloro', 'óxido de cloro(i)'], category: 2 }, { formula: 'Br2O5', names: ['pentaóxido de dibromo', 'óxido de bromo(v)'], category: 2 }, { formula: 'P2O5', names: ['pentaóxido de difósforo', 'óxido de fósforo(v)'], category: 2 },
+            // Cat 3: Sales Binarias
+            { formula: 'NaCl', names: ['cloruro de sodio'], category: 3 }, { formula: 'CaF2', names: ['fluoruro de calcio'], category: 3 }, { formula: 'FeCl3', names: ['cloruro de hierro(iii)', 'tricloruro de hierro'], category: 3 }, { formula: 'FeCl2', names: ['cloruro de hierro(ii)', 'dicloruro de hierro'], category: 3 }, { formula: 'AlP', names: ['fosfuro de aluminio'], category: 3 }, { formula: 'MgS', names: ['sulfuro de magnesio'], category: 3 }, { formula: 'CuBr2', names: ['bromuro de cobre(ii)'], category: 3 }, { formula: 'KI', names: ['yoduro de potasio'], category: 3 }, { formula: 'AgCl', names: ['cloruro de plata'], category: 3 }, { formula: 'AgBr', names: ['bromuro de plata'], category: 3 }, { formula: 'PbI2', names: ['yoduro de plomo(ii)'], category: 3 }, { formula: 'ZnS', names: ['sulfuro de zinc'], category: 3 }, { formula: 'Fe2S3', names: ['sulfuro de hierro(iii)'], category: 3 }, { formula: 'Cu2S', names: ['sulfuro de cobre(i)'], category: 3 }, { formula: 'AlBr3', names: ['bromuro de aluminio'], category: 3 }, { formula: 'CaS', names: ['sulfuro de calcio'], category: 3 }, { formula: 'K3N', names: ['nitruro de potasio'], category: 3 }, { formula: 'Mg3P2', names: ['fosfuro de magnesio'], category: 3 },
+            // Cat 5: Hidróxidos
+            { formula: 'NaOH', names: ['hidróxido de sodio'], category: 5 }, { formula: 'Ca(OH)2', names: ['hidróxido de calcio'], category: 5 }, { formula: 'Al(OH)3', names: ['hidróxido de aluminio'], category: 5 }, { formula: 'Fe(OH)3', names: ['hidróxido de hierro(iii)'], category: 5 }, { formula: 'Fe(OH)2', names: ['hidróxido de hierro(ii)'], category: 5 }, { formula: 'Mg(OH)2', names: ['hidróxido de magnesio'], category: 5 }, { formula: 'KOH', names: ['hidróxido de potasio'], category: 5 }, { formula: 'LiOH', names: ['hidróxido de litio'], category: 5 }, { formula: 'Ba(OH)2', names: ['hidróxido de bario'], category: 5 }, { formula: 'Sr(OH)2', names: ['hidróxido de estroncio'], category: 5 }, { formula: 'Cu(OH)2', names: ['hidróxido de cobre(ii)'], category: 5 }, { formula: 'Zn(OH)2', names: ['hidróxido de zinc'], category: 5 }, { formula: 'Cr(OH)3', names: ['hidróxido de cromo(iii)'], category: 5 }, { formula: 'Pb(OH)4', names: ['hidróxido de plomo(iv)'], category: 5 }, { formula: 'Sn(OH)4', names: ['hidróxido de estaño(iv)'], category: 5 }, { formula: 'Au(OH)3', names: ['hidróxido de oro(iii)'], category: 5 },
+            // Cat 6: Oxoácidos
+            { formula: 'H2SO4', names: ['ácido sulfúrico'], category: 6 }, { formula: 'H2SO3', names: ['ácido sulfuroso'], category: 6 }, { formula: 'HNO3', names: ['ácido nítrico'], category: 6 }, { formula: 'HNO2', names: ['ácido nitroso'], category: 6 }, { formula: 'H3PO4', names: ['ácido fosfórico'], category: 6 }, { formula: 'H3PO3', names: ['ácido fosforoso'], category: 6 }, { formula: 'H2CO3', names: ['ácido carbónico'], category: 6 }, { formula: 'H2SiO3', names: ['ácido silícico'], category: 6 }, { formula: 'HClO4', names: ['ácido perclórico'], category: 6 }, { formula: 'HClO3', names: ['ácido clórico'], category: 6 }, { formula: 'HClO2', names: ['ácido cloroso'], category: 6 }, { formula: 'HClO', names: ['ácido hipocloroso'], category: 6 }, { formula: 'HBrO3', names: ['ácido brómico'], category: 6 }, { formula: 'HIO4', names: ['ácido peryódico'], category: 6 }, { formula: 'H2CrO4', names: ['ácido crómico'], category: 6 }, { formula: 'H2Cr2O7', names: ['ácido dicrómico'], category: 6 }, { formula: 'HMnO4', names: ['ácido permangánico'], category: 6 }, { formula: 'H3AsO4', names: ['ácido arsénico'], category: 6 },
+            // Cat 7: Oxisales
+            { formula: 'Na2SO4', names: ['sulfato de sodio'], category: 7 }, { formula: 'CaCO3', names: ['carbonato de calcio'], category: 7 }, { formula: 'Li2CO3', names: ['carbonato de litio'], category: 7 }, { formula: 'Fe2(SO4)3', names: ['sulfato de hierro(iii)'], category: 7 }, { formula: 'FeSO4', names: ['sulfato de hierro(ii)'], category: 7 }, { formula: 'KNO3', names: ['nitrato de potasio'], category: 7 }, { formula: 'Fe(NO3)3', names: ['nitrato de hierro(iii)'], category: 7 }, { formula: 'NaNO2', names: ['nitrito de sodio'], category: 7 }, { formula: 'AlPO4', names: ['fosfato de aluminio'], category: 7 }, { formula: 'Na3PO4', names: ['fosfato de sodio'], category: 7 }, { formula: 'CaSiO3', names: ['silicato de calcio'], category: 7 }, { formula: 'KMnO4', names: ['permanganato de potasio'], category: 7 }, { formula: 'K2Cr2O7', names: ['dicromato de potasio'], category: 7 }, { formula: 'NaClO', names: ['hipoclorito de sodio'], category: 7 }, { formula: 'Zn(ClO)2', names: ['hipoclorito de zinc'], category: 7 }, { formula: 'KClO3', names: ['clorato de potasio'], category: 7 }, { formula: 'Ca(ClO4)2', names: ['perclorato de calcio'], category: 7 }, { formula: 'AgNO3', names: ['nitrato de plata'], category: 7 }, { formula: 'Al2(SO4)3', names: ['sulfato de aluminio'], category: 7 }, { formula: 'Mg(NO3)2', names: ['nitrato de magnesio'], category: 7 }, { formula: 'CuSO4', names: ['sulfato de cobre(ii)'], category: 7 },
+            // Cat 8: Sales Ácidas
+            { formula: 'NaHCO3', names: ['hidrogenocarbonato de sodio', 'bicarbonato de sodio'], category: 8 }, { formula: 'KHSO4', names: ['hidrogenosulfato de potasio', 'bisulfato de potasio'], category: 8 }, { formula: 'KHCO3', names: ['hidrogenocarbonato de potasio'], category: 8 }, { formula: 'Ca(HSO4)2', names: ['hidrogenosulfato de calcio'], category: 8 }, { formula: 'Mg(HSO3)2', names: ['hidrogenosulfito de magnesio'], category: 8 }, { formula: 'NaH2PO4', names: ['dihidrogenofosfato de sodio'], category: 8 }, { formula: 'Na2HPO4', names: ['hidrogenofosfato de sodio'], category: 8 }, { formula: 'Al(H2PO4)3', names: ['dihidrogenofosfato de aluminio'], category: 8 }, { formula: 'LiHS', names: ['hidrogenosulfuro de litio'], category: 8 }, { formula: 'Ca(HCO3)2', names: ['hidrogenocarbonato de calcio'], category: 8 }, { formula: 'KH2PO4', names: ['dihidrogenofosfato de potasio'], category: 8 }
         ];
         
-        const inorganicCompounds = [ { formula: 'NaH', names: ['hidruro de sodio'], category: 1 }, { formula: 'CaH2', names: ['hidruro de calcio'], category: 1 }, { formula: 'AlH3', names: ['hidruro de aluminio'], category: 1 }, { formula: 'FeH3', names: ['hidruro de hierro (iii)', 'trihidruro de hierro'], category: 1 }, { formula: 'FeH2', names: ['hidruro de hierro (ii)', 'dihidruro de hierro'], category: 1 }, { formula: 'LiH', names: ['hidruro de litio'], category: 1 }, { formula: 'MgH2', names: ['hidruro de magnesio'], category: 1 }, { formula: 'CuH', names: ['hidruro de cobre (i)'], category: 1 }, { formula: 'SnH4', names: ['hidruro de estaño (iv)', 'estannano'], category: 1 }, { formula: 'HCl', names: ['cloruro de hidrógeno', 'ácido clorhídrico'], category: 1 }, { formula: 'HF', names: ['fluoruro de hidrógeno', 'ácido fluorhídrico'], category: 1 }, { formula: 'HBr', names: ['bromuro de hidrógeno', 'ácido bromhídrico'], category: 1 }, { formula: 'H2S', names: ['sulfuro de hidrógeno', 'ácido sulfhídrico'], category: 1 }, { formula: 'NH3', names: ['amoniaco', 'trihidruro de nitrógeno'], category: 1 }, { formula: 'PH3', names: ['fosfano', 'fosfina'], category: 1 }, { formula: 'AsH3', names: ['arsano', 'arsina'], category: 1 }, { formula: 'SiH4', names: ['silano'], category: 1 }, { formula: 'Na2O', names: ['óxido de sodio'], category: 2 }, { formula: 'CaO', names: ['óxido de calcio'], category: 2 }, { formula: 'Al2O3', names: ['óxido de aluminio'], category: 2 }, { formula: 'Fe2O3', names: ['óxido de hierro (iii)', 'trióxido de dihierro'], category: 2 }, { formula: 'FeO', names: ['óxido de hierro (ii)', 'monóxido de hierro'], category: 2 }, { formula: 'CuO', names: ['óxido de cobre (ii)'], category: 2 }, { formula: 'Cu2O', names: ['óxido de cobre (i)'], category: 2 }, { formula: 'Li2O', names: ['óxido de litio'], category: 2 }, { formula: 'BaO', names: ['óxido de bario'], category: 2 }, { formula: 'PbO2', names: ['óxido de plomo (iv)', 'dióxido de plomo'], category: 2 }, { formula: 'CO2', names: ['dióxido de carbono'], category: 2 }, { formula: 'CO', names: ['monóxido de carbono'], category: 2 }, { formula: 'SO3', names: ['trióxido de azufre', 'óxido de azufre (vi)'], category: 2 }, { formula: 'SO2', names: ['dióxido de azufre', 'óxido de azufre (iv)'], category: 2 }, { formula: 'N2O5', names: ['pentaóxido de dinitrógeno', 'óxido de nitrógeno (v)'], category: 2 }, { formula: 'Cl2O7', names: ['heptaóxido de dicloro', 'óxido de cloro (vii)'], category: 2 }, { formula: 'P2O5', names: ['pentaóxido de difósforo', 'óxido de fósforo (v)'], category: 2 }, { formula: 'NaCl', names: ['cloruro de sodio'], category: 3 }, { formula: 'CaF2', names: ['fluoruro de calcio'], category: 3 }, { formula: 'FeCl3', names: ['cloruro de hierro (iii)', 'tricloruro de hierro'], category: 3 }, { formula: 'FeCl2', names: ['cloruro de hierro (ii)', 'dicloruro de hierro'], category: 3 }, { formula: 'AlP', names: ['fosfuro de aluminio'], category: 3 }, { formula: 'MgS', names: ['sulfuro de magnesio'], category: 3 }, { formula: 'CuBr2', names: ['bromuro de cobre (ii)'], category: 3 }, { formula: 'KI', names: ['yoduro de potasio'], category: 3 }, { formula: 'AgCl', names: ['cloruro de plata'], category: 3 }, { formula: 'Cu2S', names: ['sulfuro de cobre (i)'], category: 3 }, { formula: 'AlBr3', names: ['bromuro de aluminio'], category: 3 }, { formula: 'NaOH', names: ['hidróxido de sodio'], category: 5 }, { formula: 'Ca(OH)2', names: ['hidróxido de calcio'], category: 5 }, { formula: 'Al(OH)3', names: ['hidróxido de aluminio'], category: 5 }, { formula: 'Fe(OH)3', names: ['hidróxido de hierro (iii)'], category: 5 }, { formula: 'Fe(OH)2', names: ['hidróxido de hierro (ii)'], category: 5 }, { formula: 'Mg(OH)2', names: ['hidróxido de magnesio'], category: 5 }, { formula: 'KOH', names: ['hidróxido de potasio'], category: 5 }, { formula: 'LiOH', names: ['hidróxido de litio'], category: 5 }, { formula: 'Ba(OH)2', names: ['hidróxido de bario'], category: 5 }, { formula: 'Cu(OH)2', names: ['hidróxido de cobre (ii)'], category: 5 }, { formula: 'Pb(OH)4', names: ['hidróxido de plomo (iv)'], category: 5 }, { formula: 'H2SO4', names: ['ácido sulfúrico'], category: 6 }, { formula: 'H2SO3', names: ['ácido sulfuroso'], category: 6 }, { formula: 'HNO3', names: ['ácido nítrico'], category: 6 }, { formula: 'HNO2', names: ['ácido nitroso'], category: 6 }, { formula: 'H3PO4', names: ['ácido fosfórico'], category: 6 }, { formula: 'H2CO3', names: ['ácido carbónico'], category: 6 }, { formula: 'HClO4', names: ['ácido perclórico'], category: 6 }, { formula: 'HClO3', names: ['ácido clórico'], category: 6 }, { formula: 'HClO2', names: ['ácido cloroso'], category: 6 }, { formula: 'HClO', names: ['ácido hipocloroso'], category: 6 }, { formula: 'HBrO3', names: ['ácido brómico'], category: 6 }, { formula: 'HIO4', names: ['ácido peryódico'], category: 6 }, { formula: 'H2CrO4', names: ['ácido crómico'], category: 6 }, { formula: 'Na2SO4', names: ['sulfato de sodio'], category: 7 }, { formula: 'CaCO3', names: ['carbonato de calcio'], category: 7 }, { formula: 'Fe2(SO4)3', names: ['sulfato de hierro (iii)'], category: 7 }, { formula: 'FeSO4', names: ['sulfato de hierro (ii)'], category: 7 }, { formula: 'KNO3', names: ['nitrato de potasio'], category: 7 }, { formula: 'NaNO2', names: ['nitrito de sodio'], category: 7 }, { formula: 'AlPO4', names: ['fosfato de aluminio'], category: 7 }, { formula: 'NaClO', names: ['hipoclorito de sodio'], category: 7 }, { formula: 'KClO3', names: ['clorato de potasio'], category: 7 }, { formula: 'Ca(ClO4)2', names: ['perclorato de calcio'], category: 7 }, { formula: 'AgNO3', names: ['nitrato de plata'], category: 7 }, { formula: 'Al2(SO4)3', names: ['sulfato de aluminio'], category: 7 }, { formula: 'Mg(NO3)2', names: ['nitrato de magnesio'], category: 7 }, { formula: 'CuSO4', names: ['sulfato de cobre (ii)'], category: 7 }, { formula: 'NaHCO3', names: ['hidrogenocarbonato de sodio', 'bicarbonato de sodio'], category: 8 }, { formula: 'KHSO4', names: ['hidrogenosulfato de potasio', 'bisulfato de potasio'], category: 8 }, { formula: 'Ca(HSO4)2', names: ['hidrogenosulfato de calcio'], category: 8 }, { formula: 'NaH2PO4', names: ['dihidrogenofosfato de sodio'], category: 8 }, { formula: 'Na2HPO4', names: ['hidrogenofosfato de sodio'], category: 8 }, { formula: 'LiHS', names: ['hidrogenosulfuro de litio'], category: 8 }, { formula: 'Ca(HCO3)2', names: ['hidrogenocarbonato de calcio'], category: 8 }, { formula: 'KH2PO4', names: ['dihidrogenofosfato de potasio'], category: 8 } ];
-        
-        // Compuestos orgánicos (sin ramificados y categorías re-numeradas)
         const organicCompounds = [
             // Cat 1: Hidrocarburos
-            { formula: 'CH3-CH2-CH3', names: ['propano'], category: 1 }, 
-            { formula: 'CH3-CH2-CH2-CH3', names: ['butano'], category: 1 },
-            { formula: 'CH3-CH=CH-CH3', names: ['but-2-eno'], category: 1 }, 
-            { formula: 'CH2=CH-CH=CH2', names: ['buta-1,3-dieno'], category: 1 }, 
-            { formula: 'CH3-C≡C-CH3', names: ['but-2-ino'], category: 1 },
+            { formula: 'CH4', names: ['metano'], category: 1 }, { formula: 'CH3-CH3', names: ['etano'], category: 1 }, { formula: 'CH3-CH2-CH3', names: ['propano'], category: 1 }, { formula: 'CH3-CH2-CH2-CH3', names: ['butano'], category: 1 }, { formula: 'CH3-CH2-CH2-CH2-CH3', names: ['pentano'], category: 1 }, { formula: 'CH3-CH2-CH2-CH2-CH2-CH3', names: ['hexano'], category: 1 }, { formula: 'CH2=CH2', names: ['eteno'], category: 1 }, { formula: 'CH3-CH=CH2', names: ['propeno'], category: 1 }, { formula: 'CH3-CH=CH-CH3', names: ['but-2-eno'], category: 1 }, { formula: 'CH2=CH-CH2-CH3', names: ['but-1-eno'], category: 1 }, { formula: 'CH3-CH=CH-CH2-CH3', names: ['pent-2-eno'], category: 1 }, { formula: 'CH2=CH-CH=CH2', names: ['buta-1,3-dieno'], category: 1 }, { formula: 'CH2=C=CH-CH3', names: ['buta-1,2-dieno'], category: 1 }, { formula: 'CH≡CH', names: ['etino'], category: 1 }, { formula: 'CH3-C≡CH', names: ['propino'], category: 1 }, { formula: 'CH3-C≡C-CH3', names: ['but-2-ino'], category: 1 }, { formula: 'CH≡C-CH2-CH3', names: ['but-1-ino'], category: 1 }, { formula: 'CH3-C≡C-CH2-CH3', names: ['pent-2-ino'], category: 1 },
             // Cat 2: Aromáticos y Derivados Halogenados
-            { formula: 'C6H6', names: ['benceno'], category: 2 }, 
-            { formula: 'C6H5-Cl', names: ['clorobenceno'], category: 2 }, 
-            { formula: 'C6H5-CH3', names: ['metilbenceno', 'tolueno'], category: 2 }, 
-            { formula: 'CH3-CHCl-CH3', names: ['2-cloropropano'], category: 2 }, 
-            { formula: 'C6H4(CH3)2', names: ['dimetilbenceno', 'xileno'], category: 2 },
+            { formula: 'C6H6', names: ['benceno'], category: 2 }, { formula: 'C6H5-CH3', names: ['metilbenceno', 'tolueno'], category: 2 }, { formula: 'C6H5-CH2-CH3', names: ['etilbenceno'], category: 2 }, { formula: 'C10H8', names: ['naftaleno'], category: 2 }, { formula: 'C6H4(CH3)2', names: ['dimetilbenceno', 'xileno'], category: 2 }, { formula: 'CH3-Cl', names: ['clorometano'], category: 2 }, { formula: 'CH3-CH2-Br', names: ['bromoetano'], category: 2 }, { formula: 'CH3-CHCl-CH3', names: ['2-cloropropano'], category: 2 }, { formula: 'CHCl3', names: ['triclorometano', 'cloroformo'], category: 2 }, { formula: 'CH2Br-CH2Br', names: ['1,2-dibromoetano'], category: 2 }, { formula: 'C6H5-Cl', names: ['clorobenceno'], category: 2 }, { formula: 'C6H4Br2', names: ['dibromobenceno'], category: 2 },
             // Cat 3: Alcoholes y Éteres
-            { formula: 'CH3-CH2-OH', names: ['etanol'], category: 3 }, 
-            { formula: 'CH3-CH(OH)-CH3', names: ['propan-2-ol'], category: 3 }, 
-            { formula: 'CH3-O-CH2-CH3', names: ['metoxietano', 'etil metil éter'], category: 3 }, 
-            { formula: 'HO-CH2-CH2-OH', names: ['etan-1,2-diol', 'etilenglicol'], category: 3 },
+            { formula: 'CH3-OH', names: ['metanol'], category: 3 }, { formula: 'CH3-CH2-OH', names: ['etanol'], category: 3 }, { formula: 'CH3-CH2-CH2-OH', names: ['propan-1-ol'], category: 3 }, { formula: 'CH3-CH(OH)-CH3', names: ['propan-2-ol'], category: 3 }, { formula: 'CH3-CH(OH)-CH2-CH3', names: ['butan-2-ol'], category: 3 }, { formula: 'HO-CH2-CH2-OH', names: ['etan-1,2-diol', 'etilenglicol'], category: 3 }, { formula: 'HO-CH2-CH(OH)-CH2-OH', names: ['propan-1,2,3-triol', 'glicerina'], category: 3 }, { formula: 'C6H5-OH', names: ['fenol'], category: 3 }, { formula: 'CH3-O-CH3', names: ['metoximetano', 'dimetil éter'], category: 3 }, { formula: 'CH3-O-CH2-CH3', names: ['metoxietano', 'etil metil éter'], category: 3 }, { formula: 'CH3-CH2-O-CH2-CH3', names: ['etoxietano', 'dietil éter'], category: 3 },
             // Cat 4: Aldehídos y Cetonas
-            { formula: 'CH3-CHO', names: ['etanal', 'acetaldehído'], category: 4 }, 
-            { formula: 'CH3-CO-CH3', names: ['propanona', 'acetona'], category: 4 }, 
-            { formula: 'CH3-CH2-CO-CH3', names: ['butanona'], category: 4 }, 
-            { formula: 'C6H5-CHO', names: ['benzaldehído'], category: 4 },
+            { formula: 'HCHO', names: ['metanal', 'formaldehído'], category: 4 }, { formula: 'CH3-CHO', names: ['etanal', 'acetaldehído'], category: 4 }, { formula: 'CH3-CH2-CHO', names: ['propanal'], category: 4 }, { formula: 'CH3-CH2-CH2-CHO', names: ['butanal'], category: 4 }, { formula: 'C6H5-CHO', names: ['benzaldehído'], category: 4 }, { formula: 'CH3-CO-CH3', names: ['propanona', 'acetona'], category: 4 }, { formula: 'CH3-CO-CH2-CH3', names: ['butanona'], category: 4 }, { formula: 'CH3-CH2-CO-CH2-CH3', names: ['pentan-3-ona'], category: 4 }, { formula: 'CH3-CO-CO-CH3', names: ['butanodiona'], category: 4 },
             // Cat 5: Ácidos carboxílicos y Ésteres
-            { formula: 'CH3-COOH', names: ['ácido etanoico', 'ácido acético'], category: 5 }, 
-            { formula: 'CH3-CH2-COOH', names: ['ácido propanoico'], category: 5 }, 
-            { formula: 'CH3-COO-CH3', names: ['etanoato de metilo', 'acetato de metilo'], category: 5 }, 
-            { formula: 'HCOO-CH2-CH3', names: ['metanoato de etilo'], category: 5 },
+            { formula: 'HCOOH', names: ['ácido metanoico', 'ácido fórmico'], category: 5 }, { formula: 'CH3-COOH', names: ['ácido etanoico', 'ácido acético'], category: 5 }, { formula: 'CH3-CH2-COOH', names: ['ácido propanoico'], category: 5 }, { formula: 'CH3-CH2-CH2-COOH', names: ['ácido butanoico'], category: 5 }, { formula: 'C6H5-COOH', names: ['ácido benzoico'], category: 5 }, { formula: 'HCOO-CH3', names: ['metanoato de metilo'], category: 5 }, { formula: 'HCOO-CH2-CH3', names: ['metanoato de etilo'], category: 5 }, { formula: 'CH3-COO-CH3', names: ['etanoato de metilo', 'acetato de metilo'], category: 5 }, { formula: 'CH3-COO-CH2-CH3', names: ['etanoato de etilo', 'acetato de etilo'], category: 5 }, { formula: 'CH3-CH2-COO-CH3', names: ['propanoato de metilo'], category: 5 },
             // Cat 6: Aminas, Amidas y Nitroderivados
-            { formula: 'CH3-CH2-NH2', names: ['etanamina'], category: 6 }, 
-            { formula: 'CH3-CO-NH2', names: ['etanamida', 'acetamida'], category: 6 }, 
-            { formula: 'C6H5-NO2', names: ['nitrobenceno'], category: 6 }, 
-            { formula: 'CH3-NH-CH3', names: ['dimetilamina'], category: 6 },
+            { formula: 'CH3-NH2', names: ['metanamina'], category: 6 }, { formula: 'CH3-CH2-NH2', names: ['etanamina'], category: 6 }, { formula: 'CH3-NH-CH3', names: ['dimetilamina'], category: 6 }, { formula: '(CH3)3N', names: ['trimetilamina'], category: 6 }, { formula: 'C6H5-NH2', names: ['anilina', 'fenilamina'], category: 6 }, { formula: 'HCONH2', names: ['metanamida'], category: 6 }, { formula: 'CH3-CO-NH2', names: ['etanamida', 'acetamida'], category: 6 }, { formula: 'CH3-CH2-CO-NH2', names: ['propanamida'], category: 6 }, { formula: 'CH3-NO2', names: ['nitrometano'], category: 6 }, { formula: 'CH3-CH2-NO2', names: ['nitroetano'], category: 6 }, { formula: 'C6H5-NO2', names: ['nitrobenceno'], category: 6 }
         ];
         
         // --- LÓGICA DE LA APLICACIÓN ---
@@ -194,7 +180,7 @@
         const totalScoreEl = document.getElementById('total-score');
 
         let currentCompound = null;
-        let lastCompound = null;
+        let quizSessionCompounds = [];
         let filteredCompounds = [];
         let score = { correct: 0, total: 0 };
         let state = 'waiting';
@@ -236,18 +222,20 @@
 
         const normalizeText = (str) => {
             if (typeof str !== 'string') return '';
+            // Se mantiene la lógica de normalización que elimina espacios antes de paréntesis
             return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+\(/g, '(').replace(/\s*=\s*/g, "=").replace(/\s*≡\s*/g, "≡").replace(/\s*-\s*/g, "-").replace(/,/g, '');
         };
         
         const capitalize = (str) => {
             if (typeof str !== 'string' || str.length === 0) return '';
-            return str.charAt(0).toUpperCase() + str.slice(1);
+            // Capitaliza solo la primera letra de toda la cadena
+            return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
         };
         
         const renderFormula = (formula, type) => {
             const simpleRender = (text) => text.replace(/(\d+)/g, '<sub>$1</sub>');
             const benzeneSVG = `<svg viewBox="0 0 100 100" width="150" height="150"><polygon stroke="black" stroke-width="3" fill="none" points="50,10 93,35 93,85 50,110 7,85 7,35"></polygon><circle cx="50" cy="60" r="20" stroke="black" stroke-width="2" fill="none"></circle></svg>`;
-            if (formula.startsWith('C6H')) return benzeneSVG;
+            if (formula === 'C6H6' || formula === 'C10H8' || formula.startsWith('C6H5') || formula.startsWith('C6H4')) return benzeneSVG;
             if (type === 'inorganic' || !formula.includes('-') && !formula.includes('=')) return simpleRender(formula);
 
             // Renderizado de orgánicas
@@ -277,8 +265,21 @@
             else if (currentType === 'inorganic' && currentCategory === 10) filteredCompounds = [...allCompounds];
             else filteredCompounds = allCompounds.filter(c => c.category === currentCategory);
             
+            // Lógica para no repetir preguntas
+            let shuffled = [...filteredCompounds];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            quizSessionCompounds = shuffled.slice(0, 10);
+
+            // Si no hay suficientes compuestos para 10 preguntas, el test será más corto
+            if (quizSessionCompounds.length === 0) {
+                 alert("No hay compuestos en esta categoría para empezar el test.");
+                 return;
+            }
+
             score = { correct: 0, total: 0 };
-            lastCompound = null;
             updateScore();
             document.getElementById('quiz-title').textContent = categoryText;
             document.getElementById('quiz-subtitle').textContent = currentMode === 'name_formula' ? 'Nombra el siguiente compuesto:' : 'Formula el siguiente compuesto:';
@@ -291,9 +292,8 @@
         };
         
         const nextQuestion = () => {
-            if (filteredCompounds.length === 0) {
-                questionEl.innerHTML = 'No hay compuestos para esta categoría.';
-                checkBtn.disabled = true;
+            if (score.total >= quizSessionCompounds.length) {
+                showFinalScore();
                 return;
             }
 
@@ -306,12 +306,7 @@
             answerInput.focus();
             answerInput.classList.remove('border-green-500', 'border-red-500');
 
-            let randomIndex;
-            do {
-                randomIndex = Math.floor(Math.random() * filteredCompounds.length);
-                currentCompound = filteredCompounds[randomIndex];
-            } while (filteredCompounds.length > 1 && currentCompound === lastCompound);
-            lastCompound = currentCompound;
+            currentCompound = quizSessionCompounds[score.total];
             
             const currentType = document.querySelector('input[name="type"]:checked').value;
             const currentMode = document.querySelector('input[name="mode"]:checked').value;
@@ -328,9 +323,11 @@
             const currentMode = document.querySelector('input[name="mode"]:checked').value;
             const userAnswer = answerInput.value.trim();
             let isCorrect = false;
-
+            
             if (currentMode === 'name_formula') {
-                isCorrect = currentCompound.names.map(name => normalizeText(name)).includes(normalizeText(userAnswer));
+                // La validación es insensible a mayúsculas/minúsculas para mejor UX.
+                const userNormalized = normalizeText(userAnswer);
+                isCorrect = currentCompound.names.some(name => normalizeText(name) === userNormalized);
             } else {
                 const condensedFormula = currentCompound.formula.replace(/[\s-()]/g, '');
                 const userAnswerClean = userAnswer.replace(/[\s-()]/g, '');
@@ -346,6 +343,7 @@
                 answerInput.classList.add('border-green-500');
             } else {
                 let correctAnswerHTML = currentMode === 'name_formula' 
+                    // Muestra la respuesta formateada correctamente (mayúscula inicial y sin espacio en paréntesis)
                     ? `<p class="text-sm feedback-text">Respuesta correcta: ${capitalize(currentCompound.names[0])}</p>`
                     : `<p class="text-sm feedback-text">Respuesta correcta: ${currentCompound.formula}</p>`;
                 feedbackEl.innerHTML = `<div class="flex items-center justify-center gap-2 text-red-600 font-bold"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg><span>Incorrecto.</span></div>${correctAnswerHTML}`;
@@ -354,7 +352,7 @@
             
             updateScore();
             state = 'checked';
-            if (score.total >= 10) {
+            if (score.total >= quizSessionCompounds.length) {
                 checkBtn.textContent = 'Ver Resultados';
             } else {
                 checkBtn.textContent = 'Siguiente';
@@ -363,10 +361,12 @@
         };
         
         const showFinalScore = () => {
-            document.getElementById('final-score-text').textContent = `Tu nota final es: ${score.correct} sobre 10`;
+            const totalQuestions = quizSessionCompounds.length;
+            document.getElementById('final-score-text').textContent = `Tu nota final es: ${score.correct} sobre ${totalQuestions}`;
             let message = '';
-            if (score.correct < 5) message = 'Necesitas repasar un poco más. ¡No te rindas!';
-            else if (score.correct < 8) message = '¡Buen trabajo! Sigue practicando para perfeccionar.';
+            const percentage = (score.correct / totalQuestions) * 100;
+            if (percentage < 50) message = 'Necesitas repasar un poco más. ¡No te rindas!';
+            else if (percentage < 80) message = '¡Buen trabajo! Sigue practicando para perfeccionar.';
             else message = '¡Excelente! Tienes un gran dominio del tema.';
             document.getElementById('final-message').textContent = message;
 
@@ -376,7 +376,8 @@
         };
 
         const updateScore = () => {
-            document.getElementById('score').textContent = `Progreso: ${score.total} / 10`;
+            const totalQuestions = quizSessionCompounds.length || 10;
+            document.getElementById('score').textContent = `Progreso: ${score.total} / ${totalQuestions}`;
         };
 
         // --- INICIALIZACIÓN Y EVENTOS ---
@@ -394,19 +395,19 @@
         restartBtn.addEventListener('click', () => {
             finalScoreView.classList.add('hidden');
             setupView.classList.remove('hidden');
-            loadTotalScore(); // Actualizar la puntuación al volver al menú
+            loadTotalScore();
         });
         backToSetupBtn.addEventListener('click', () => {
             quizView.classList.add('hidden');
             setupView.classList.remove('hidden');
-            loadTotalScore(); // Actualizar la puntuación al volver al menú
+            loadTotalScore();
         });
 
         checkBtn.addEventListener('click', () => {
             if (state === 'waiting') {
                 checkAnswer();
             } else {
-                if (score.total >= 10) {
+                if (score.total >= quizSessionCompounds.length) {
                     showFinalScore();
                 } else {
                     nextQuestion();
