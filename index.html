@@ -191,7 +191,7 @@
                     } else if (header === 'category') {
                         obj[header] = parseInt(values[index], 10);
                     } else {
-                        obj[header] = values[index] || undefined; // Asigna undefined si la celda está vacía
+                        obj[header] = values[index] || undefined;
                     }
                 });
                 data.push(obj);
@@ -334,7 +334,11 @@
                 else filteredCompounds = allCompounds.filter(c => c.category === currentCategory);
             }
             
+            // Se baraja la lista filtrada para asegurar un orden aleatorio en cada prueba.
             let shuffled = [...filteredCompounds].sort(() => 0.5 - Math.random());
+            
+            // Se seleccionan los primeros N compuestos de la lista barajada.
+            // El método 'slice' crea un nuevo array con los compuestos, garantizando que no se repitan dentro de la misma prueba.
             quizSessionCompounds = shuffled.slice(0, QUIZ_LENGTH);
 
             if (quizSessionCompounds.length === 0) {
