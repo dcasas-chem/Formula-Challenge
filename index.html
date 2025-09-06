@@ -202,12 +202,12 @@
         const loadCompounds = async (type) => {
             try {
                 if (type === 'inorganic' && !inorganicCompounds) {
-                    const response = await fetch('inorganic_compounds.csv');
+                    const response = await fetch('./inorganic_compounds.csv');
                     if (!response.ok) throw new Error(`Network response was not ok for inorganic_compounds.csv`);
                     const csvText = await response.text();
                     inorganicCompounds = parseCSV(csvText);
                 } else if (type === 'organic' && !organicCompounds) {
-                    const response = await fetch('organic_compounds.csv');
+                    const response = await fetch('./organic_compounds.csv');
                      if (!response.ok) throw new Error(`Network response was not ok for organic_compounds.csv`);
                     const csvText = await response.text();
                     organicCompounds = parseCSV(csvText);
@@ -334,14 +334,10 @@
                 else filteredCompounds = allCompounds.filter(c => c.category === currentCategory);
             }
             
-            // Se baraja la lista filtrada para asegurar un orden aleatorio en cada prueba.
             let shuffled = [...filteredCompounds].sort(() => 0.5 - Math.random());
-            
-            // Se seleccionan los primeros N compuestos de la lista barajada.
-            // El método 'slice' crea un nuevo array con los compuestos, garantizando que no se repitan dentro de la misma prueba.
             quizSessionCompounds = shuffled.slice(0, QUIZ_LENGTH);
 
-            if (quizSessionCompounds.length === 0) {
+            if (quizSessionCompounds.length < 1) {
                  alert("No hay suficientes compuestos en esta categoría para este modo de juego.");
                  return;
             }
