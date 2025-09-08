@@ -14,31 +14,54 @@
             --grad-from-organic: #4ade80; --grad-to-organic: #16a34a; --focus-ring-organic: #86efac;
             
             --grad-from: var(--grad-from-inorganic); --grad-to: var(--grad-to-inorganic); --focus-ring: var(--focus-ring-inorganic);
+            
+            --mode-1-bg: #f7fee7; --mode-1-border: #84cc16;
+            --mode-2-bg: #ecfeff; --mode-2-border: #06b6d4;
+            --mode-3-bg: #fff1f2; --mode-3-border: #ef4444;
+            --mode-4-bg: #eef2ff; --mode-4-border: #6366f1;
         }
         .theme-organic {
              --grad-from: var(--grad-from-organic); --grad-to: var(--grad-to-organic); --focus-ring: var(--focus-ring-organic);
         }
         body {
             font-family: 'Poppins', sans-serif;
-            color: #0f172a;
+            color: #1e293b;
             background-image: linear-gradient(to bottom right, var(--grad-from), var(--grad-to));
             transition: background-image 0.5s ease-in-out;
         }
         .main-card { 
             min-height: 300px; 
-            background-color: rgba(255,255,255,0.9);
+            background-color: #ffffff;
         }
         #question sub { font-size: 0.6em; vertical-align: sub; }
         .feedback-text sub { font-size: 0.8em; }
-        .selection-radio:checked + label {
+        
+        .selection-radio + label, .selection-checkbox + label {
+            background-color: #ffffff;
+            border-color: #d1d5db;
+        }
+
+        .selection-radio:checked + label, .selection-checkbox:checked + label {
             border-color: var(--grad-to);
-            background-color: color-mix(in srgb, var(--grad-from) 15%, transparent);
+            background-color: color-mix(in srgb, var(--grad-from) 20%, transparent);
             box-shadow: 0 0 0 2px var(--grad-to);
         }
+
+        #mode_name + label { background-color: var(--mode-1-bg); }
+        #mode_write + label { background-color: var(--mode-2-bg); }
+        #mode_error + label { background-color: var(--mode-3-bg); }
+        #mode_timed + label { background-color: var(--mode-4-bg); }
+
+        #mode_name:checked + label { border-color: var(--mode-1-border); box-shadow: 0 0 0 2px var(--mode-1-border); }
+        #mode_write:checked + label { border-color: var(--mode-2-border); box-shadow: 0 0 0 2px var(--mode-2-border); }
+        #mode_error:checked + label { border-color: var(--mode-3-border); box-shadow: 0 0 0 2px var(--mode-3-border); }
+        #mode_timed:checked + label { border-color: var(--mode-4-border); box-shadow: 0 0 0 2px var(--mode-4-border); }
+
         .themed-text { color: var(--grad-to); }
         .themed-focus-ring:focus{ --tw-ring-color: var(--focus-ring) !important; }
         .progress-bar-inner {
             background: linear-gradient(to right, var(--grad-from), var(--grad-to));
+            transition: width 0.4s ease-out;
         }
         .bg-gradient-themed {
             background-image: linear-gradient(to right, var(--grad-from), var(--grad-to));
@@ -48,59 +71,88 @@
             -webkit-background-clip: text;
             color: transparent;
         }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); } 20%, 40%, 60%, 80% { transform: translateX(5px); } }
+        .shake-incorrect { animation: shake 0.5s ease-in-out; }
+
+        @keyframes jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .jump-correct { animation: jump 0.4s ease-out; }
     </style>
 </head>
 <body class="theme-inorganic flex items-start sm:items-center justify-center min-h-screen p-4 pt-6 sm:p-4">
 
-    <div class="w-full max-w-3xl main-card backdrop-blur-sm rounded-2xl shadow-2xl p-4 sm:p-6 transition-all duration-500">
+    <button id="sound-toggle-btn" class="fixed top-4 right-4 p-2 rounded-full bg-slate-200/50 text-slate-800 z-10 backdrop-blur-sm">
+        <svg id="volume-on-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+        <svg id="volume-off-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+    </button>
+
+    <div class="w-full max-w-3xl main-card rounded-2xl shadow-2xl p-4 sm:p-8 transition-all duration-500">
 
         <div id="setup-view">
-            <h1 class="text-3xl sm:text-4xl font-extrabold mb-1 text-center text-gradient-themed">Formula Challenge</h1>
-            <p class="text-slate-600 mb-6 text-center">Selecciona las opciones para empezar a practicar.</p>
+            <h1 class="text-4xl sm:text-5xl font-extrabold mb-10 text-center text-gradient-themed">Formula Challenge</h1>
             
-            <div class="space-y-6">
+            <div class="space-y-8">
                  <div>
-                    <h2 class="text-base font-semibold text-slate-700 mb-2 text-center">1. Elige la formulación</h2>
+                    <h2 class="text-lg font-bold text-slate-700 mb-3 text-center">Elige la formulación</h2>
                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <input type="radio" name="type" value="inorganic" id="type_inorganic" class="hidden selection-radio" checked>
-                        <label for="type_inorganic" class="text-center p-3 border-2 border-slate-300 rounded-lg cursor-pointer hover:border-blue-400 transition-all duration-300">
-                            <span class="font-semibold text-slate-800">Inorgánica</span>
+                        <label for="type_inorganic" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
+                            <span class="font-semibold text-slate-800 text-base">Inorgánica</span>
                         </label>
                         <input type="radio" name="type" value="organic" id="type_organic" class="hidden selection-radio">
-                        <label for="type_organic" class="text-center p-3 border-2 border-slate-300 rounded-lg cursor-pointer hover:border-green-400 transition-all duration-300">
-                           <span class="font-semibold text-slate-800">Orgánica</span>
+                        <label for="type_organic" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
+                           <span class="font-semibold text-slate-800 text-base">Orgánica</span>
                         </label>
                     </div>
                 </div>
 
                 <div>
-                    <h2 class="text-base font-semibold text-slate-700 mb-2 text-center">2. Elige el modo de práctica</h2>
+                    <h2 class="text-lg font-bold text-slate-700 mb-3 text-center">Elige el modo de práctica</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <input type="radio" name="mode" value="name_formula" id="mode_name" class="hidden selection-radio" checked>
-                        <label for="mode_name" class="text-center p-3 border-2 border-slate-300 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
-                            <span class="font-semibold text-slate-800">Nombrar la fórmula</span>
+                        <label for="mode_name" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
+                            <span class="font-semibold text-green-800">Nombrar la fórmula</span>
                         </label>
                         <input type="radio" name="mode" value="write_formula" id="mode_write" class="hidden selection-radio">
-                        <label for="mode_write" class="text-center p-3 border-2 border-slate-300 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
-                            <span class="font-semibold text-slate-800">Formular el nombre</span>
+                        <label for="mode_write" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
+                            <span class="font-semibold text-cyan-800">Formular el nombre</span>
                         </label>
                         <input type="radio" name="mode" value="find_error" id="mode_error" class="hidden selection-radio">
-                        <label for="mode_error" class="text-center p-3 border-2 border-slate-300 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
-                            <span class="font-semibold text-slate-800">Identificar el error</span>
+                        <label for="mode_error" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
+                            <span class="font-semibold text-red-800">Identificar el error</span>
                         </label>
                         <input type="radio" name="mode" value="timed_mode" id="mode_timed" class="hidden selection-radio">
-                        <label for="mode_timed" class="text-center p-3 border-2 border-slate-300 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
-                            <span class="font-semibold text-slate-800">Contrarreloj</span>
+                        <label for="mode_timed" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
+                            <span class="font-semibold text-indigo-800">Contrarreloj</span>
                         </label>
                     </div>
                 </div>
+
                 <div>
-                    <h2 class="text-base font-semibold text-slate-700 mb-2 text-center">3. Elige la categoría</h2>
-                    <select id="category" class="w-full p-3 border-2 border-slate-300 bg-white rounded-lg focus:ring-2 themed-focus-ring focus:border-transparent transition-all font-medium text-slate-800"></select>
+                    <h2 class="text-lg font-bold text-slate-700 mb-3 text-center">Elige la(s) categoría(s)</h2>
+                    <div id="category-checkboxes" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 text-sm"></div>
+                </div>
+
+                <div>
+                    <h2 class="text-lg font-bold text-slate-700 mb-3 text-center">Número de preguntas</h2>
+                     <div class="grid grid-cols-3 gap-3">
+                        <input type="radio" name="quiz_length" value="10" id="length_10" class="hidden selection-radio" checked>
+                        <label for="length_10" class="text-center p-3 border-2 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
+                            <span class="font-semibold text-slate-800">10</span>
+                        </label>
+                        <input type="radio" name="quiz_length" value="15" id="length_15" class="hidden selection-radio">
+                        <label for="length_15" class="text-center p-3 border-2 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
+                           <span class="font-semibold text-slate-800">15</span>
+                        </label>
+                        <input type="radio" name="quiz_length" value="20" id="length_20" class="hidden selection-radio">
+                        <label for="length_20" class="text-center p-3 border-2 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
+                           <span class="font-semibold text-slate-800">20</span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-6 flex items-center justify-center gap-2">
+            <div class="mt-8 flex items-center justify-center gap-2">
                 <div id="total-score" class="text-center text-amber-500 font-bold text-base bg-amber-500/10 p-3 rounded-lg flex-grow"></div>
                 <button id="reset-score-btn" class="p-3 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors" title="Reiniciar puntuación total">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
@@ -123,7 +175,7 @@
                     <button id="back-to-setup" class="text-sm bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-300 transition-colors">Salir</button>
                 </div>
             </div>
-            <!-- Barra de progreso -->
+            
             <div class="w-full bg-slate-200 rounded-full h-2.5 mb-4">
               <div id="progress-bar" class="progress-bar-inner h-2.5 rounded-full" style="width: 0%"></div>
             </div>
@@ -134,13 +186,8 @@
             </div>
 
             <div class="mt-4">
-                <div class="flex gap-2">
-                    <input type="text" id="answer" placeholder="Escribe tu respuesta aquí..." class="w-full p-3 border-2 border-slate-300 bg-white rounded-lg text-base focus:ring-2 themed-focus-ring focus:border-transparent transition-all" autocomplete="off" spellcheck="false">
-                    <button id="hint-btn" class="p-3 bg-sky-500/10 text-sky-500 rounded-lg hover:bg-sky-500/20 transition-colors" title="Pedir una pista">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
-                    </button>
-                </div>
-                <div id="feedback" class="mt-2 min-h-[48px] text-center text-slate-600"></div>
+                <input type="text" id="answer" placeholder="Escribe tu respuesta aquí..." class="w-full p-3 border-2 border-slate-300 bg-white rounded-lg text-base focus:ring-2 themed-focus-ring focus:border-transparent transition-all" autocomplete="off" spellcheck="false">
+                <div id="feedback" class="mt-2 min-h-[48px] text-center text-slate-600 font-medium"></div>
                 <button id="check-btn" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-4 themed-focus-ring mt-2 shadow-lg bg-gradient-themed">
                     Comprobar
                 </button>
@@ -159,7 +206,7 @@
             <h1 class="text-3xl sm:text-4xl font-extrabold mb-4 text-gradient-themed">¡Prueba finalizada!</h1>
             <p id="final-score-text" class="text-xl text-slate-700 mb-2"></p>
             <p id="final-message" class="text-base text-slate-500 mb-6"></p>
-            <!-- Revisión de respuestas -->
+
             <div id="results-review" class="mt-6 text-left max-h-60 overflow-y-auto border border-slate-200 rounded-lg p-2">
                 <h3 class="font-bold text-lg text-slate-800 mb-2 sticky top-0 bg-white/80 p-2">Revisión de respuestas</h3>
                 <div id="results-table-container"></div>
@@ -172,8 +219,8 @@
 
     <script>
         // --- DATOS ---
-        const inorganicCategories = [ { value: 1, text: "1. Hidruros" }, { value: 2, text: "2. Óxidos" }, { value: 3, text: "3. Sales Binarias" }, { value: 4, text: "4. Compuestos Binarios (1-3)" }, { value: 5, text: "5. Hidróxidos" }, { value: 6, text: "6. Oxoácidos" }, { value: 7, text: "7. Oxisales" }, { value: 8, text: "8. Sales Ácidas" }, { value: 9, text: "9. Compuestos Terciarios y Cuaternarios (5-8)" }, { value: 10, text: "10. Todos los compuestos" } ];
-        const organicCategories = [ { value: 1, text: "1. Hidrocarburos" }, { value: 2, text: "2. Aromáticos y Derivados Halogenados" }, { value: 3, text: "3. Alcoholes y Éteres" }, { value: 4, text: "4. Aldehídos y Cetonas" }, { value: 5, text: "5. Ácidos carboxílicos y Ésteres" }, { value: 6, text: "6. Aminas, Amidas y Nitroderivados" } ];
+        const inorganicCategories = [ { value: 1, text: "Hidruros" }, { value: 2, text: "Óxidos" }, { value: 3, text: "Peróxidos" }, { value: 4, text: "Sales Binarias" }, { value: 5, text: "Hidróxidos" }, { value: 6, text: "Oxoácidos" }, { value: 7, text: "Oxisales" }, { value: 8, text: "Sales Ácidas" }];
+        const organicCategories = [ { value: 1, text: "Hidrocarburos" }, { value: 2, text: "Aromáticos y Halogenados" }, { value: 3, text: "Alcoholes y Éteres" }, { value: 4, text: "Aldehídos y Cetonas" }, { value: 5, text: "Ácidos y Ésteres" }, { value: 6, text: "Aminas y Amidas" } ];
         
         const inorganicCompounds = [
             { formula: 'NaH', names: ['Hidruro de sodio'], category: 1, incorrectName: 'Óxido de sodio'},
@@ -188,7 +235,7 @@
             { formula: 'BaH2', names: ['Hidruro de bario', 'Dihidruro de bario'], category: 1, incorrectName: 'Óxido de bario'},
             { formula: 'AlH3', names: ['Hidruro de aluminio', 'Trihidruro de aluminio'], category: 1, incorrectName: 'Hidróxido de aluminio'},
             { formula: 'GaH3', names: ['Hidruro de galio', 'Trihidruro de galio'], category: 1, incorrectName: 'Óxido de galio'},
-            { formula: 'FeH3', names: ['Hidruro de hierro(III)', 'Trihidruro de hierro'], category: 1, incorrectName: 'Hidruro de hierro(II)', hint: 'El hierro actúa con su valencia más alta (+3).'},
+            { formula: 'FeH3', names: ['Hidruro de hierro(III)', 'Trihidruro de hierro'], category: 1, incorrectName: 'Hidruro de hierro(II)'},
             { formula: 'FeH2', names: ['Hidruro de hierro(II)', 'Dihidruro de hierro'], category: 1, incorrectName: 'Hidruro de hierro(III)'},
             { formula: 'CuH', names: ['Hidruro de cobre(I)', 'Monohidruro de cobre'], category: 1, incorrectName: 'Hidruro de cobre(II)'},
             { formula: 'CuH2', names: ['Hidruro de cobre(II)', 'Dihidruro de cobre'], category: 1, incorrectName: 'Hidruro de cobre(I)'},
@@ -198,26 +245,6 @@
             { formula: 'SnH2', names: ['Hidruro de estaño(II)', 'Dihidruro de estaño'], category: 1, incorrectName: 'Hidruro de estaño(IV)'},
             { formula: 'AuH3', names: ['Hidruro de oro(III)', 'Trihidruro de oro'], category: 1, incorrectName: 'Hidruro de oro(I)'},
             { formula: 'AuH', names: ['Hidruro de oro(I)', 'Monohidruro de oro'], category: 1, incorrectName: 'Hidruro de oro(III)'},
-            { formula: 'CrH3', names: ['Hidruro de cromo(III)', 'Trihidruro de cromo'], category: 1, incorrectName: 'Hidruro de cromo(VI)'},
-            { formula: 'CrH6', names: ['Hidruro de cromo(VI)', 'Hexahidruro de cromo'], category: 1, incorrectName: 'Hidruro de cromo(III)'},
-            { formula: 'MnH2', names: ['Hidruro de manganeso(II)', 'Dihidruro de manganeso'], category: 1, incorrectName: 'Hidruro de manganeso(IV)'},
-            { formula: 'MnH4', names: ['Hidruro de manganeso(IV)', 'Tetrahidruro de manganeso'], category: 1, incorrectName: 'Hidruro de manganeso(II)'},
-            { formula: 'NiH2', names: ['Hidruro de níquel(II)', 'Dihidruro de níquel'], category: 1, incorrectName: 'Hidruro de níquel(III)'},
-            { formula: 'NiH3', names: ['Hidruro de níquel(III)', 'Trihidruro de níquel'], category: 1, incorrectName: 'Hidruro de níquel(II)'},
-            { formula: 'CoH2', names: ['Hidruro de cobalto(II)', 'Dihidruro de cobalto'], category: 1, incorrectName: 'Hidruro de cobalto(III)'},
-            { formula: 'CoH3', names: ['Hidruro de cobalto(III)', 'Trihidruro de cobalto'], category: 1, incorrectName: 'Hidruro de cobalto(II)'},
-            { formula: 'ZnH2', names: ['Hidruro de zinc', 'Dihidruro de zinc'], category: 1, incorrectName: 'Óxido de zinc'},
-            { formula: 'CdH2', names: ['Hidruro de cadmio', 'Dihidruro de cadmio'], category: 1, incorrectName: 'Sulfuro de cadmio'},
-            { formula: 'HgH2', names: ['Hidruro de mercurio(II)', 'Dihidruro de mercurio'], category: 1, incorrectName: 'Hidruro de mercurio(I)'},
-            { formula: 'HgH', names: ['Hidruro de mercurio(I)', 'Monohidruro de mercurio'], category: 1, incorrectName: 'Hidruro de mercurio(II)'},
-            { formula: 'AgH', names: ['Hidruro de plata'], category: 1, incorrectName: 'Cloruro de plata'},
-            { formula: 'PtH4', names: ['Hidruro de platino(IV)', 'Tetrahidruro de platino'], category: 1, incorrectName: 'Hidruro de platino(II)'},
-            { formula: 'PtH2', names: ['Hidruro de platino(II)', 'Dihidruro de platino'], category: 1, incorrectName: 'Hidruro de platino(IV)'},
-            { formula: 'PdH2', names: ['Hidruro de paladio(II)', 'Dihidruro de paladio'], category: 1, incorrectName: 'Hidruro de paladio(IV)'},
-            { formula: 'PdH4', names: ['Hidruro de paladio(IV)', 'Tetrahidruro de paladio'], category: 1, incorrectName: 'Hidruro de paladio(II)'},
-            { formula: 'ScH3', names: ['Hidruro de escandio', 'Trihidruro de escandio'], category: 1, incorrectName: 'Óxido de escandio'},
-            { formula: 'TiH4', names: ['Hidruro de titanio(IV)', 'Tetrahidruro de titanio'], category: 1, incorrectName: 'Óxido de titanio(IV)'},
-            { formula: 'VH5', names: ['Hidruro de vanadio(V)', 'Pentahidruro de vanadio'], category: 1, incorrectName: 'Óxido de vanadio(V)'},
             { formula: 'HCl', names: ['Cloruro de hidrógeno', 'Ácido clorhídrico'], category: 1, incorrectName: 'Ácido sulfhídrico'},
             { formula: 'HBr', names: ['Bromuro de hidrógeno', 'Ácido bromhídrico'], category: 1, incorrectName: 'Ácido clorhídrico'},
             { formula: 'HF', names: ['Fluoruro de hidrógeno', 'Ácido fluorhídrico'], category: 1, incorrectName: 'Ácido yodhídrico'},
@@ -226,22 +253,14 @@
             { formula: 'H2Se', names: ['Seleniuro de hidrógeno', 'Ácido selenhídrico'], category: 1, incorrectName: 'Ácido telurhídrico'},
             { formula: 'H2Te', names: ['Telururo de hidrógeno', 'Ácido telurhídrico'], category: 1, incorrectName: 'Ácido sulfhídrico'},
             { formula: 'NH3', names: ['Amoniaco', 'Trihidruro de nitrógeno'], category: 1, incorrectName: 'Metano'},
-            { formula: 'PH3', names: ['Fosfano', 'Trihidruro de fósforo'], category: 1, incorrectName: 'Amoniaco'},
-            { formula: 'AsH3', names: ['Arsano', 'Trihidruro de arsénico'], category: 1, incorrectName: 'Fosfano'},
-            { formula: 'CH4', names: ['Metano', 'Tetrahidruro de carbono'], category: 1, incorrectName: 'Silano'},
-            { formula: 'SiH4', names: ['Silano', 'Tetrahidruro de silicio'], category: 1, incorrectName: 'Metano'},
             { formula: 'Na2O', names: ['Óxido de sodio'], category: 2, incorrectName: 'Hidruro de sodio'},
             { formula: 'K2O', names: ['Óxido de potasio'], category: 2, incorrectName: 'Sulfuro de potasio'},
             { formula: 'Li2O', names: ['Óxido de litio'], category: 2, incorrectName: 'Hidruro de litio'},
-            { formula: 'Rb2O', names: ['Óxido de rubidio'], category: 2, incorrectName: 'Óxido de cesio'},
             { formula: 'CaO', names: ['Óxido de calcio'], category: 2, incorrectName: 'Cloruro de calcio'},
             { formula: 'MgO', names: ['Óxido de magnesio'], category: 2, incorrectName: 'Sulfuro de magnesio'},
             { formula: 'BaO', names: ['Óxido de bario'], category: 2, incorrectName: 'Hidruro de bario'},
-            { formula: 'SrO', names: ['Óxido de estroncio'], category: 2, incorrectName: 'Fluoruro de estroncio'},
-            { formula: 'BeO', names: ['Óxido de berilio'], category: 2, incorrectName: 'Hidruro de berilio'},
             { formula: 'Al2O3', names: ['Óxido de aluminio', 'Trióxido de dialuminio'], category: 2, incorrectName: 'Sulfuro de aluminio'},
-            { formula: 'Ga2O3', names: ['Óxido de galio', 'Trióxido de digalio'], category: 2, incorrectName: 'Cloruro de galio'},
-            { formula: 'Fe2O3', names: ['Óxido de hierro(III)', 'Trióxido de dihierro'], category: 2, incorrectName: 'Óxido de hierro(II)', hint: 'El oxígeno tiene valencia -2.'},
+            { formula: 'Fe2O3', names: ['Óxido de hierro(III)', 'Trióxido de dihierro'], category: 2, incorrectName: 'Óxido de hierro(II)'},
             { formula: 'FeO', names: ['Óxido de hierro(II)', 'Monóxido de hierro'], category: 2, incorrectName: 'Óxido de hierro(III)'},
             { formula: 'CuO', names: ['Óxido de cobre(II)', 'Monóxido de cobre'], category: 2, incorrectName: 'Óxido de cobre(I)'},
             { formula: 'Cu2O', names: ['Óxido de cobre(I)', 'Monóxido de dicobre'], category: 2, incorrectName: 'Óxido de cobre(II)'},
@@ -250,87 +269,60 @@
             { formula: 'SnO2', names: ['Óxido de estaño(IV)', 'Dióxido de estaño'], category: 2, incorrectName: 'Óxido de estaño(II)'},
             { formula: 'SnO', names: ['Óxido de estaño(II)', 'Monóxido de estaño'], category: 2, incorrectName: 'Óxido de estaño(IV)'},
             { formula: 'ZnO', names: ['Óxido de zinc'], category: 2, incorrectName: 'Sulfuro de zinc'},
-            { formula: 'CdO', names: ['Óxido de cadmio'], category: 2, incorrectName: 'Seleniuro de cadmio'},
             { formula: 'Ag2O', names: ['Óxido de plata'], category: 2, incorrectName: 'Sulfuro de plata'},
-            { formula: 'HgO', names: ['Óxido de mercurio(II)', 'Monóxido de mercurio'], category: 2, incorrectName: 'Óxido de mercurio(I)'},
-            { formula: 'Hg2O', names: ['Óxido de mercurio(I)', 'Monóxido de dimercurio'], category: 2, incorrectName: 'Óxido de mercurio(II)'},
-            { formula: 'Ni2O3', names: ['Óxido de níquel(III)', 'Trióxido de diníquel'], category: 2, incorrectName: 'Óxido de níquel(II)'},
-            { formula: 'NiO', names: ['Óxido de níquel(II)', 'Monóxido de níquel'], category: 2, incorrectName: 'Óxido de níquel(III)'},
-            { formula: 'Co2O3', names: ['Óxido de cobalto(III)', 'Trióxido de dicobalto'], category: 2, incorrectName: 'Óxido de cobalto(II)'},
-            { formula: 'CoO', names: ['Óxido de cobalto(II)', 'Monóxido de cobalto'], category: 2, incorrectName: 'Óxido de cobalto(III)'},
-            { formula: 'Au2O3', names: ['Óxido de oro(III)', 'Trióxido de dioro'], category: 2, incorrectName: 'Óxido de oro(I)'},
-            { formula: 'Au2O', names: ['Óxido de oro(I)', 'Monóxido de dioro'], category: 2, incorrectName: 'Óxido de oro(III)'},
-            { formula: 'PtO2', names: ['Óxido de platino(IV)', 'Dióxido de platino'], category: 2, incorrectName: 'Óxido de platino(II)'},
-            { formula: 'PdO', names: ['Óxido de paladio(II)', 'Monóxido de paladio'], category: 2, incorrectName: 'Óxido de paladio(IV)'},
-            { formula: 'Sc2O3', names: ['Óxido de escandio'], category: 2, incorrectName: 'Cloruro de escandio'},
-            { formula: 'TiO2', names: ['Óxido de titanio(IV)', 'Dióxido de titanio'], category: 2, incorrectName: 'Sulfuro de titanio(IV)'},
-            { formula: 'V2O5', names: ['Óxido de vanadio(V)', 'Pentaóxido de divanadio'], category: 2, incorrectName: 'Óxido de vanadio(III)'},
-            { formula: 'CrO3', names: ['Óxido de cromo(VI)', 'Trióxido de cromo'], category: 2, incorrectName: 'Óxido de cromo(III)'},
-            { formula: 'Cr2O3', names: ['Óxido de cromo(III)', 'Trióxido de dicromo'], category: 2, incorrectName: 'Óxido de cromo(VI)'},
-            { formula: 'Mn2O7', names: ['Óxido de manganeso(VII)', 'Heptaóxido de dimanganeso'], category: 2, incorrectName: 'Óxido de manganeso(IV)'},
-            { formula: 'MnO2', names: ['Óxido de manganeso(IV)', 'Dióxido de manganeso'], category: 2, incorrectName: 'Óxido de manganeso(II)'},
             { formula: 'SO3', names: ['Trióxido de azufre', 'Óxido de azufre(VI)'], category: 2, incorrectName: 'Óxido de azufre(IV)'},
             { formula: 'SO2', names: ['Dióxido de azufre', 'Óxido de azufre(IV)'], category: 2, incorrectName: 'Óxido de azufre(VI)'},
             { formula: 'N2O5', names: ['Pentaóxido de dinitrógeno', 'Óxido de nitrógeno(V)'], category: 2, incorrectName: 'Trióxido de dinitrógeno'},
-            { formula: 'N2O3', names: ['Trióxido de dinitrógeno', 'Óxido de nitrógeno(III)'], category: 2, incorrectName: 'Óxido de nitrógeno(V)'},
-            { formula: 'N2O', names: ['Monóxido de dinitrógeno', 'Óxido de nitrógeno(I)'], category: 2, incorrectName: 'Óxido de nitrógeno(II)'},
             { formula: 'CO2', names: ['Dióxido de carbono'], category: 2, incorrectName: 'Monóxido de carbono'},
-            { formula: 'CO', names: ['Monóxido de carbono'], category: 2, incorrectName: 'Dióxido de carbono'},
             { formula: 'Cl2O7', names: ['Heptaóxido de dicloro', 'Óxido de cloro(VII)'], category: 2, incorrectName: 'Pentaóxido de dicloro'},
-            { formula: 'Cl2O5', names: ['Pentaóxido de dicloro', 'Óxido de cloro(V)'], category: 2, incorrectName: 'Trióxido de dicloro'},
-            { formula: 'Cl2O3', names: ['Trióxido de dicloro', 'Óxido de cloro(III)'], category: 2, incorrectName: 'Monóxido de dicloro'},
-            { formula: 'Cl2O', names: ['Monóxido de dicloro', 'Óxido de cloro(I)'], category: 2, incorrectName: 'Trióxido de dicloro'},
-            { formula: 'Br2O7', names: ['Heptaóxido de dibromo', 'Óxido de bromo(VII)'], category: 2, incorrectName: 'Pentaóxido de dibromo'},
-            { formula: 'Br2O', names: ['Monóxido de dibromo', 'Óxido de bromo(I)'], category: 2, incorrectName: 'Trióxido de dibromo'},
-            { formula: 'I2O5', names: ['Pentaóxido de diyodo', 'Óxido de yodo(V)'], category: 2, incorrectName: 'Heptaóxido de diyodo'},
-            { formula: 'P2O5', names: ['Pentaóxido de difósforo', 'Óxido de fósforo(V)'], category: 2, incorrectName: 'Óxido de fósforo(III)'},
-            { formula: 'P2O3', names: ['Trióxido de difósforo', 'Óxido de fósforo(III)'], category: 2, incorrectName: 'Óxido de fósforo(V)'},
-            { formula: 'NaCl', names: ['Cloruro de sodio'], category: 3, incorrectName: 'Bromuro de sodio'},
-            { formula: 'KBr', names: ['Bromuro de potasio'], category: 3, incorrectName: 'Cloruro de potasio'},
-            { formula: 'LiF', names: ['Fluoruro de litio'], category: 3, incorrectName: 'Yoduro de litio'},
-            { formula: 'CaF2', names: ['Fluoruro de calcio', 'Difluoruro de calcio'], category: 3, incorrectName: 'Cloruro de calcio'},
-            { formula: 'MgCl2', names: ['Cloruro de magnesio', 'Dicloruro de magnesio'], category: 3, incorrectName: 'Bromuro de magnesio'},
-            { formula: 'BaI2', names: ['Yoduro de bario', 'Diyoduro de bario'], category: 3, incorrectName: 'Fluoruro de bario'},
-            { formula: 'AlBr3', names: ['Bromuro de aluminio', 'Tribromuro de aluminio'], category: 3, incorrectName: 'Cloruro de aluminio'},
-            { formula: 'FeCl3', names: ['Cloruro de hierro(III)', 'Tricloruro de hierro'], category: 3, incorrectName: 'Cloruro de hierro(II)'},
-            { formula: 'FeI2', names: ['Yoduro de hierro(II)', 'Diyoduro de hierro'], category: 3, incorrectName: 'Yoduro de hierro(III)'},
-            { formula: 'CuS', names: ['Sulfuro de cobre(II)'], category: 3, incorrectName: 'Sulfuro de cobre(I)'},
-            { formula: 'Cu2S', names: ['Sulfuro de cobre(I)'], category: 3, incorrectName: 'Sulfuro de cobre(II)'},
-            { formula: 'AgCl', names: ['Cloruro de plata'], category: 3, incorrectName: 'Bromuro de plata'},
-            { formula: 'Ag2S', names: ['Sulfuro de plata'], category: 3, incorrectName: 'Óxido de plata'},
-            { formula: 'Na2S', names: ['Sulfuro de sodio'], category: 3, incorrectName: 'Óxido de sodio'},
-            { formula: 'K2Se', names: ['Seleniuro de potasio'], category: 3, incorrectName: 'Sulfuro de potasio'},
-            { formula: 'PbI2', names: ['Yoduro de plomo(II)', 'Diyoduro de plomo'], category: 3, incorrectName: 'Yoduro de plomo(IV)'},
-            { formula: 'PbS2', names: ['Sulfuro de plomo(IV)', 'Disulfuro de plomo'], category: 3, incorrectName: 'Sulfuro de plomo(II)'},
-            { formula: 'ZnS', names: ['Sulfuro de zinc'], category: 3, incorrectName: 'Óxido de zinc'},
-            { formula: 'CdSe', names: ['Seleniuro de cadmio'], category: 3, incorrectName: 'Sulfuro de cadmio'},
-            { formula: 'CaS', names: ['Sulfuro de calcio'], category: 3, incorrectName: 'Óxido de calcio'},
-            { formula: 'KI', names: ['Yoduro de potasio'], category: 3, incorrectName: 'Cloruro de potasio'},
-            { formula: 'MnS2', names: ['Sulfuro de manganeso(IV)', 'Disulfuro de manganeso'], category: 3, incorrectName: 'Sulfuro de manganeso(II)'},
-            { formula: 'MnCl2', names: ['Cloruro de manganeso(II)', 'Dicloruro de manganeso'], category: 3, incorrectName: 'Cloruro de manganeso(IV)'},
-            { formula: 'NiCl2', names: ['Cloruro de níquel(II)', 'Dicloruro de níquel'], category: 3, incorrectName: 'Cloruro de níquel(III)'},
-            { formula: 'Ni2S3', names: ['Sulfuro de níquel(III)'], category: 3, incorrectName: 'Sulfuro de níquel(II)'},
-            { formula: 'CoBr3', names: ['Bromuro de cobalto(III)', 'Tribromuro de cobalto'], category: 3, incorrectName: 'Bromuro de cobalto(II)'},
-            { formula: 'CoF2', names: ['Fluoruro de cobalto(II)', 'Difluoruro de cobalto'], category: 3, incorrectName: 'Fluoruro de cobalto(III)'},
-            { formula: 'AuCl3', names: ['Cloruro de oro(III)', 'Tricloruro de oro'], category: 3, incorrectName: 'Cloruro de oro(I)'},
-            { formula: 'AuCl', names: ['Cloruro de oro(I)', 'Monocloruro de oro'], category: 3, incorrectName: 'Cloruro de oro(III)'},
-            { formula: 'PtS2', names: ['Sulfuro de platino(IV)', 'Disulfuro de platino'], category: 3, incorrectName: 'Sulfuro de platino(II)'},
-            { formula: 'PdF2', names: ['Fluoruro de paladio(II)', 'Difluoruro de paladio'], category: 3, incorrectName: 'Fluoruro de paladio(IV)'},
-            { formula: 'HgBr2', names: ['Bromuro de mercurio(II)', 'Dibromuro de mercurio'], category: 3, incorrectName: 'Bromuro de mercurio(I)'},
-            { formula: 'VCl5', names: ['Cloruro de vanadio(V)', 'Pentacloruro de vanadio'], category: 3, incorrectName: 'Cloruro de vanadio(III)'},
-            { formula: 'TiS2', names: ['Sulfuro de titanio(IV)', 'Disulfuro de titanio'], category: 3, incorrectName: 'Óxido de titanio(IV)'},
-            { formula: 'ScBr3', names: ['Bromuro de escandio', 'Tribromuro de escandio'], category: 3, incorrectName: 'Cloruro de escandio'},
-            { formula: 'Cr2S3', names: ['Sulfuro de cromo(III)'], category: 3, incorrectName: 'Sulfuro de cromo(VI)'},
+            { formula: 'H2O2', names: ['Peróxido de hidrógeno', 'Agua oxigenada'], category: 3, incorrectName: 'Óxido de dihidrógeno'},
+            { formula: 'Na2O2', names: ['Peróxido de sodio'], category: 3, incorrectName: 'Óxido de sodio'},
+            { formula: 'K2O2', names: ['Peróxido de potasio'], category: 3, incorrectName: 'Óxido de potasio'},
+            { formula: 'Li2O2', names: ['Peróxido de litio'], category: 3, incorrectName: 'Óxido de litio'},
+            { formula: 'Rb2O2', names: ['Peróxido de rubidio'], category: 3, incorrectName: 'Óxido de rubidio'},
+            { formula: 'Cs2O2', names: ['Peróxido de cesio'], category: 3, incorrectName: 'Óxido de cesio'},
+            { formula: 'CaO2', names: ['Peróxido de calcio'], category: 3, incorrectName: 'Óxido de calcio'},
+            { formula: 'MgO2', names: ['Peróxido de magnesio'], category: 3, incorrectName: 'Óxido de magnesio'},
+            { formula: 'SrO2', names: ['Peróxido de estroncio'], category: 3, incorrectName: 'Óxido de estroncio'},
+            { formula: 'BaO2', names: ['Peróxido de bario'], category: 3, incorrectName: 'Óxido de bario'},
+            { formula: 'ZnO2', names: ['Peróxido de zinc'], category: 3, incorrectName: 'Óxido de zinc'},
+            { formula: 'CdO2', names: ['Peróxido de cadmio'], category: 3, incorrectName: 'Óxido de cadmio'},
+            { formula: 'CuO2', names: ['Peróxido de cobre(II)'], category: 3, incorrectName: 'Óxido de cobre(II)'},
+            { formula: 'HgO2', names: ['Peróxido de mercurio(II)'], category: 3, incorrectName: 'Óxido de mercurio(II)'},
+            { formula: 'Ag2O2', names: ['Peróxido de plata'], category: 3, incorrectName: 'Óxido de plata'},
+            { formula: 'NiO2', names: ['Peróxido de níquel(II)'], category: 3, incorrectName: 'Óxido de níquel(II)'},
+            { formula: 'FeO2', names: ['Peróxido de hierro(II)'], category: 3, incorrectName: 'Óxido de hierro(II)'},
+            { formula: 'CoO2', names: ['Peróxido de cobalto(II)'], category: 3, incorrectName: 'Óxido de cobalto(II)'},
+            { formula: 'SnO2', names: ['Peróxido de estaño(IV)'], category: 3, incorrectName: 'Óxido de estaño(IV)'},
+            { formula: 'PbO2', names: ['Peróxido de plomo(IV)'], category: 3, incorrectName: 'Óxido de plomo(IV)'},
+            { formula: 'NaCl', names: ['Cloruro de sodio'], category: 4, incorrectName: 'Bromuro de sodio'},
+            { formula: 'KBr', names: ['Bromuro de potasio'], category: 4, incorrectName: 'Cloruro de potasio'},
+            { formula: 'LiF', names: ['Fluoruro de litio'], category: 4, incorrectName: 'Yoduro de litio'},
+            { formula: 'CaF2', names: ['Fluoruro de calcio', 'Difluoruro de calcio'], category: 4, incorrectName: 'Cloruro de calcio'},
+            { formula: 'MgCl2', names: ['Cloruro de magnesio', 'Dicloruro de magnesio'], category: 4, incorrectName: 'Bromuro de magnesio'},
+            { formula: 'BaI2', names: ['Yoduro de bario', 'Diyoduro de bario'], category: 4, incorrectName: 'Fluoruro de bario'},
+            { formula: 'AlBr3', names: ['Bromuro de aluminio', 'Tribromuro de aluminio'], category: 4, incorrectName: 'Cloruro de aluminio'},
+            { formula: 'FeCl3', names: ['Cloruro de hierro(III)', 'Tricloruro de hierro'], category: 4, incorrectName: 'Cloruro de hierro(II)'},
+            { formula: 'FeI2', names: ['Yoduro de hierro(II)', 'Diyoduro de hierro'], category: 4, incorrectName: 'Yoduro de hierro(III)'},
+            { formula: 'CuS', names: ['Sulfuro de cobre(II)'], category: 4, incorrectName: 'Sulfuro de cobre(I)'},
+            { formula: 'Cu2S', names: ['Sulfuro de cobre(I)'], category: 4, incorrectName: 'Sulfuro de cobre(II)'},
+            { formula: 'AgCl', names: ['Cloruro de plata'], category: 4, incorrectName: 'Bromuro de plata'},
+            { formula: 'Ag2S', names: ['Sulfuro de plata'], category: 4, incorrectName: 'Óxido de plata'},
+            { formula: 'Na2S', names: ['Sulfuro de sodio'], category: 4, incorrectName: 'Óxido de sodio'},
+            { formula: 'K2Se', names: ['Seleniuro de potasio'], category: 4, incorrectName: 'Sulfuro de potasio'},
+            { formula: 'PbI2', names: ['Yoduro de plomo(II)', 'Diyoduro de plomo'], category: 4, incorrectName: 'Yoduro de plomo(IV)'},
+            { formula: 'PbS2', names: ['Sulfuro de plomo(IV)', 'Disulfuro de plomo'], category: 4, incorrectName: 'Sulfuro de plomo(II)'},
+            { formula: 'ZnS', names: ['Sulfuro de zinc'], category: 4, incorrectName: 'Óxido de zinc'},
+            { formula: 'CdSe', names: ['Seleniuro de cadmio'], category: 4, incorrectName: 'Sulfuro de cadmio'},
+            { formula: 'KI', names: ['Yoduro de potasio'], category: 4, incorrectName: 'Cloruro de potasio'},
             { formula: 'NaOH', names: ['Hidróxido de sodio'], category: 5, incorrectName: 'Cloruro de sodio'},
             { formula: 'KOH', names: ['Hidróxido de potasio'], category: 5, incorrectName: 'Óxido de potasio'},
             { formula: 'LiOH', names: ['Hidróxido de litio'], category: 5, incorrectName: 'Hidruro de litio'},
-            { formula: 'RbOH', names: ['Hidróxido de rubidio'], category: 5, incorrectName: 'Hidróxido de cesio'},
             { formula: 'Ca(OH)2', names: ['Hidróxido de calcio'], category: 5, incorrectName: 'Óxido de calcio'},
             { formula: 'Mg(OH)2', names: ['Hidróxido de magnesio'], category: 5, incorrectName: 'Hidruro de magnesio'},
             { formula: 'Ba(OH)2', names: ['Hidróxido de bario'], category: 5, incorrectName: 'Óxido de bario'},
-            { formula: 'Sr(OH)2', names: ['Hidróxido de estroncio'], category: 5, incorrectName: 'Hidruro de estroncio'},
             { formula: 'Al(OH)3', names: ['Hidróxido de aluminio'], category: 5, incorrectName: 'Óxido de aluminio'},
-            { formula: 'Fe(OH)3', names: ['Hidróxido de hierro(III)'], category: 5, incorrectName: 'Hidróxido de hierro(II)', hint: 'El grupo hidróxido (OH) tiene carga -1.'},
+            { formula: 'Fe(OH)3', names: ['Hidróxido de hierro(III)'], category: 5, incorrectName: 'Hidróxido de hierro(II)'},
             { formula: 'Fe(OH)2', names: ['Hidróxido de hierro(II)'], category: 5, incorrectName: 'Hidróxido de hierro(III)'},
             { formula: 'Cu(OH)2', names: ['Hidróxido de cobre(II)'], category: 5, incorrectName: 'Hidróxido de cobre(I)'},
             { formula: 'CuOH', names: ['Hidróxido de cobre(I)'], category: 5, incorrectName: 'Hidróxido de cobre(II)'},
@@ -343,65 +335,41 @@
             { formula: 'Cr(OH)3', names: ['Hidróxido de cromo(III)'], category: 5, incorrectName: 'Hidróxido de cromo(VI)'},
             { formula: 'Mn(OH)2', names: ['Hidróxido de manganeso(II)'], category: 5, incorrectName: 'Hidróxido de manganeso(IV)'},
             { formula: 'Co(OH)3', names: ['Hidróxido de cobalto(III)'], category: 5, incorrectName: 'Hidróxido de cobalto(II)'},
-            { formula: 'Ni(OH)2', names: ['Hidróxido de níquel(II)'], category: 5, incorrectName: 'Hidróxido de níquel(III)'},
-            { formula: 'AgOH', names: ['Hidróxido de plata'], category: 5, incorrectName: 'Cloruro de plata'},
-            { formula: 'Au(OH)3', names: ['Hidróxido de oro(III)'], category: 5, incorrectName: 'Hidróxido de oro(I)'},
-            { formula: 'Ti(OH)4', names: ['Hidróxido de titanio(IV)'], category: 5, incorrectName: 'Óxido de titanio(IV)'},
-            { formula: 'V(OH)5', names: ['Hidróxido de vanadio(V)'], category: 5, incorrectName: 'Óxido de vanadio(V)'},
-            { formula: 'H2SO4', names: ['Ácido sulfúrico'], category: 6, incorrectName: 'Ácido sulfuroso', hint: 'El azufre actúa con su valencia más alta (+6).'},
+            { formula: 'H2SO4', names: ['Ácido sulfúrico'], category: 6, incorrectName: 'Ácido sulfuroso'},
             { formula: 'H2SO3', names: ['Ácido sulfuroso'], category: 6, incorrectName: 'Ácido sulfúrico'},
             { formula: 'HNO3', names: ['Ácido nítrico'], category: 6, incorrectName: 'Ácido nitroso'},
             { formula: 'HNO2', names: ['Ácido nitroso'], category: 6, incorrectName: 'Ácido nítrico'},
             { formula: 'H2CO3', names: ['Ácido carbónico'], category: 6, incorrectName: 'Ácido bórico'},
             { formula: 'H3PO4', names: ['Ácido fosfórico'], category: 6, incorrectName: 'Ácido fosforoso'},
             { formula: 'H3PO3', names: ['Ácido fosforoso'], category: 6, incorrectName: 'Ácido fosfórico'},
-            { formula: 'HClO4', names: ['Ácido perclórico'], category: 6, incorrectName: 'Ácido clórico', hint: 'El cloro con su mayor valencia (+7).'},
+            { formula: 'HClO4', names: ['Ácido perclórico'], category: 6, incorrectName: 'Ácido clórico'},
             { formula: 'HClO3', names: ['Ácido clórico'], category: 6, incorrectName: 'Ácido perclórico'},
             { formula: 'HClO2', names: ['Ácido cloroso'], category: 6, incorrectName: 'Ácido hipocloroso'},
             { formula: 'HClO', names: ['Ácido hipocloroso'], category: 6, incorrectName: 'Ácido cloroso'},
-            { formula: 'HBrO4', names: ['Ácido perbrómico'], category: 6, incorrectName: 'Ácido brómico'},
             { formula: 'HBrO3', names: ['Ácido brómico'], category: 6, incorrectName: 'Ácido perbrómico'},
-            { formula: 'HBrO2', names: ['Ácido bromoso'], category: 6, incorrectName: 'Ácido hipobromoso'},
-            { formula: 'HBrO', names: ['Ácido hipobromoso'], category: 6, incorrectName: 'Ácido bromoso'},
-            { formula: 'HIO4', names: ['Ácido peryódico'], category: 6, incorrectName: 'Ácido yódico'},
             { formula: 'HIO3', names: ['Ácido yódico'], category: 6, incorrectName: 'Ácido peryódico'},
-            { formula: 'HIO2', names: ['Ácido yodoso'], category: 6, incorrectName: 'Ácido hipoyodoso'},
-            { formula: 'HIO', names: ['Ácido hipoyodoso'], category: 6, incorrectName: 'Ácido yodoso'},
             { formula: 'H2CrO4', names: ['Ácido crómico'], category: 6, incorrectName: 'Ácido dicrómico'},
             { formula: 'H2Cr2O7', names: ['Ácido dicrómico'], category: 6, incorrectName: 'Ácido crómico'},
             { formula: 'HMnO4', names: ['Ácido permangánico'], category: 6, incorrectName: 'Ácido mangánico'},
             { formula: 'H2MnO4', names: ['Ácido mangánico'], category: 6, incorrectName: 'Ácido permangánico'},
             { formula: 'H3AsO4', names: ['Ácido arsénico'], category: 6, incorrectName: 'Ácido arsenioso'},
-            { formula: 'H3AsO3', names: ['Ácido arsenioso'], category: 6, incorrectName: 'Ácido arsénico'},
             { formula: 'H3BO3', names: ['Ácido bórico'], category: 6, incorrectName: 'Ácido carbónico'},
             { formula: 'H2SiO3', names: ['Ácido silícico'], category: 6, incorrectName: 'Ácido fosfórico'},
             { formula: 'H2SeO4', names: ['Ácido selénico'], category: 6, incorrectName: 'Ácido selenioso'},
-            { formula: 'H2SeO3', names: ['Ácido selenioso'], category: 6, incorrectName: 'Ácido selénico'},
-            { formula: 'H2TeO4', names: ['Ácido telúrico'], category: 6, incorrectName: 'Ácido teluroso'},
-            { formula: 'H2TeO3', names: ['Ácido teluroso'], category: 6, incorrectName: 'Ácido telúrico'},
-            { formula: 'HVO3', names: ['Ácido vanádico'], category: 6, incorrectName: 'Ácido nítrico'},
-            { formula: 'H2TiO3', names: ['Ácido titánico'], category: 6, incorrectName: 'Ácido carbónico'},
-            { formula: 'H3SbO4', names: ['Ácido antimónico'], category: 6, incorrectName: 'Ácido fosfórico'},
             { formula: 'Na2SO4', names: ['Sulfato de sodio'], category: 7, incorrectName: 'Sulfito de sodio'},
             { formula: 'K2CO3', names: ['Carbonato de potasio'], category: 7, incorrectName: 'Carbonato de sodio'},
             { formula: 'LiNO3', names: ['Nitrato de litio'], category: 7, incorrectName: 'Nitrito de litio'},
             { formula: 'MgSO3', names: ['Sulfito de magnesio'], category: 7, incorrectName: 'Sulfato de magnesio'},
             { formula: 'Ca3(PO4)2', names: ['Fosfato de calcio'], category: 7, incorrectName: 'Fosfito de calcio'},
             { formula: 'Al(NO3)3', names: ['Nitrato de aluminio'], category: 7, incorrectName: 'Nitrito de aluminio'},
-            { formula: 'Fe2(SO4)3', names: ['Sulfato de hierro(III)'], category: 7, incorrectName: 'Sulfato de hierro(II)', hint: 'El anión sulfato (SO4) tiene carga -2, y el Hierro (Fe) actúa con +3.'},
+            { formula: 'Fe2(SO4)3', names: ['Sulfato de hierro(III)'], category: 7, incorrectName: 'Sulfato de hierro(II)'},
             { formula: 'FeSO4', names: ['Sulfato de hierro(II)'], category: 7, incorrectName: 'Sulfato de hierro(III)'},
-            { formula: 'Fe2(CO3)3', names: ['Carbonato de hierro(III)'], category: 7, incorrectName: 'Carbonato de hierro(II)'},
-            { formula: 'FeCO3', names: ['Carbonato de hierro(II)'], category: 7, incorrectName: 'Carbonato de hierro(III)'},
             { formula: 'Cu3(PO4)2', names: ['Fosfato de cobre(II)'], category: 7, incorrectName: 'Fosfato de cobre(I)'},
             { formula: 'CuNO3', names: ['Nitrato de cobre(I)'], category: 7, incorrectName: 'Nitrato de cobre(II)'},
-            { formula: 'CuSO4', names: ['Sulfato de cobre(II)'], category: 7, incorrectName: 'Sulfito de cobre(II)'},
             { formula: 'KNO3', names: ['Nitrato de potasio'], category: 7, incorrectName: 'Nitrito de potasio'},
             { formula: 'KNO2', names: ['Nitrito de potasio'], category: 7, incorrectName: 'Nitrato de potasio'},
             { formula: 'AgClO3', names: ['Clorato de plata'], category: 7, incorrectName: 'Perclorato de plata'},
-            { formula: 'Ag2SO4', names: ['Sulfato de plata'], category: 7, incorrectName: 'Sulfito de plata'},
-            { formula: 'AgNO3', names: ['Nitrato de plata'], category: 7, incorrectName: 'Nitrito de plata'},
             { formula: 'NaClO4', names: ['Perclorato de sodio'], category: 7, incorrectName: 'Clorato de sodio'},
-            { formula: 'NaClO', names: ['Hipoclorito de sodio'], category: 7, incorrectName: 'Clorito de sodio'},
             { formula: 'KMnO4', names: ['Permanganato de potasio'], category: 7, incorrectName: 'Manganato de potasio'},
             { formula: 'Na2CrO4', names: ['Cromato de sodio'], category: 7, incorrectName: 'Dicromato de sodio'},
             { formula: 'K2Cr2O7', names: ['Dicromato de potasio'], category: 7, incorrectName: 'Cromato de potasio'},
@@ -409,58 +377,12 @@
             { formula: 'Fe(BrO3)2', names: ['Bromato de hierro(II)'], category: 7, incorrectName: 'Perbromato de hierro(II)'},
             { formula: 'Al2(SO4)3', names: ['Sulfato de aluminio'], category: 7, incorrectName: 'Sulfito de aluminio'},
             { formula: 'Pb(SO4)2', names: ['Sulfato de plomo(IV)'], category: 7, incorrectName: 'Sulfato de plomo(II)'},
-            { formula: 'PbSO3', names: ['Sulfito de plomo(II)'], category: 7, incorrectName: 'Sulfato de plomo(II)'},
-            { formula: 'Sn(CO3)2', names: ['Carbonato de estaño(IV)'], category: 7, incorrectName: 'Carbonato de estaño(II)'},
-            { formula: 'Sn3(PO4)2', names: ['Fosfato de estaño(II)'], category: 7, incorrectName: 'Fosfato de estaño(IV)'},
-            { formula: 'Li3BO3', names: ['Borato de litio'], category: 7, incorrectName: 'Borato de sodio'},
-            { formula: 'MgSiO3', names: ['Silicato de magnesio'], category: 7, incorrectName: 'Silicato de calcio'},
-            { formula: 'Zn(NO3)2', names: ['Nitrato de zinc'], category: 7, incorrectName: 'Nitrito de zinc'},
-            { formula: 'ZnSO4', names: ['Sulfato de zinc'], category: 7, incorrectName: 'Sulfito de zinc'},
-            { formula: 'CdSO4', names: ['Sulfato de cadmio'], category: 7, incorrectName: 'Sulfito de cadmio'},
-            { formula: 'Cd(NO3)2', names: ['Nitrato de cadmio'], category: 7, incorrectName: 'Nitrito de cadmio'},
-            { formula: 'Hg2SO4', names: ['Sulfato de mercurio(I)'], category: 7, incorrectName: 'Sulfato de mercurio(II)'},
-            { formula: 'Hg(NO3)2', names: ['Nitrato de mercurio(II)'], category: 7, incorrectName: 'Nitrato de mercurio(I)'},
-            { formula: 'Co(ClO4)2', names: ['Perclorato de cobalto(II)'], category: 7, incorrectName: 'Clorato de cobalto(II)'},
-            { formula: 'Co2(SO4)3', names: ['Sulfato de cobalto(III)'], category: 7, incorrectName: 'Sulfato de cobalto(II)'},
-            { formula: 'Ni3(PO4)2', names: ['Fosfato de níquel(II)'], category: 7, incorrectName: 'Fosfito de níquel(II)'},
-            { formula: 'NiSO4', names: ['Sulfato de níquel(II)'], category: 7, incorrectName: 'Sulfito de níquel(II)'},
-            { formula: 'Au2(SO4)3', names: ['Sulfato de oro(III)'], category: 7, incorrectName: 'Sulfato de oro(I)'},
-            { formula: 'AuNO3', names: ['Nitrato de oro(I)'], category: 7, incorrectName: 'Nitrato de oro(III)'},
-            { formula: 'Pt(SO4)2', names: ['Sulfato de platino(IV)'], category: 7, incorrectName: 'Sulfato de platino(II)'},
-            { formula: 'Pt(SO3)2', names: ['Sulfito de platino(IV)'], category: 7, incorrectName: 'Sulfito de platino(II)'},
-            { formula: 'Pd(NO3)2', names: ['Nitrato de paladio(II)'], category: 7, incorrectName: 'Nitrato de paladio(IV)'},
-            { formula: 'K2MnO4', names: ['Manganato de potasio'], category: 7, incorrectName: 'Permanganato de potasio'},
-            { formula: 'Fe2(CrO4)3', names: ['Cromato de hierro(III)'], category: 7, incorrectName: 'Cromato de hierro(II)'},
-            { formula: 'FeCrO4', names: ['Cromato de hierro(II)'], category: 7, incorrectName: 'Cromato de hierro(III)'},
-            { formula: 'CuCr2O7', names: ['Dicromato de cobre(II)'], category: 7, incorrectName: 'Cromato de cobre(II)'},
-            { formula: 'Ba(MnO4)2', names: ['Permanganato de bario'], category: 7, incorrectName: 'Manganato de bario'},
-            { formula: 'Na2SeO4', names: ['Seleniato de sodio'], category: 7, incorrectName: 'Seleniato de potasio'},
-            { formula: 'CaTeO3', names: ['Telurito de calcio'], category: 7, incorrectName: 'Telurito de magnesio'},
-            { formula: 'Fe(VO3)2', names: ['Vanadato de hierro(II)'], category: 7, incorrectName: 'Vanadato de hierro(III)'},
-            { formula: 'MgTiO3', names: ['Titanato de magnesio'], category: 7, incorrectName: 'Titanato de calcio'},
-            { formula: 'Li3AsO4', names: ['Arseniato de litio'], category: 7, incorrectName: 'Arsenito de litio'},
-            { formula: 'AlAsO3', names: ['Arsenito de aluminio'], category: 7, incorrectName: 'Arseniato de aluminio'},
-            { formula: 'Sc2(SO4)3', names: ['Sulfato de escandio'], category: 7, incorrectName: 'Cloruro de escandio'},
-            { formula: 'Ti(SO4)2', names: ['Sulfato de titanio(IV)'], category: 7, incorrectName: 'Óxido de titanio(IV)'},
-            { formula: 'V2(SO4)5', names: ['Sulfato de vanadio(V)'], category: 7, incorrectName: 'Sulfato de vanadio(III)'},
-            { formula: 'Cr2(SO4)3', names: ['Sulfato de cromo(III)'], category: 7, incorrectName: 'Sulfato de cromo(VI)'},
-            { formula: 'Mn(SO4)2', names: ['Sulfato de manganeso(IV)'], category: 7, incorrectName: 'Sulfato de manganeso(II)'},
-            { formula: 'MnSO4', names: ['Sulfato de manganeso(II)'], category: 7, incorrectName: 'Sulfato de manganeso(IV)'},
-            { formula: 'Ca(NO3)2', names: ['Nitrato de calcio'], category: 7, incorrectName: 'Nitrito de calcio'},
-            { formula: 'Ba(NO2)2', names: ['Nitrito de bario'], category: 7, incorrectName: 'Nitrato de bario'},
-            { formula: 'AlPO4', names: ['Fosfato de aluminio'], category: 7, incorrectName: 'Fosfito de aluminio'},
-            { formula: 'Pb(CrO4)2', names: ['Cromato de plomo(IV)'], category: 7, incorrectName: 'Cromato de plomo(II)'},
-            { formula: 'Sn(MnO4)2', names: ['Permanganato de estaño(II)'], category: 7, incorrectName: 'Manganato de estaño(II)'},
-            { formula: 'ZnCr2O7', names: ['Dicromato de zinc'], category: 7, incorrectName: 'Cromato de zinc'},
-            { formula: 'Ni(BrO)2', names: ['Hipobromito de níquel(II)'], category: 7, incorrectName: 'Bromito de níquel(II)'},
-            { formula: 'Co(IO2)3', names: ['Yodito de cobalto(III)'], category: 7, incorrectName: 'Yodato de cobalto(III)'},
             { formula: 'NaHCO3', names: ['Hidrogenocarbonato de sodio', 'Bicarbonato de sodio'], category: 8, incorrectName: 'Carbonato de sodio'},
             { formula: 'KHSO4', names: ['Hidrogenosulfato de potasio'], category: 8, incorrectName: 'Sulfato de potasio'},
             { formula: 'Ca(HCO3)2', names: ['Hidrogenocarbonato de calcio'], category: 8, incorrectName: 'Carbonato de calcio'},
             { formula: 'Mg(HCO3)2', names: ['Hidrogenocarbonato de magnesio'], category: 8, incorrectName: 'Carbonato de magnesio'},
             { formula: 'NaH2PO4', names: ['Dihidrogenofosfato de sodio'], category: 8, incorrectName: 'Fosfato de sodio'},
             { formula: 'Na2HPO4', names: ['Hidrogenofosfato de sodio'], category: 8, incorrectName: 'Fosfato de sodio'},
-            { formula: 'NaHS', names: ['Hidrogenosulfuro de sodio'], category: 8, incorrectName: 'Sulfuro de sodio'},
             { formula: 'K2HPO4', names: ['Hidrogenofosfato de potasio'], category: 8, incorrectName: 'Fosfato de potasio'},
             { formula: 'KH2PO4', names: ['Dihidrogenofosfato de potasio'], category: 8, incorrectName: 'Fosfato de potasio'},
             { formula: 'Mg(HSO4)2', names: ['Hidrogenosulfato de magnesio'], category: 8, incorrectName: 'Sulfato de magnesio'},
@@ -474,115 +396,31 @@
             { formula: 'CaHPO4', names: ['Hidrogenofosfato de calcio'], category: 8, incorrectName: 'Fosfato de calcio'},
             { formula: 'CuHSO4', names: ['Hidrogenosulfato de cobre(I)'], category: 8, incorrectName: 'Sulfato de cobre(I)'},
             { formula: 'Zn(HCO3)2', names: ['Hidrogenocarbonato de zinc'], category: 8, incorrectName: 'Carbonato de zinc'},
-            { formula: 'NaHSeO4', names: ['Hidrogenoseleniato de sodio'], category: 8, incorrectName: 'Seleniato de sodio'},
-            { formula: 'KHTeO3', names: ['Hidrogenotelurito de potasio'], category: 8, incorrectName: 'Telurito de potasio'},
             { formula: 'Mg(H2PO4)2', names: ['Dihidrogenofosfato de magnesio'], category: 8, incorrectName: 'Fosfato de magnesio'},
-            { formula: 'AgHSO4', names: ['Hidrogenosulfato de plata'], category: 8, incorrectName: 'Sulfato de plata'},
-            { formula: 'Co(HSO4)2', names: ['Hidrogenosulfato de cobalto(II)'], category: 8, incorrectName: 'Sulfato de cobalto(II)'},
-            { formula: 'Ni(HCO3)2', names: ['Hidrogenocarbonato de níquel(II)'], category: 8, incorrectName: 'Carbonato de níquel(II)'},
-            { formula: 'Au(HSO4)3', names: ['Hidrogenosulfato de oro(III)'], category: 8, incorrectName: 'Sulfato de oro(III)'},
-            { formula: 'Pt(HSO4)4', names: ['Hidrogenosulfato de platino(IV)'], category: 8, incorrectName: 'Sulfato de platino(IV)'},
-            { formula: 'Mn(HSO4)2', names: ['Hidrogenosulfato de manganeso(II)'], category: 8, incorrectName: 'Sulfato de manganeso(II)'},
-            { formula: 'Cr(HSO4)3', names: ['Hidrogenosulfato de cromo(III)'], category: 8, incorrectName: 'Sulfato de cromo(III)'},
-            { formula: 'V(HSO4)5', names: ['Hidrogenosulfato de vanadio(V)'], category: 8, incorrectName: 'Sulfato de vanadio(V)'},
-            { formula: 'Ti(HSO4)4', names: ['Hidrogenosulfato de titanio(IV)'], category: 8, incorrectName: 'Sulfato de titanio(IV)'},
-            { formula: 'Sc(HCO3)3', names: ['Hidrogenocarbonato de escandio'], category: 8, incorrectName: 'Carbonato de escandio'}
         ];
 
         const organicCompounds = [
             { formula: 'CH4', names: ['Metano'], category: 1, incorrectName: 'Etano'},
             { formula: 'CH3-CH3', names: ['Etano'], category: 1, incorrectName: 'Propano'},
-            { formula: 'CH3-CH2-CH3', names: ['Propano'], category: 1, incorrectName: 'Butano'},
-            { formula: 'CH3-CH2-CH2-CH3', names: ['Butano'], category: 1, incorrectName: 'Pentano'},
-            { formula: 'CH3-CH2-CH2-CH2-CH3', names: ['Pentano'], category: 1, incorrectName: 'Hexano'},
-            { formula: 'CH3-CH2-CH2-CH2-CH2-CH3', names: ['Hexano'], category: 1, incorrectName: 'Heptano'},
-            { formula: 'CH3-CH2-CH2-CH2-CH2-CH2-CH3', names: ['Heptano'], category: 1, incorrectName: 'Octano'},
-            { formula: 'CH2=CH2', names: ['Eteno'], category: 1, incorrectName: 'Etino', hint: 'El sufijo -eno indica un doble enlace.'},
-            { formula: 'CH3-CH=CH2', names: ['Propeno'], category: 1, incorrectName: 'Propino'},
-            { formula: 'CH3-CH2-CH=CH2', names: ['But-1-eno'], category: 1, incorrectName: 'But-2-eno'},
-            { formula: 'CH3-CH=CH-CH3', names: ['But-2-eno'], category: 1, incorrectName: 'But-1-eno'},
-            { formula: 'CH3-CH2-CH2-CH=CH2', names: ['Pent-1-eno'], category: 1, incorrectName: 'Pent-2-eno'},
-            { formula: 'CH3-CH2-CH=CH-CH3', names: ['Pent-2-eno'], category: 1, incorrectName: 'Pent-1-eno'},
-            { formula: 'CH≡CH', names: ['Etino'], category: 1, incorrectName: 'Eteno', hint: 'El sufijo -ino indica un triple enlace.'},
-            { formula: 'CH3-C≡CH', names: ['Propino'], category: 1, incorrectName: 'Propeno'},
-            { formula: 'CH3-C≡C-CH3', names: ['But-2-ino'], category: 1, incorrectName: 'But-1-ino'},
-            { formula: 'CH3-CH2-C≡CH', names: ['But-1-ino'], category: 1, incorrectName: 'But-2-ino'},
-            { formula: 'CH3-CH2-CH2-C≡CH', names: ['Pent-1-ino'], category: 1, incorrectName: 'Pent-2-ino'},
-            { formula: 'CH3-CH2-C≡C-CH3', names: ['Pent-2-ino'], category: 1, incorrectName: 'Pent-1-ino'},
+            { formula: 'CH2=CH2', names: ['Eteno'], category: 1, incorrectName: 'Etino'},
+            { formula: 'CH≡CH', names: ['Etino'], category: 1, incorrectName: 'Eteno'},
             { formula: 'C6H12', names: ['Ciclohexano'], category: 1, incorrectName: 'Benceno'},
-            { formula: 'C5H10', names: ['Ciclopentano'], category: 1, incorrectName: 'Penteno'},
-            { formula: 'C4H8', names: ['Ciclobutano'], category: 1, incorrectName: 'Buteno'},
-            { formula: 'C3H6', names: ['Ciclopropano'], category: 1, incorrectName: 'Propeno'},
             { formula: 'C6H6', names: ['Benceno'], category: 2, incorrectName: 'Ciclohexano'},
-            { formula: 'C6H5-CH3', names: ['Metilbenceno', 'Tolueno'], category: 2, incorrectName: 'Etilbenceno'},
-            { formula: 'C6H5-CH2-CH3', names: ['Etilbenceno'], category: 2, incorrectName: 'Metilbenceno'},
             { formula: 'C6H5-Cl', names: ['Clorobenceno'], category: 2, incorrectName: 'Bromobenceno'},
-            { formula: 'C6H5-Br', names: ['Bromobenceno'], category: 2, incorrectName: 'Clorobenceno'},
-            { formula: 'C6H5-I', names: ['Yodobenceno'], category: 2, incorrectName: 'Fluorobenceno'},
-            { formula: 'C6H5-F', names: ['Fluorobenceno'], category: 2, incorrectName: 'Yodobenceno'},
-            { formula: 'C6H4Cl2', names: ['Diclorobenceno'], category: 2, incorrectName: 'Triclorobenceno'},
             { formula: 'CHCl3', names: ['Triclorometano', 'Cloroformo'], category: 2, incorrectName: 'Diclorometano'},
-            { formula: 'CH2Cl2', names: ['Diclorometano'], category: 2, incorrectName: 'Triclorometano'},
-            { formula: 'CH3-Cl', names: ['Clorometano', 'Cloruro de metilo'], category: 2, incorrectName: 'Bromometano'},
-            { formula: 'CH3-CH2-Br', names: ['Bromoetano'], category: 2, incorrectName: 'Cloroetano'},
-            { formula: 'CH3-I', names: ['Yodometano'], category: 2, incorrectName: 'Fluorometano'},
-            { formula: 'CCl4', names: ['Tetraclorometano'], category: 2, incorrectName: 'Triclorometano'},
-            { formula: 'CH3-CH2-CH2-Cl', names: ['1-Cloropropano'], category: 2, incorrectName: '2-Cloropropano'},
-            { formula: 'CH3-CHCl-CH3', names: ['2-Cloropropano'], category: 2, incorrectName: '1-Cloropropano'},
             { formula: 'CH3-OH', names: ['Metanol'], category: 3, incorrectName: 'Etanol'},
-            { formula: 'CH3-CH2-OH', names: ['Etanol'], category: 3, incorrectName: 'Propanol', hint: 'La terminación -ol indica un grupo -OH.'},
-            { formula: 'CH3-CH2-CH2-OH', names: ['Propan-1-ol'], category: 3, incorrectName: 'Propan-2-ol'},
-            { formula: 'CH3-CH(OH)-CH3', names: ['Propan-2-ol'], category: 3, incorrectName: 'Propan-1-ol'},
-            { formula: 'CH3-CH2-CH2-CH2-OH', names: ['Butan-1-ol'], category: 3, incorrectName: 'Butan-2-ol'},
-            { formula: 'CH3-CH2-CH(OH)-CH3', names: ['Butan-2-ol'], category: 3, incorrectName: 'Butan-1-ol'},
-            { formula: 'HO-CH2-CH2-OH', names: ['Etan-1,2-diol', 'Etilenglicol'], category: 3, incorrectName: 'Propan-1,2-diol'},
-            { formula: 'HO-CH2-CH(OH)-CH3', names: ['Propan-1,2-diol'], category: 3, incorrectName: 'Etan-1,2-diol'},
-            { formula: 'C6H5-OH', names: ['Fenol'], category: 3, incorrectName: 'Benceno'},
+            { formula: 'CH3-CH2-OH', names: ['Etanol'], category: 3, incorrectName: 'Propanol'},
             { formula: 'CH3-O-CH3', names: ['Metoximetano', 'Dimetil éter'], category: 3, incorrectName: 'Etoxietano'},
-            { formula: 'CH3-O-CH2-CH3', names: ['Metoxietano', 'Etil metil éter'], category: 3, incorrectName: 'Metoximetano'},
-            { formula: 'CH3-CH2-O-CH2-CH3', names: ['Etoxietano', 'Dietil éter'], category: 3, incorrectName: 'Metoxietano'},
-            { formula: 'CH3-O-CH2-CH2-CH3', names: ['1-Metoxipropano'], category: 3, incorrectName: '2-Metoxipropano'},
-            { formula: 'CH3-O-CH(CH3)2', names: ['2-Metoxipropano'], category: 3, incorrectName: '1-Metoxipropano'},
             { formula: 'HCHO', names: ['Metanal', 'Formaldehído'], category: 4, incorrectName: 'Etanal'},
             { formula: 'CH3-CHO', names: ['Etanal', 'Acetaldehído'], category: 4, incorrectName: 'Propanal'},
-            { formula: 'CH3-CH2-CHO', names: ['Propanal'], category: 4, incorrectName: 'Butanal'},
-            { formula: 'CH3-CH2-CH2-CHO', names: ['Butanal'], category: 4, incorrectName: 'Pentanal'},
-            { formula: 'CH3-CH2-CH2-CH2-CHO', names: ['Pentanal'], category: 4, incorrectName: 'Hexanal'},
-            { formula: 'C6H5-CHO', names: ['Benzaldehído'], category: 4, incorrectName: 'Fenol'},
-            { formula: 'CH3-CO-CH3', names: ['Propanona', 'Acetona'], category: 4, incorrectName: 'Butanona', hint: 'El grupo C=O en un carbono secundario es característico.'},
-            { formula: 'CH3-CH2-CO-CH3', names: ['Butanona'], category: 4, incorrectName: 'Propanona'},
-            { formula: 'CH3-CO-CH2-CH2-CH3', names: ['Pentan-2-ona'], category: 4, incorrectName: 'Pentan-3-ona'},
-            { formula: 'CH3-CH2-CO-CH2-CH3', names: ['Pentan-3-ona'], category: 4, incorrectName: 'Pentan-2-ona'},
-            { formula: 'CH3-CH2-CH2-CO-CH2-CH3', names: ['Hexan-3-ona'], category: 4, incorrectName: 'Hexan-2-ona'},
+            { formula: 'CH3-CO-CH3', names: ['Propanona', 'Acetona'], category: 4, incorrectName: 'Butanona'},
             { formula: 'HCOOH', names: ['Ácido metanoico', 'Ácido fórmico'], category: 5, incorrectName: 'Ácido etanoico'},
-            { formula: 'CH3-COOH', names: ['Ácido etanoico', 'Ácido acético'], category: 5, incorrectName: 'Ácido propanoico', hint: 'El grupo -COOH es el grupo carboxilo.'},
-            { formula: 'CH3-CH2-COOH', names: ['Ácido propanoico'], category: 5, incorrectName: 'Ácido butanoico'},
-            { formula: 'CH3-CH2-CH2-COOH', names: ['Ácido butanoico'], category: 5, incorrectName: 'Ácido pentanoico'},
-            { formula: 'CH3-CH2-CH2-CH2-COOH', names: ['Ácido pentanoico'], category: 5, incorrectName: 'Ácido hexanoico'},
-            { formula: 'C6H5-COOH', names: ['Ácido benzoico'], category: 5, incorrectName: 'Ácido acético'},
+            { formula: 'CH3-COOH', names: ['Ácido etanoico', 'Ácido acético'], category: 5, incorrectName: 'Ácido propanoico'},
             { formula: 'HCOO-CH3', names: ['Metanoato de metilo'], category: 5, incorrectName: 'Etanoato de metilo'},
-            { formula: 'CH3-COO-CH3', names: ['Etanoato de metilo'], category: 5, incorrectName: 'Metanoato de metilo'},
-            { formula: 'CH3-COO-CH2-CH3', names: ['Etanoato de etilo'], category: 5, incorrectName: 'Propanoato de etilo'},
-            { formula: 'CH3-CH2-COO-CH3', names: ['Propanoato de metilo'], category: 5, incorrectName: 'Etanoato de etilo'},
-            { formula: 'CH3-CH2-COO-CH2-CH3', names: ['Propanoato de etilo'], category: 5, incorrectName: 'Butanoato de metilo'},
-            { formula: 'HCOO-CH2-CH3', names: ['Metanoato de etilo'], category: 5, incorrectName: 'Etanoato de metilo'},
             { formula: 'CH3-NH2', names: ['Metanamina'], category: 6, incorrectName: 'Etanamina'},
-            { formula: 'CH3-CH2-NH2', names: ['Etanamina'], category: 6, incorrectName: 'Propanamina'},
-            { formula: 'CH3-CH2-CH2-NH2', names: ['Propanamina'], category: 6, incorrectName: 'Butanamina'},
-            { formula: '(CH3)2NH', names: ['Dimetilamina'], category: 6, incorrectName: 'Trimetilamina'},
-            { formula: '(CH3)3N', names: ['Trimetilamina'], category: 6, incorrectName: 'Dimetilamina'},
-            { formula: 'CH3-NH-CH2-CH3', names: ['Etilmetilamina'], category: 6, incorrectName: 'Dietilamina'},
-            { formula: '(CH3-CH2)2NH', names: ['Dietilamina'], category: 6, incorrectName: 'Etilmetilamina'},
             { formula: 'C6H5-NH2', names: ['Fenilamina', 'Anilina'], category: 6, incorrectName: 'Nitrobenceno'},
-            { formula: 'HCO-NH2', names: ['Metanamida'], category: 6, incorrectName: 'Etanamida'},
             { formula: 'CH3-CO-NH2', names: ['Etanamida'], category: 6, incorrectName: 'Propanamida'},
-            { formula: 'CH3-CH2-CO-NH2', names: ['Propanamida'], category: 6, incorrectName: 'Butanamida'},
-            { formula: 'CH3-CH2-CH2-CO-NH2', names: ['Butanamida'], category: 6, incorrectName: 'Propanamida'},
-            { formula: 'CH3-NO2', names: ['Nitrometano'], category: 6, incorrectName: 'Nitroetano'},
-            { formula: 'CH3-CH2-NO2', names: ['Nitroetano'], category: 6, incorrectName: 'Nitropropano'},
-            { formula: 'CH3-CH2-CH2-NO2', names: ['1-Nitropropano'], category: 6, incorrectName: '2-Nitropropano'},
-            { formula: 'CH3-CH(NO2)-CH3', names: ['2-Nitropropano'], category: 6, incorrectName: '1-Nitropropano'},
-            { formula: 'C6H5-NO2', names: ['Nitrobenceno'], category: 6, incorrectName: 'Anilina'}
+            { formula: 'CH3-NO2', names: ['Nitrometano'], category: 6, incorrectName: 'Nitroetano'}
         ];
 
         // --- LÓGICA DE LA APLICACIÓN ---
@@ -593,14 +431,13 @@
         const startBtn = document.getElementById('start-btn');
         const checkBtn = document.getElementById('check-btn');
         const answerInput = document.getElementById('answer');
-        const categorySelect = document.getElementById('category');
+        const categoryCheckboxesContainer = document.getElementById('category-checkboxes');
         const backToSetupBtn = document.getElementById('back-to-setup');
         const restartBtn = document.getElementById('restart-btn');
         const typeRadios = document.querySelectorAll('input[name="type"]');
         const questionEl = document.getElementById('question');
         const totalScoreEl = document.getElementById('total-score');
         const resetScoreBtn = document.getElementById('reset-score-btn');
-        const hintBtn = document.getElementById('hint-btn');
         const feedbackEl = document.getElementById('feedback');
         const timerEl = document.getElementById('timer');
         
@@ -611,7 +448,6 @@
         let sessionResults = [];
         let currentStreak = 0;
         let timerInterval;
-        const QUIZ_LENGTH = 10;
 
         const loadTotalScore = () => {
             const totalCorrect = parseInt(localStorage.getItem('totalCorrect')) || 0;
@@ -640,12 +476,16 @@
 
         const populateCategories = (type) => {
             const categories = type === 'inorganic' ? inorganicCategories : organicCategories;
-            categorySelect.innerHTML = '';
+            categoryCheckboxesContainer.innerHTML = '';
             categories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat.value;
-                option.textContent = cat.text;
-                categorySelect.appendChild(option);
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <input type="checkbox" name="category" value="${cat.value}" id="cat_${type}_${cat.value}" class="hidden selection-checkbox">
+                    <label for="cat_${type}_${cat.value}" class="block text-center p-2 border-2 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
+                        <span class="font-semibold text-slate-800">${cat.text}</span>
+                    </label>
+                `;
+                categoryCheckboxesContainer.appendChild(div);
             });
         };
 
@@ -675,39 +515,45 @@
             const allCompounds = currentType === 'inorganic' ? inorganicCompounds : organicCompounds;
             
             const currentMode = document.querySelector('input[name="mode"]:checked').value;
-            const currentCategory = parseInt(categorySelect.value);
-            const categoryText = categorySelect.options[categorySelect.selectedIndex].text;
+            
+            const selectedCategoryNodes = document.querySelectorAll('input[name="category"]:checked');
+            if (selectedCategoryNodes.length === 0) {
+                alert("Por favor, selecciona al menos una categoría para empezar.");
+                return;
+            }
+            const selectedCategories = Array.from(selectedCategoryNodes).map(node => parseInt(node.value));
+            
+            const allCats = currentType === 'inorganic' ? inorganicCategories : organicCategories;
+            let categoryText = 'Práctica Personalizada';
+            if (selectedCategories.length === 1) {
+                categoryText = allCats.find(c => c.value === selectedCategories[0])?.text || '';
+            }
+
+            const QUIZ_LENGTH = parseInt(document.querySelector('input[name="quiz_length"]:checked').value);
 
             let filteredCompounds;
             
             if (currentMode === 'find_error') {
                  let compoundsWithError = allCompounds.filter(c => c.incorrectName);
-                 if (currentType === 'inorganic') {
-                    if (currentCategory === 4) compoundsWithError = compoundsWithError.filter(c => [1, 2, 3].includes(c.category));
-                    else if (currentCategory === 9) compoundsWithError = compoundsWithError.filter(c => [5, 6, 7, 8].includes(c.category));
-                    else if (currentCategory === 10) {}
-                    else compoundsWithError = compoundsWithError.filter(c => c.category === currentCategory);
-                 } else {
-                     compoundsWithError = compoundsWithError.filter(c => c.category === currentCategory);
-                 }
-                 filteredCompounds = compoundsWithError;
+                 filteredCompounds = compoundsWithError.filter(c => selectedCategories.includes(c.category));
             } else {
-                 if (currentType === 'inorganic' && currentCategory === 4) filteredCompounds = allCompounds.filter(c => [1, 2, 3].includes(c.category));
-                else if (currentType === 'inorganic' && currentCategory === 9) filteredCompounds = allCompounds.filter(c => [5, 6, 7, 8].includes(c.category));
-                else if (currentType === 'inorganic' && currentCategory === 10) filteredCompounds = [...allCompounds];
-                else filteredCompounds = allCompounds.filter(c => c.category === currentCategory);
+                 filteredCompounds = allCompounds.filter(c => selectedCategories.includes(c.category));
             }
             
             let shuffled = [...filteredCompounds].sort(() => 0.5 - Math.random());
-            quizSessionCompounds = shuffled.slice(0, QUIZ_LENGTH);
+            
+            quizSessionCompounds = [];
+            if (shuffled.length > 0) {
+                for (let i = 0; i < QUIZ_LENGTH; i++) {
+                    quizSessionCompounds.push(shuffled[i % shuffled.length]);
+                }
+                quizSessionCompounds.sort(() => 0.5 - Math.random());
+            }
+
 
             if (quizSessionCompounds.length < 1) {
-                 alert("No hay suficientes compuestos en esta categoría para este modo de juego.");
+                 alert("No hay suficientes compuestos en la(s) categoría(s) seleccionada(s) para este modo de juego.");
                  return;
-            }
-            
-            if (quizSessionCompounds.length < QUIZ_LENGTH) {
-                console.warn(`Advertencia: Solo se encontraron ${quizSessionCompounds.length} compuestos. La prueba será más corta.`)
             }
 
             score = { correct: 0, total: 0 };
@@ -716,15 +562,8 @@
             updateStreak();
             updateScore();
             
-            const titles = {
-                name_formula: 'Nombra el siguiente compuesto:',
-                write_formula: 'Formula el siguiente compuesto:',
-                find_error: 'Identifica el error y escribe el nombre correcto:',
-                timed_mode: '¡Rápido! Nombra el compuesto:'
-            };
-            const labels = {
-                name_formula: 'FÓRMULA', write_formula: 'NOMBRE', find_error: 'FÓRMULA Y NOMBRE INCORRECTO', timed_mode: 'FÓRMULA'
-            }
+            const titles = { name_formula: 'Nombra el siguiente compuesto:', write_formula: 'Formula el siguiente compuesto:', find_error: 'Identifica el error y escribe el nombre correcto:', timed_mode: '¡Rápido! Nombra el compuesto:' };
+            const labels = { name_formula: 'FÓRMULA', write_formula: 'NOMBRE', find_error: 'FÓRMULA Y NOMBRE INCORRECTO', timed_mode: 'FÓRMULA' }
 
             document.getElementById('quiz-title').textContent = categoryText;
             document.getElementById('quiz-subtitle').textContent = titles[currentMode];
@@ -753,8 +592,7 @@
             answerInput.value = '';
             answerInput.disabled = false;
             answerInput.focus();
-            hintBtn.disabled = false;
-
+            
             currentCompound = quizSessionCompounds[score.total];
             const currentMode = document.querySelector('input[name="mode"]:checked').value;
 
@@ -786,30 +624,22 @@
             if (isCorrect) {
                 score.correct++;
                 currentStreak++;
-                feedbackEl.innerHTML = `<div class="flex items-center justify-center gap-2 text-green-600 font-bold"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>¡Correcto!</span></div>`;
+                feedbackEl.innerHTML = `<div class="flex items-center justify-center gap-2 text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>¡Correcto!</span></div>`;
             } else {
                 currentStreak = 0;
                 let correctAnswerHTML = (currentMode === 'write_formula')
                     ? currentCompound.formula
                     : capitalize(currentCompound.names[0]);
-                if (currentCompound.explanation) {
-                    explanationHTML = `<p class="text-sm mt-1 text-sky-600">${currentCompound.explanation}</p>`;
-                }
-                feedbackEl.innerHTML = `<div class="flex items-center justify-center gap-2 text-red-600 font-bold"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg><span>Incorrecto.</span></div><p class="text-sm feedback-text">La respuesta correcta es: <strong>${correctAnswerHTML}</strong></p>${explanationHTML}`;
+                explanationHTML = `<p class="text-sm feedback-text">La respuesta correcta es: <strong>${correctAnswerHTML}</strong></p>`;
+                feedbackEl.innerHTML = `<div class="flex items-center justify-center gap-2 text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg><span>Incorrecto.</span></div>${explanationHTML}`;
             }
 
-            sessionResults.push({
-                question: currentCompound,
-                userAnswer: userAnswer,
-                isCorrect: isCorrect
-            });
-            
+            sessionResults.push({ question: currentCompound, userAnswer: userAnswer, isCorrect: isCorrect });
             updateScore();
             updateStreak();
             state = 'checked';
             checkBtn.textContent = score.total >= quizSessionCompounds.length ? 'Ver Resultados' : 'Siguiente';
             answerInput.disabled = true;
-            hintBtn.disabled = true;
         };
         
         const showFinalScore = () => {
@@ -819,9 +649,13 @@
             document.getElementById('final-score-text').textContent = `Tu nota final es: ${score.correct} sobre ${totalQuestions}`;
             let message = '';
             const percentage = totalQuestions > 0 ? (score.correct / totalQuestions) * 100 : 0;
-            if (percentage < 50) message = 'Necesitas repasar un poco más. ¡No te rindas!';
-            else if (percentage < 80) message = '¡Buen trabajo! Sigue practicando para perfeccionar.';
-            else message = '¡Excelente! Tienes un gran dominio del tema.';
+            if (percentage >= 80) {
+                message = '¡Excelente! Tienes un gran dominio del tema.';
+            } else if (percentage >= 50) {
+                message = '¡Buen trabajo! Sigue practicando para perfeccionar.';
+            } else {
+                message = 'Necesitas repasar un poco más. ¡No te rindas!';
+            }
             document.getElementById('final-message').textContent = message;
 
             saveTotalScore(score.correct, score.total);
@@ -854,17 +688,13 @@
         const startTimer = () => {
             let timeLeft = 180; // 3 minutos
             timerEl.classList.remove('hidden');
-
             const updateTimer = () => {
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;
                 timerEl.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                if (timeLeft <= 0) {
-                    showFinalScore();
-                }
+                if (timeLeft <= 0) { showFinalScore(); }
                 timeLeft--;
             };
-            
             updateTimer();
             timerInterval = setInterval(updateTimer, 1000);
         };
@@ -874,15 +704,12 @@
             let tableHTML = `<table class="w-full text-sm"><thead><tr class="border-b"><th class="p-2 text-left">Pregunta</th><th class="p-2 text-left">Tu Respuesta</th><th class="p-2 text-left">Correcta</th></tr></thead><tbody>`;
             sessionResults.forEach(result => {
                 const mode = result.question.incorrectName ? 'find_error' : (document.querySelector('input[name="mode"]:checked').value);
-                
                 let questionText = '';
                 if(mode === 'write_formula') questionText = capitalize(result.question.names[0]);
                 else if (mode === 'find_error') questionText = `${renderFormula(result.question.formula)} <span class="text-red-500 font-medium">${capitalize(result.question.incorrectName)}</span>`;
                 else questionText = renderFormula(result.question.formula);
-
                 const correctAnswer = (mode === 'write_formula') ? result.question.formula : capitalize(result.question.names[0]);
                 const isCorrectClass = result.isCorrect ? 'text-green-600' : 'text-red-600';
-
                 tableHTML += `<tr class="border-b"><td class="p-2 font-mono">${questionText}</td><td class="p-2 ${isCorrectClass}">${result.userAnswer || '-'}</td><td class="p-2 text-slate-500">${correctAnswer}</td></tr>`;
             });
             tableHTML += `</tbody></table>`;
@@ -893,51 +720,41 @@
         document.addEventListener('DOMContentLoaded', () => {
             populateCategories('inorganic');
             loadTotalScore();
-        });
 
-        resetScoreBtn.addEventListener('click', resetTotalScore);
+            resetScoreBtn.addEventListener('click', resetTotalScore);
 
-        typeRadios.forEach(radio => radio.addEventListener('change', (e) => {
-            setTheme(e.target.value);
-            populateCategories(e.target.value);
-        }));
+            typeRadios.forEach(radio => radio.addEventListener('change', (e) => {
+                setTheme(e.target.value);
+                populateCategories(e.target.value);
+            }));
 
-        startBtn.addEventListener('click', setupGame);
-        restartBtn.addEventListener('click', () => {
-            finalScoreView.classList.add('hidden');
-            setupView.classList.remove('hidden');
-            loadTotalScore();
-        });
-        backToSetupBtn.addEventListener('click', () => {
-            clearInterval(timerInterval);
-            quizView.classList.add('hidden');
-            setupView.classList.remove('hidden');
-            loadTotalScore();
-        });
+            startBtn.addEventListener('click', setupGame);
+            restartBtn.addEventListener('click', () => {
+                finalScoreView.classList.add('hidden');
+                setupView.classList.remove('hidden');
+                loadTotalScore();
+            });
+            backToSetupBtn.addEventListener('click', () => {
+                clearInterval(timerInterval);
+                quizView.classList.add('hidden');
+                setupView.classList.remove('hidden');
+                loadTotalScore();
+            });
 
-        hintBtn.addEventListener('click', () => {
-            if (currentCompound && currentCompound.hint) {
-                feedbackEl.innerHTML = `<p class="text-sky-600">${currentCompound.hint}</p>`;
-                hintBtn.disabled = true;
-            } else {
-                feedbackEl.innerHTML = `<p class="text-slate-500">No hay pistas disponibles para este compuesto.</p>`;
-                hintBtn.disabled = true;
-            }
-        });
-
-        checkBtn.addEventListener('click', () => {
-            if (state === 'waiting') {
-                checkAnswer();
-            } else {
-                nextQuestion();
-            }
-        });
-        
-        answerInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                checkBtn.click();
-            }
+            checkBtn.addEventListener('click', () => {
+                if (state === 'waiting') {
+                    checkAnswer();
+                } else {
+                    nextQuestion();
+                }
+            });
+            
+            answerInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    checkBtn.click();
+                }
+            });
         });
     </script>
 </body>
