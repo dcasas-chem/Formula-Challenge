@@ -3,51 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formula Challenge</title>
+    <title>UnidApp</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Space Grotesk & Barlow -->
+    <!-- Google Fonts: Lexend -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --theme-color-600: #5dd699;
-            --theme-color-800: #10b981; /* Tailwind green-500 */
-            --theme-gradient-from: #5dd699;
-            --theme-gradient-to: #34d399; /* Tailwind green-400 */
-            --theme-shadow-color: 'rgba(93, 214, 153, 0.5)';
-            --theme-focus-ring-color: #5dd699;
-            --theme-bg-from: #ecfdf5; /* Tailwind green-50 */
-            --theme-bg-to: #f0fdfa; /* Tailwind teal-50 */
-        }
         body {
-            font-family: 'Barlow', sans-serif;
-            background: linear-gradient(135deg, var(--theme-bg-from), var(--theme-bg-to));
-            color: #1f2937; /* gray-800 */
-            transition: background 0.5s ease;
-        }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #a8e0ff 0%, #8ee2f5 50%, #91d8f7 100%);
+            color: #2d3748;
         }
         .glass-container {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
         }
-        .selection-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-            cursor: pointer;
+        .theme-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: white;
+            border-radius: 1rem; /* rounded-xl */
         }
-        .selection-card.selected {
-            transform: translateY(-4px);
-            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-            --tw-ring-color: var(--theme-color-600);
+        .theme-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
@@ -59,22 +43,19 @@
             background-color: #f8fafc;
             border: 1px solid #cbd5e1;
             color: #1e293b;
-            font-family: 'Barlow', sans-serif;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none; margin: 0;
         }
         .btn-primary {
-            background: linear-gradient(45deg, var(--theme-gradient-from), var(--theme-gradient-to));
+            background: linear-gradient(45deg, #ef4444, #f97316); /* Red-500 to Orange-500 */
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--theme-shadow-color);
-        }
-        /* Dynamic Theme Classes */
-        .text-theme { color: var(--theme-color-600); }
-        .hover\:text-theme-dark:hover { color: var(--theme-color-800); }
-        .focus\:ring-theme:focus, .ring-theme { 
-            --tw-ring-color: var(--theme-focus-ring-color);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5); /* Red-500 shadow */
         }
     </style>
 </head>
@@ -84,128 +65,105 @@
         
         <div id="main-menu">
             <div class="text-center mb-6">
-                <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 tracking-tight">Formula Challenge</h1>
-                <p class="text-gray-600 mt-2 text-lg">Pon a prueba tus conocimientos de formulación.</p>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500 tracking-tight">UnidApp</h1>
+                <p class="text-gray-600 mt-2">Domina los factores de conversión del Sistema Internacional.</p>
             </div>
-            <div id="stats-container" class="text-center mb-6 p-4 bg-white/50 rounded-lg border border-gray-200"></div>
 
-            <div>
-                <h2 class="text-xl font-bold text-center text-theme mb-4">1. Elige el tipo de formulación</h2>
-                <div class="flex justify-center gap-4" id="formulation-type-selector">
-                    <button data-value="inorganic" class="selection-card p-5 w-full bg-gradient-to-br from-sky-500 to-cyan-400 rounded-xl text-white">
-                        <h3 class="text-xl font-bold">Inorgánica</h3>
+            <div id="stats-container" class="text-center mb-6 p-4 bg-white/50 rounded-lg border border-gray-200">
+                <!-- Stats loaded by JS -->
+            </div>
+
+            <div id="theme-selection" class="fade-in">
+                <h2 class="text-lg font-semibold text-center text-red-600 mb-6">Elige una categoría para comenzar</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <button data-theme="simple" class="theme-card text-left p-5 bg-gradient-to-br from-sky-500 to-cyan-400">
+                        <h3 class="text-lg font-bold mb-1">Magnitudes Simples</h3>
+                        <p class="text-sky-100 text-sm">Longitud, masa, tiempo, volumen...</p>
                     </button>
-                    <button data-value="organic" class="selection-card p-5 w-full bg-gradient-to-br from-emerald-500 to-lime-500 rounded-xl text-white">
-                        <h3 class="text-xl font-bold">Orgánica</h3>
+                    <button data-theme="derived" class="theme-card text-left p-5 bg-gradient-to-br from-red-500 to-rose-500">
+                        <h3 class="text-lg font-bold mb-1">Magnitudes Derivadas</h3>
+                        <p class="text-red-100 text-sm">Velocidad, densidad...</p>
+                    </button>
+                    <button data-theme="prefix" class="theme-card text-left p-5 bg-gradient-to-br from-emerald-500 to-lime-500">
+                        <h3 class="text-lg font-bold mb-1">Múltiplos y Submúltiplos</h3>
+                        <p class="text-emerald-100 text-sm">Practica con prefijos: de Giga a nano.</p>
+                    </button>
+                    <button data-theme="scientific" class="theme-card text-left p-5 bg-gradient-to-br from-amber-500 to-orange-500">
+                        <h3 class="text-lg font-bold mb-1">Notación Científica</h3>
+                        <p class="text-amber-100 text-sm">El reto definitivo.</p>
                     </button>
                 </div>
-            </div>
-            <div class="mt-8">
-                <h2 class="text-xl font-bold text-center text-theme mb-4">2. Elige el modo de juego</h2>
-                <div class="grid grid-cols-2 gap-4" id="game-mode-selector">
-                    <button data-value="formulate" class="selection-card p-5 bg-white/60 rounded-xl border">
-                        <h3 class="text-xl font-bold text-gray-800">Formular</h3>
-                    </button>
-                    <button data-value="name" class="selection-card p-5 bg-white/60 rounded-xl border">
-                        <h3 class="text-xl font-bold text-gray-800">Nombrar</h3>
-                    </button>
-                    <button data-value="correct_error" class="selection-card p-5 bg-white/60 rounded-xl border">
-                        <h3 class="text-xl font-bold text-gray-800">Corrige el Error</h3>
-                    </button>
-                    <button data-value="time_trial" class="selection-card p-5 bg-white/60 rounded-xl border">
-                        <h3 class="text-xl font-bold text-gray-800">Contrarreloj</h3>
-                    </button>
-                </div>
-            </div>
-            <div class="text-center mt-8">
-                <button id="continue-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Continuar</button>
             </div>
         </div>
 
-        <div id="category-selection-view" class="hidden fade-in"></div>
+        <div id="question-selection" class="hidden fade-in text-center">
+            <!-- Content generated by JS -->
+        </div>
 
-        <div id="game-view" class="hidden"></div>
+        <div id="game-view" class="hidden">
+            <!-- Content generated by JS -->
+        </div>
         
-        <div id="game-over-view" class="hidden fade-in text-center p-8"></div>
+        <div id="game-over-view" class="hidden fade-in text-center p-8">
+            <h2 class="text-3xl font-bold text-red-600 mb-4">¡Partida Terminada!</h2>
+            <p id="final-score-text" class="text-xl text-gray-700 mb-8"></p>
+            <button id="play-again-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Jugar de Nuevo</button>
+        </div>
+
     </div>
-    
+
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- DATA & CONFIG ---
-        const compounds = {
-            inorganic: {
-                'Óxidos': [
-                    { formula: 'Fe2O3', name: 'óxido de hierro (III)' }, { formula: 'CuO', name: 'óxido de cobre (II)' }, { formula: 'CO2', name: 'dióxido de carbono' }, { formula: 'N2O5', name: 'pentaóxido de dinitrógeno' }, { formula: 'PbO2', name: 'óxido de plomo (IV)' }
-                ],
-                'Hidruros Metálicos': [
-                    { formula: 'NaH', name: 'hidruro de sodio' }, { formula: 'CaH2', name: 'hidruro de calcio' }, { formula: 'AlH3', name: 'hidruro de aluminio' }, { formula: 'LiH', name: 'hidruro de litio' }
-                ],
-                'Hidróxidos': [
-                    { formula: 'NaOH', name: 'hidróxido de sodio' }, { formula: 'Ca(OH)2', name: 'hidróxido de calcio' }, { formula: 'Fe(OH)3', name: 'hidróxido de hierro (III)' }
-                ],
-                'Sales Binarias': [
-                    { formula: 'NaCl', name: 'cloruro de sodio' }, { formula: 'FeCl3', name: 'cloruro de hierro (III)' }, { formula: 'CaS', name: 'sulfuro de calcio' }, { formula: 'AlBr3', name: 'bromuro de aluminio' }
-                ]
+        // --- DATA ---
+        const data = {
+            simple: {
+                longitud: { name: 'Longitud', path: ['km', 'm', 'cm', 'mm'], units: { 'km': { to_next: 1000 }, 'm': { to_next: 100 }, 'cm': { to_next: 10 }, 'mm': {} } },
+                masa: { name: 'Masa', path: ['t', 'kg', 'g', 'mg'], units: { 't': { to_next: 1000 }, 'kg': { to_next: 1000 }, 'g': { to_next: 1000 }, 'mg': {} } },
+                tiempo: { name: 'Tiempo', path: ['d', 'h', 'min', 's'], units: { 'd': { to_next: 24 }, 'h': { to_next: 60 }, 'min': { to_next: 60 }, 's': {} } },
+                volumen_liquido: { name: 'Volumen Líquido', path: ['kL', 'L', 'mL'], units: { 'kL': { to_next: 1000 }, 'L': { to_next: 1000 }, 'mL': {} } },
+                area: { name: 'Área', path: ['km²', 'm²', 'cm²'], units: { 'km²': { to_next: 1e6 }, 'm²': { to_next: 1e4 }, 'cm²': {} } },
+                volumen_cubico: { name: 'Volumen Cúbico', path: ['m³', 'cm³', 'mm³'], units: { 'm³': { to_next: 1e6 }, 'cm³': { to_next: 1000 }, 'mm³': {} } }
             },
-            organic: {
-                'Alcanos': [
-                    { formula: 'CH4', name: 'metano' }, { formula: 'C2H6', name: 'etano' }, { formula: 'C3H8', name: 'propano' }, { formula: 'C4H10', name: 'butano' }, { formula: 'C5H12', name: 'pentano' }
-                ],
-                'Alquenos': [
-                    { formula: 'C2H4', name: 'eteno' }, { formula: 'C3H6', name: 'propeno' }, { formula: 'C4H8', name: 'buteno' },
-                ],
-                'Alquinos': [
-                    { formula: 'C2H2', name: 'etino' }, { formula: 'C3H4', name: 'propino' }, { formula: 'C4H6', name: 'butino' },
-                ],
-                'Alcoholes': [
-                    { formula: 'CH3OH', name: 'metanol' }, { formula: 'C2H5OH', name: 'etanol' }, { formula: 'CH3CH2CH2OH', name: 'propan-1-ol' },
-                ]
+            derived: {
+                velocidad: { name: 'Velocidad', units: { 'km/h': { num: 'km', den: 'h' }, 'm/s': { num: 'm', den: 's' } } },
+                densidad: { name: 'Densidad', units: { 'kg/m³': { num: 'kg', den: 'm³' }, 'g/cm³': { num: 'g', den: 'cm³' } } }
+            },
+            prefix: {
+                name: 'Múltiplos y Submúltiplos', base_units: ['m', 'g', 's', 'L', 'W', 'V', 'A', 'Hz', 'J'],
+                prefixes: { 'G': 1e9, 'M': 1e6, 'k': 1e3, '': 1, 'c': 1e-2, 'm': 1e-3, 'µ': 1e-6, 'n': 1e-9 }
             }
         };
+        const simpleUnitToMagnitude = {};
+        for (const magKey in data.simple) {
+            data.simple[magKey].path.forEach(unitKey => simpleUnitToMagnitude[unitKey] = magKey);
+        }
 
-        const themes = {
-            default: {
-                '--theme-color-600': '#5dd699', '--theme-color-800': '#10b981', '--theme-gradient-from': '#5dd699',
-                '--theme-gradient-to': '#34d399', '--theme-shadow-color': 'rgba(93, 214, 153, 0.5)', '--theme-focus-ring-color': '#5dd699',
-                '--theme-bg-from': '#ecfdf5', '--theme-bg-to': '#f0fdfa'
-            },
-            inorganic: {
-                '--theme-color-600': '#0284c7', '--theme-color-800': '#0369a1', '--theme-gradient-from': '#0ea5e9',
-                '--theme-gradient-to': '#06b6d4', '--theme-shadow-color': 'rgba(14, 165, 233, 0.5)', '--theme-focus-ring-color': '#0ea5e9',
-                '--theme-bg-from': '#bae6fd', '--theme-bg-to': '#a5f3fc'
-            },
-            organic: {
-                '--theme-color-600': '#16a34a', '--theme-color-800': '#14532d', '--theme-gradient-from': '#22c55e',
-                '--theme-gradient-to': '#84cc16', '--theme-shadow-color': 'rgba(34, 197, 94, 0.5)', '--theme-focus-ring-color': '#22c55e',
-                '--theme-bg-from': '#a7f3d0', '--theme-bg-to': '#d9f99d'
-            }
-        };
-
-        // --- STATE & DOM ---
-        let gameState = {};
-        const allViews = {
-            mainMenu: document.getElementById('main-menu'),
-            categorySelection: document.getElementById('category-selection-view'),
-            game: document.getElementById('game-view'),
-            gameOver: document.getElementById('game-over-view')
-        };
-        const formulationTypeSelector = document.getElementById('formulation-type-selector');
-        const gameModeSelector = document.getElementById('game-mode-selector');
-
-        // --- THEME & UI FUNCTIONS ---
-        const applyThemeColors = (theme = 'default') => {
-            const colors = themes[theme];
-            Object.entries(colors).forEach(([key, value]) => document.documentElement.style.setProperty(key, value));
-        };
-        const showView = (viewToShow) => Object.values(allViews).forEach(v => v.classList.toggle('hidden', v !== viewToShow));
+        // --- DOM ELEMENTS ---
+        const mainMenu = document.getElementById('main-menu');
+        const questionSelectionView = document.getElementById('question-selection');
+        const gameView = document.getElementById('game-view');
+        const gameOverView = document.getElementById('game-over-view');
+        const allViews = [mainMenu, questionSelectionView, gameView, gameOverView];
         
+        // --- STATE & GAME LOGIC ---
+        let gameState = {};
+        let currentTheme = '';
+
+        const showView = (viewToShow) => {
+            allViews.forEach(v => v.classList.add('hidden'));
+            viewToShow.classList.remove('hidden');
+        };
+
+        const getStats = () => JSON.parse(localStorage.getItem('conversionStats')) || { correct: 0, total: 0 };
+        const saveStats = (stats) => localStorage.setItem('conversionStats', JSON.stringify(stats));
         const updateStatsDisplay = () => {
-            const stats = JSON.parse(localStorage.getItem('formulaChallengeStats')) || { correct: 0, total: 0 };
+            const stats = getStats();
             const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
-            document.getElementById('stats-container').innerHTML = `
+            const statsContainer = document.getElementById('stats-container');
+            statsContainer.innerHTML = `
                 <div class="flex items-center justify-center gap-4">
                     <div>
-                        <h3 class="font-bold text-gray-800 text-lg">Estadísticas Globales</h3>
+                        <h3 class="font-bold text-gray-800">Estadísticas Globales</h3>
                         <p class="text-sm text-gray-700">Aciertos: <span class="font-semibold text-green-600">${stats.correct}</span> de <span class="font-semibold text-blue-600">${stats.total}</span> | Precisión: <span class="font-semibold text-yellow-600">${accuracy}%</span></p>
                     </div>
                     <button id="reset-stats-btn" class="p-2 rounded-full hover:bg-red-500/10" title="Borrar datos">
@@ -213,270 +171,310 @@
                     </button>
                 </div>`;
             document.getElementById('reset-stats-btn').addEventListener('click', () => {
-                if (confirm('¿Estás seguro? Se borrarán todas tus estadísticas.')) {
-                    localStorage.removeItem('formulaChallengeStats');
+                if (confirm('¿Estás seguro de que quieres borrar todas tus estadísticas?')) {
+                    localStorage.removeItem('conversionStats');
                     updateStatsDisplay();
                 }
             });
         };
         
-        // --- SETUP & NAVIGATION ---
-        const handleSelection = (selector, selectedBtn) => {
-            if (!selectedBtn) return;
-            selector.querySelectorAll('.selection-card').forEach(btn => btn.classList.remove('selected'));
-            selectedBtn.classList.add('selected');
-        };
-
-        formulationTypeSelector.addEventListener('click', e => handleSelection(formulationTypeSelector, e.target.closest('.selection-card')));
-        gameModeSelector.addEventListener('click', e => handleSelection(gameModeSelector, e.target.closest('.selection-card')));
-
-        document.getElementById('continue-btn').addEventListener('click', () => {
-            const type = formulationTypeSelector.querySelector('.selected')?.dataset.value;
-            const mode = gameModeSelector.querySelector('.selected')?.dataset.value;
-
-            if (!type || !mode) {
-                alert('Por favor, selecciona el tipo de formulación y el modo de juego.');
-                return;
-            }
-
-            gameState.type = type;
-            gameState.mode = mode;
-            applyThemeColors(type);
-
-            const categories = Object.keys(compounds[type]);
-            const isTimeTrial = mode === 'time_trial';
-            allViews.categorySelection.innerHTML = `
-                <h2 class="text-3xl font-bold text-theme mb-2">Configura tu partida</h2>
-                <div class="grid grid-cols-1 ${isTimeTrial ? '' : 'md:grid-cols-2'} gap-x-8 gap-y-4">
-                    ${!isTimeTrial ? `
-                    <div>
-                        <h3 class="font-bold text-lg text-gray-700 mb-3">Número de preguntas</h3>
-                        <div class="flex justify-center space-x-3" id="question-count-selector">
-                            ${[10, 15, 20].map(n => `<button data-value="${n}" class="selection-card w-20 h-14 text-xl font-bold rounded-lg bg-white/60 border">${n}</button>`).join('')}
-                        </div>
-                    </div>` : ''}
-                    <div class="${isTimeTrial ? 'col-span-1' : ''}">
-                        <h3 class="font-bold text-lg text-gray-700 mb-3">Categorías de compuestos</h3>
-                        <div class="space-y-2 text-left max-w-xs mx-auto" id="category-checkboxes">
-                            ${categories.map(cat => `
-                                <label class="flex items-center p-3 bg-white/60 rounded-lg border cursor-pointer">
-                                    <input type="checkbox" value="${cat}" checked class="h-5 w-5 rounded border-gray-300 text-theme focus:ring-theme">
-                                    <span class="ml-3 text-gray-800 font-medium">${cat}</span>
-                                </label>`).join('')}
-                        </div>
-                    </div>
+        document.getElementById('theme-selection').addEventListener('click', (e) => {
+            const themeBtn = e.target.closest('button[data-theme]');
+            if (!themeBtn) return;
+            currentTheme = themeBtn.dataset.theme;
+            questionSelectionView.innerHTML = `
+                <h2 class="text-2xl font-bold text-red-600 mb-6">¿Cuántas preguntas?</h2>
+                <div class="flex justify-center flex-wrap gap-4 mt-6">
+                    <button data-count="10" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">10</button>
+                    <button data-count="15" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">15</button>
+                    <button data-count="20" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">20</button>
                 </div>
-                <div class="flex items-center justify-center gap-4 mt-8">
-                    <button id="back-to-main-btn" class="text-theme hover:text-theme-dark flex items-center gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                        Volver
-                    </button>
-                    <button id="start-game-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Empezar a jugar</button>
-                </div>`;
-            
-            if (!isTimeTrial) {
-                document.getElementById('question-count-selector').addEventListener('click', e => handleSelection(document.getElementById('question-count-selector'), e.target.closest('.selection-card')));
-                document.querySelector('#question-count-selector button').classList.add('selected');
-            }
-            document.getElementById('back-to-main-btn').addEventListener('click', () => { applyThemeColors(); showView(allViews.mainMenu); });
-            document.getElementById('start-game-btn').addEventListener('click', startGame);
-            
-            showView(allViews.categorySelection);
+                <button id="back-to-themes-btn" class="text-red-600 hover:text-red-800 mt-8 flex items-center gap-1.5 mx-auto">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Volver
+                </button>`;
+            document.getElementById('back-to-themes-btn').addEventListener('click', () => showView(mainMenu));
+            showView(questionSelectionView);
         });
-        
-        // --- GAME LOGIC ---
-        let timerInterval;
 
-        const startGame = () => {
-            const isTimeTrial = gameState.mode === 'time_trial';
-            const count = isTimeTrial ? 999 : parseInt(document.querySelector('#question-count-selector .selected')?.dataset.value);
-            const selectedCategories = Array.from(document.querySelectorAll('#category-checkboxes input:checked')).map(cb => cb.value);
-
-            if (!count || selectedCategories.length === 0) {
-                alert('Por favor, selecciona un número de preguntas y al menos una categoría.');
-                return;
-            }
-
-            let questionPool = [];
-            selectedCategories.forEach(cat => questionPool.push(...compounds[gameState.type][cat]));
-            
-            if (questionPool.length === 0) {
-                 alert('La categoría seleccionada no tiene compuestos. Por favor, elige otra.');
-                 return;
-            }
-
-            gameState.totalQuestions = count;
-            gameState.currentQuestion = 0;
-            gameState.score = 0;
-            gameState.questionPool = questionPool;
-            gameState.questions = Array.from({ length: count }, () => questionPool[Math.floor(Math.random() * questionPool.length)]);
-            if(isTimeTrial) gameState.timeLeft = 60;
-
-            setupGameView();
-            nextQuestion();
-        };
-
-        const setupGameView = () => {
-            const isTimeTrial = gameState.mode === 'time_trial';
-            allViews.game.innerHTML = `
-                <div class="flex items-center justify-between mb-2 text-base">
-                    <button id="back-to-menu-btn" class="text-theme hover:text-theme-dark flex items-center gap-1.5">
+        questionSelectionView.addEventListener('click', (e) => {
+            const countBtn = e.target.closest('button[data-count]');
+            if (!countBtn) return;
+            gameState = { current: 0, score: 0, total: parseInt(countBtn.dataset.count), problem: {} };
+            gameView.innerHTML = `
+                <div class="flex items-center justify-between mb-2 text-sm">
+                    <button id="back-btn" class="text-red-600 hover:text-red-800 flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                         Salir
                     </button>
-                    <div id="game-score" class="font-semibold text-gray-700"></div>
-                    ${isTimeTrial ? `<div id="timer" class="font-bold text-2xl text-theme"></div>` : ''}
+                     <div id="score-display" class="font-semibold text-gray-700"></div>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-2 mb-4"><div id="progress-bar" class="bg-yellow-400 h-2 rounded-full"></div></div>
-                <div class="bg-white/50 p-6 rounded-lg text-center border border-gray-200 min-h-[120px] flex flex-col justify-center">
-                    <p id="question-text" class="text-gray-600 mb-2 text-lg"></p>
-                    <p id="challenge" class="text-3xl md:text-4xl font-bold text-theme tracking-wider"></p>
+                <div id="progress-container" class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div id="progress-bar" class="bg-red-500 h-2 rounded-full transition-all duration-300 ease-linear"></div>
                 </div>
-                <div class="mt-6">
-                    <input id="answer-input" type="text" class="w-full p-4 text-2xl text-center rounded-lg border focus:ring-2 focus:ring-theme" placeholder="Tu respuesta...">
+                <div class="bg-white/50 p-5 rounded-lg text-center border border-gray-200">
+                    <p class="text-gray-600 mb-2" id="problem-title"></p>
+                    <p id="problem-statement" class="text-xl md:text-2xl font-bold text-red-600 tracking-wider break-all"></p>
                 </div>
-                <div id="feedback" class="mt-4 min-h-[70px]"></div>
-                <div class="mt-4 flex justify-center">
-                    <button id="check-btn" class="btn-primary px-8 py-3 text-white font-semibold rounded-lg w-full md:w-auto text-lg">Comprobar</button>
+                <div class="mt-5">
+                    <p class="text-center text-gray-600 mb-4" id="equation-title"></p>
+                    <div id="equation-container" class="overflow-x-auto pb-4">
+                        <div class="flex items-center justify-center flex-wrap gap-2 md:gap-4 text-lg md:text-xl min-w-max px-2"></div>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-center">
+                    <button id="check-btn" class="btn-primary px-8 py-3 text-white font-semibold rounded-lg">Comprobar</button>
+                </div>
+                <div id="feedback-container" class="hidden mt-5 p-4 rounded-lg fade-in"></div>
+                <div class="text-center">
+                     <button id="next-btn" class="hidden mt-5 btn-primary px-8 py-3 text-white font-semibold rounded-lg">Siguiente Pregunta →</button>
                 </div>`;
-            
-            document.getElementById('back-to-menu-btn').addEventListener('click', () => { clearInterval(timerInterval); applyThemeColors(); showView(allViews.mainMenu); });
-            const checkBtn = document.getElementById('check-btn');
-            const answerInput = document.getElementById('answer-input');
+            document.getElementById('back-btn').addEventListener('click', () => showView(mainMenu));
+            document.getElementById('check-btn').addEventListener('click', checkAnswer);
+            document.getElementById('next-btn').addEventListener('click', generateProblem);
+            showView(gameView);
+            generateProblem();
+        });
 
-            checkBtn.addEventListener('click', () => (checkBtn.textContent === 'Comprobar') ? checkAnswer() : nextQuestion());
-            answerInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); checkBtn.click(); }});
+        // --- PROBLEM GENERATION ---
+        const generateProblem = () => {
+            gameView.querySelector('#feedback-container').classList.add('hidden');
+            gameView.querySelector('#check-btn').classList.remove('hidden');
+            gameView.querySelector('#next-btn').classList.add('hidden');
+            gameView.querySelector('#equation-container div').innerHTML = '';
             
-            showView(allViews.game);
+            const value = parseFloat((Math.random() * 200 + 1).toPrecision(3));
+
+            if (currentTheme === 'simple') generateSimpleProblem(value);
+            else if (currentTheme === 'derived') generateDerivedProblem(value);
+            else if (currentTheme === 'prefix') generatePrefixProblem(value);
+            else if (currentTheme === 'scientific') generateScientificProblem();
+
+            updateProgress();
         };
 
-        const generateError = (compound) => {
-            const { formula, name } = compound;
-            if (Math.random() > 0.5) { // Error in name
-                let wrongName = name;
-                if (name.includes('(')) {
-                    wrongName = name.replace(/\(I+\)/, (match) => (match === '(III)' ? '(II)' : '(III)'));
-                } else if (name.includes('óxido')) {
-                    wrongName = name.replace('penta', 'di').replace('di', 'tri');
-                } else {
-                    wrongName = wrongName.replace('ano', 'eno').replace('ol', 'al');
-                }
-                return { challenge: `<strong>${formula}</strong> se nombra: <br><em>${wrongName}</em>`, answer: name, type: 'name' };
-            } else { // Error in formula
-                let wrongFormula = formula.replace(/(\d)/, (d) => parseInt(d) + 1);
-                if (wrongFormula === formula) wrongFormula = formula + '2';
-                return { challenge: `<strong>${name}</strong> tiene la fórmula: <br><em>${wrongFormula}</em>`, answer: formula, type: 'formula' };
-            }
+        const getConversionSteps = (fromUnit, toUnit) => {
+             const magKey = simpleUnitToMagnitude[fromUnit];
+             if(!magKey) return { steps: [], factor: 1};
+             const mag = data.simple[magKey];
+             const fromIdx = mag.path.indexOf(fromUnit);
+             const toIdx = mag.path.indexOf(toUnit);
+             if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return { steps: [], factor: 1 };
+             
+             const steps = [];
+             let totalFactor = 1;
+             const forward = fromIdx < toIdx;
+             const path = forward ? mag.path.slice(fromIdx, toIdx) : mag.path.slice(toIdx, fromIdx).reverse();
+             
+             path.forEach(u => {
+                 const stepFrom = forward ? u : mag.path[mag.path.indexOf(u) + 1];
+                 const stepTo = forward ? mag.path[mag.path.indexOf(u) + 1] : u;
+                 const factor = mag.units[stepFrom].to_next;
+                 if (forward) {
+                     steps.push({ num: factor, den: 1, numUnit: stepTo, denUnit: stepFrom });
+                     totalFactor *= factor;
+                 } else {
+                     steps.push({ num: 1, den: factor, numUnit: stepTo, denUnit: stepFrom });
+                     totalFactor /= factor;
+                 }
+             });
+             return { steps, factor: totalFactor };
         };
         
-        const nextQuestion = () => {
-            if (gameState.currentQuestion >= gameState.totalQuestions) {
-                endGame();
-                return;
-            }
-
-            const questionData = gameState.questions[gameState.currentQuestion];
-            const challengeEl = document.getElementById('challenge');
-            const questionTextEl = document.getElementById('question-text');
-
-            if (gameState.mode === 'correct_error') {
-                const { challenge, answer, type } = generateError(questionData);
-                questionTextEl.textContent = `Hay un error en la ${type === 'name' ? 'nomenclatura' : 'fórmula'}. ¡Corrígelo!`;
-                challengeEl.innerHTML = challenge;
-                gameState.currentAnswer = answer;
-            } else {
-                const isFormulateMode = gameState.mode === 'formulate';
-                questionTextEl.textContent = isFormulateMode ? 'Escribe la fórmula para:' : 'Nombra el siguiente compuesto:';
-                challengeEl.textContent = isFormulateMode ? questionData.name : questionData.formula;
-                gameState.currentAnswer = isFormulateMode ? questionData.formula : questionData.name;
-            }
-
-            document.getElementById('answer-input').value = '';
-            document.getElementById('answer-input').disabled = false;
-            document.getElementById('answer-input').focus();
-            document.getElementById('feedback').innerHTML = '';
-            document.getElementById('check-btn').textContent = 'Comprobar';
-            document.getElementById('check-btn').disabled = false;
+        const generateSimpleProblem = (value) => {
+            const magKeys = Object.keys(data.simple);
+            const mag = data.simple[magKeys[Math.floor(Math.random() * magKeys.length)]];
+            let from, to;
+            do { from = mag.path[Math.floor(Math.random() * mag.path.length)]; to = mag.path[Math.floor(Math.random() * mag.path.length)]; } while (from === to);
             
-            if (gameState.mode === 'time_trial' && !timerInterval) startTimer();
-            updateGameUI();
-            gameState.currentQuestion++;
-        };
-
-        const checkAnswer = () => {
-            const userAnswer = document.getElementById('answer-input').value.trim().toLowerCase();
-            const correctAnswer = gameState.currentAnswer.toLowerCase();
-            const isCorrect = userAnswer === correctAnswer;
+            const { steps, factor } = getConversionSteps(from, to);
+            gameState.problem = { type: 'factor', value, from, to, steps, correctAnswer: value * factor };
             
-            if (isCorrect) {
-                gameState.score++;
-                if (gameState.mode === 'time_trial') gameState.timeLeft += 3;
-            } else {
-                if (gameState.mode === 'time_trial') gameState.timeLeft -= 2;
-            }
-
-            document.getElementById('answer-input').disabled = true;
-            document.getElementById('check-btn').textContent = 'Siguiente';
-
-            const feedbackEl = document.getElementById('feedback');
-            feedbackEl.innerHTML = `
-                <div class="p-4 rounded-lg ${isCorrect ? 'bg-green-100 border-green-300' : 'bg-red-100 border-red-300'} border">
-                    <h3 class="font-bold ${isCorrect ? 'text-green-800' : 'text-red-800'}">${isCorrect ? '¡Correcto!' : 'Incorrecto'}</h3>
-                    ${!isCorrect ? `<p class="text-gray-700 mt-1">La respuesta correcta es: <strong class="text-theme">${gameState.currentAnswer}</strong></p>` : ''}
-                </div>`;
-            updateGameUI();
-        };
-
-        const startTimer = () => {
-            const timerEl = document.getElementById('timer');
-            timerInterval = setInterval(() => {
-                gameState.timeLeft--;
-                timerEl.textContent = `${gameState.timeLeft}s`;
-                if (gameState.timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                    endGame();
-                }
-            }, 1000);
+            buildFactorEquationUI();
         };
         
-        const updateGameUI = () => {
-            if (gameState.mode === 'time_trial') {
-                document.getElementById('game-score').textContent = `Aciertos: ${gameState.score}`;
-            } else {
-                const progress = (gameState.currentQuestion / gameState.totalQuestions) * 100;
-                document.getElementById('progress-bar').style.width = `${progress}%`;
-                document.getElementById('game-score').textContent = `Pregunta: ${gameState.currentQuestion} / ${gameState.totalQuestions} | Aciertos: ${gameState.score}`;
-            }
+        const generateDerivedProblem = (value) => {
+            const magKeys = Object.keys(data.derived);
+            const magKey = magKeys[Math.floor(Math.random() * magKeys.length)];
+            const mag = data.derived[magKey];
+            const unitKeys = Object.keys(mag.units);
+            let fromKey = unitKeys[0], toKey = unitKeys[1];
+            if (Math.random() > 0.5) [fromKey, toKey] = [toKey, fromKey];
+            
+            const from = mag.units[fromKey], to = mag.units[toKey];
+            const numConv = getConversionSteps(from.num, to.num);
+            const denConv = getConversionSteps(from.den, to.den);
+            const steps = [
+                ...numConv.steps, 
+                ...denConv.steps.map(s => ({...s, num: s.den, den: s.num, numUnit: s.denUnit, denUnit: s.numUnit}))
+            ];
+            const totalFactor = numConv.factor / denConv.factor;
+            
+            gameState.problem = { type: 'factor', value, from: fromKey, to: toKey, steps, correctAnswer: value * totalFactor };
+            buildFactorEquationUI();
         };
 
-        const endGame = () => {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            const stats = JSON.parse(localStorage.getItem('formulaChallengeStats')) || { correct: 0, total: 0 };
-            stats.correct += gameState.score;
-            stats.total += gameState.mode === 'time_trial' ? gameState.currentQuestion -1 : gameState.totalQuestions;
-            localStorage.setItem('formulaChallengeStats', JSON.stringify(stats));
-
-            allViews.gameOver.innerHTML = `
-                <h2 class="text-3xl font-bold text-theme mb-4">¡Partida Terminada!</h2>
-                <p class="text-xl text-gray-700 mb-8">Tu puntuación fue: ${gameState.score} aciertos.</p>
-                <button id="play-again-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Jugar de Nuevo</button>`;
+        const generatePrefixProblem = (value) => {
+            const prefixes = Object.keys(data.prefix.prefixes);
+            const baseUnit = data.prefix.base_units[Math.floor(Math.random() * data.prefix.base_units.length)];
+            let fromP, toP;
+            do { fromP = prefixes[Math.floor(Math.random() * prefixes.length)]; toP = prefixes[Math.floor(Math.random() * prefixes.length)]; } while (fromP === toP);
             
-            document.getElementById('play-again-btn').addEventListener('click', () => {
-                applyThemeColors();
-                updateStatsDisplay();
-                showView(allViews.mainMenu);
+            const fromFactor = data.prefix.prefixes[fromP];
+            const toFactor = data.prefix.prefixes[toP];
+            const fromUnit = fromP + baseUnit, toUnit = toP + baseUnit;
+            const factor = fromFactor / toFactor;
+            
+            gameState.problem = { type: 'factor', value, from: fromUnit, to: toUnit, steps: [{num: 1, den: factor, numUnit: toUnit, denUnit: fromUnit}], correctAnswer: value / factor };
+            buildFactorEquationUI();
+        };
+        
+        const generateScientificProblem = () => {
+             const exponent = Math.floor(Math.random() * 20) - 10;
+             const mantissa = parseFloat((Math.random() * 9 + 1).toPrecision(3));
+             const value = mantissa * Math.pow(10, exponent);
+             gameState.problem = { type: 'scientific', value, correctMantissa: mantissa, correctExponent: exponent };
+             buildScientificEquationUI();
+        };
+        
+        // --- UI BUILDERS ---
+        const buildFactorEquationUI = () => {
+            const { value, from, to, steps } = gameState.problem;
+            const container = gameView.querySelector('#equation-container div');
+            
+            let html = `<div class="font-bold text-gray-800 bg-white/70 p-3 rounded-lg border border-gray-200">${value} ${from}</div>`;
+            steps.forEach((step, i) => {
+                html += `
+                    <div class="text-gray-800">&times;</div>
+                    <div class="flex flex-col items-center">
+                        <div class="flex items-center gap-2 border-b-2 border-gray-300 pb-2">
+                            <input type="number" data-step="${i}" data-type="num" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
+                            <span class="text-red-600 font-semibold w-12 text-left">${step.numUnit}</span>
+                        </div>
+                        <div class="flex items-center gap-2 pt-2">
+                            <input type="number" data-step="${i}" data-type="den" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
+                            <span class="text-red-600 font-semibold w-12 text-left">${step.denUnit}</span>
+                        </div>
+                    </div>`;
             });
-            showView(allViews.gameOver);
+            html += `
+                <div class="text-gray-800">=</div>
+                <div class="flex items-center gap-2">
+                    <input type="number" id="final-answer" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
+                    <span class="text-red-600 font-semibold">${to}</span>
+                </div>`;
+            container.innerHTML = html;
+            gameView.querySelector('#problem-title').textContent = 'Convierte la siguiente cantidad:';
+            gameView.querySelector('#problem-statement').textContent = `${value} ${from} a ${to}`;
+            gameView.querySelector('#equation-title').textContent = 'Completa la cadena de factores de conversión:';
+        };
+        
+        const buildScientificEquationUI = () => {
+             const { value } = gameState.problem;
+             const container = gameView.querySelector('#equation-container div');
+             container.innerHTML = `
+                <div class="flex items-baseline gap-1 text-2xl">
+                    <input type="number" id="sci-mantissa" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
+                    <span class="font-semibold text-gray-800">&times; 10</span>
+                    <input type="number" id="sci-exponent" class="w-20 text-center rounded-md p-1 text-base self-start relative top-1">
+                </div>`;
+            gameView.querySelector('#problem-title').textContent = 'Expresa el siguiente número:';
+            gameView.querySelector('#problem-statement').textContent = value.toLocaleString('en-US', {useGrouping: false, maximumFractionDigits: 20});
+            gameView.querySelector('#equation-title').textContent = 'Escribe la respuesta en notación científica:';
+        };
+
+        // --- CHECKING LOGIC ---
+        const checkAnswer = () => {
+            const { problem } = gameState;
+            const tolerance = 0.05; // 5% tolerance for floating point
+            const errorMessages = new Set();
+            let isCorrect = false;
+
+            if (problem.type === 'factor') {
+                let allStepsCorrect = true;
+                problem.steps.forEach((step, i) => {
+                    const userNum = parseFloat(gameView.querySelector(`[data-step="${i}"][data-type="num"]`).value);
+                    const userDen = parseFloat(gameView.querySelector(`[data-step="${i}"][data-type="den"]`).value);
+                    if (isNaN(userNum) || Math.abs(userNum - step.num) > tolerance || isNaN(userDen) || Math.abs(userDen - step.den) > tolerance) {
+                        allStepsCorrect = false;
+                        errorMessages.add(`El factor de conversión en el <b>paso ${i + 1}</b> es incorrecto.`);
+                    }
+                });
+
+                const userAnswer = parseFloat(gameView.querySelector('#final-answer').value);
+                const isAnsCorrect = !isNaN(userAnswer) && (Math.abs(userAnswer - problem.correctAnswer) / (problem.correctAnswer || 1) < tolerance || Math.abs(userAnswer - problem.correctAnswer) < 0.01);
+                if (!isAnsCorrect) errorMessages.add('El <b>resultado final</b> es incorrecto.');
+                
+                isCorrect = allStepsCorrect && isAnsCorrect;
+
+            } else if (problem.type === 'scientific') {
+                const userMantissa = parseFloat(gameView.querySelector('#sci-mantissa').value);
+                const userExponent = parseFloat(gameView.querySelector('#sci-exponent').value);
+                const isMantissaOK = !isNaN(userMantissa) && Math.abs(userMantissa - problem.correctMantissa) < tolerance;
+                const isExponentOK = !isNaN(userExponent) && userExponent === problem.correctExponent;
+                if (!isMantissaOK) errorMessages.add('La <b>mantisa</b> (el número) es incorrecta.');
+                if (!isExponentOK) errorMessages.add('El <b>exponente</b> es incorrecto.');
+                
+                isCorrect = isMantissaOK && isExponentOK;
+            }
+            
+            gameState.current++;
+            if(isCorrect) gameState.score++;
+            showFeedback(isCorrect, Array.from(errorMessages));
+
+            if (gameState.current >= gameState.total) {
+                const stats = getStats();
+                stats.correct += gameState.score;
+                stats.total += gameState.total;
+                saveStats(stats);
+                updateStatsDisplay();
+                document.getElementById('final-score-text').textContent = `Tu puntuación fue: ${gameState.score} de ${gameState.total} aciertos.`;
+                showView(gameOverView);
+            }
+        };
+        
+        const showFeedback = (isCorrect, errors) => {
+            const container = gameView.querySelector('#feedback-container');
+            container.classList.remove('hidden');
+            let explanationHTML = '';
+
+            if (gameState.problem.type === 'factor') {
+                explanationHTML = `${gameState.problem.value} ${gameState.problem.from}`;
+                gameState.problem.steps.forEach(s => { explanationHTML += ` &times; ( ${s.num.toLocaleString()} ${s.numUnit} / ${s.den.toLocaleString()} ${s.denUnit} )`});
+                explanationHTML += ` = ${gameState.problem.correctAnswer.toPrecision(4)} ${gameState.problem.to}`;
+            } else if (gameState.problem.type === 'scientific') {
+                const displayValue = gameState.problem.value.toLocaleString('en-US', {useGrouping: false, maximumFractionDigits: 20});
+                explanationHTML = `${displayValue} = ${gameState.problem.correctMantissa} &times; 10<sup>${gameState.problem.correctExponent}</sup>`;
+            }
+
+            container.innerHTML = `
+                <div class="flex items-start gap-4">
+                    <div class="mt-1">${isCorrect ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-600"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`}</div>
+                    <div>
+                        <h3 class="text-lg font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}">${isCorrect ? '¡Excelente!' : '¡Casi lo tienes!'}</h3>
+                        <p class="text-gray-700 mt-1">${isCorrect ? 'Has completado el proceso correctamente.' : errors.join('<br>')}</p>
+                    </div>
+                </div>
+                <div class="mt-4 p-4 bg-gray-100/70 border border-gray-200 rounded-lg">
+                    <h4 class="font-semibold text-red-600 mb-2">Planteamiento Correcto:</h4>
+                    <p class="text-sm text-gray-600 font-mono break-words">${explanationHTML}</p>
+                </div>`;
+            
+            gameView.querySelector('#check-btn').classList.add('hidden');
+            if(gameState.current < gameState.total) gameView.querySelector('#next-btn').classList.remove('hidden');
+            gameView.querySelectorAll('input').forEach(i => i.disabled = true);
+        };
+        
+        const updateProgress = () => {
+            const progress = (gameState.current / gameState.total) * 100;
+            gameView.querySelector('#progress-bar').style.width = `${progress}%`;
+            gameView.querySelector('#score-display').textContent = `Pregunta: ${gameState.current + 1} / ${gameState.total} | Aciertos: ${gameState.score}`;
         };
 
         // --- INITIALIZATION ---
-        applyThemeColors();
+        document.getElementById('play-again-btn').addEventListener('click', () => { updateStatsDisplay(); showView(mainMenu); });
         updateStatsDisplay();
-        showView(allViews.mainMenu);
-        formulationTypeSelector.querySelector('[data-value="inorganic"]').classList.add('selected');
-        gameModeSelector.querySelector('[data-value="formulate"]').classList.add('selected');
+        showView(mainMenu);
     });
     </script>
 </body>
