@@ -4,758 +4,480 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formula Challenge</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Space Grotesk & Barlow -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --grad-from-inorganic: #38bdf8; --grad-to-inorganic: #4f46e5; --focus-ring-inorganic: #60a5fa;
-            --grad-from-organic: #4ade80; --grad-to-organic: #16a34a; --focus-ring-organic: #86efac;
-            
-            --grad-from: var(--grad-from-inorganic); --grad-to: var(--grad-to-inorganic); --focus-ring: var(--focus-ring-inorganic);
-            
-            --mode-1-bg: #f7fee7; --mode-1-border: #84cc16;
-            --mode-2-bg: #ecfeff; --mode-2-border: #06b6d4;
-            --mode-3-bg: #fff1f2; --mode-3-border: #ef4444;
-            --mode-4-bg: #eef2ff; --mode-4-border: #6366f1;
-        }
-        .theme-organic {
-             --grad-from: var(--grad-from-organic); --grad-to: var(--grad-to-organic); --focus-ring: var(--focus-ring-organic);
+            --theme-color-600: #5dd699;
+            --theme-color-800: #10b981; /* Tailwind green-500 */
+            --theme-gradient-from: #5dd699;
+            --theme-gradient-to: #34d399; /* Tailwind green-400 */
+            --theme-shadow-color: 'rgba(93, 214, 153, 0.5)';
+            --theme-focus-ring-color: #5dd699;
+            --theme-bg-from: #ecfdf5; /* Tailwind green-50 */
+            --theme-bg-to: #f0fdfa; /* Tailwind teal-50 */
         }
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Barlow', sans-serif;
+            background: linear-gradient(135deg, var(--theme-bg-from), var(--theme-bg-to));
+            color: #1f2937; /* gray-800 */
+            transition: background 0.5s ease;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-container {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        }
+        .selection-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+        }
+        .selection-card.selected {
+            transform: translateY(-4px);
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+            --tw-ring-color: var(--theme-color-600);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        input[type="number"], input[type="text"] {
+            -moz-appearance: textfield;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
             color: #1e293b;
-            background-image: linear-gradient(to bottom right, var(--grad-from), var(--grad-to));
-            transition: background-image 0.5s ease-in-out;
+            font-family: 'Barlow', sans-serif;
         }
-        .main-card { 
-            min-height: 300px; 
-            background-color: #ffffff;
+        .btn-primary {
+            background: linear-gradient(45deg, var(--theme-gradient-from), var(--theme-gradient-to));
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        #question sub { font-size: 0.6em; vertical-align: sub; }
-        .feedback-text sub { font-size: 0.8em; }
-        
-        .selection-radio + label, .selection-checkbox + label {
-            background-color: #ffffff;
-            border-color: #d1d5db;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--theme-shadow-color);
         }
-
-        .selection-radio:checked + label, .selection-checkbox:checked + label {
-            border-color: var(--grad-to);
-            background-color: color-mix(in srgb, var(--grad-from) 20%, transparent);
-            box-shadow: 0 0 0 2px var(--grad-to);
+        /* Dynamic Theme Classes */
+        .text-theme { color: var(--theme-color-600); }
+        .hover\:text-theme-dark:hover { color: var(--theme-color-800); }
+        .focus\:ring-theme:focus, .ring-theme { 
+            --tw-ring-color: var(--theme-focus-ring-color);
         }
-
-        #mode_name + label { background-color: var(--mode-1-bg); }
-        #mode_write + label { background-color: var(--mode-2-bg); }
-        #mode_error + label { background-color: var(--mode-3-bg); }
-        #mode_timed + label { background-color: var(--mode-4-bg); }
-
-        #mode_name:checked + label { border-color: var(--mode-1-border); box-shadow: 0 0 0 2px var(--mode-1-border); }
-        #mode_write:checked + label { border-color: var(--mode-2-border); box-shadow: 0 0 0 2px var(--mode-2-border); }
-        #mode_error:checked + label { border-color: var(--mode-3-border); box-shadow: 0 0 0 2px var(--mode-3-border); }
-        #mode_timed:checked + label { border-color: var(--mode-4-border); box-shadow: 0 0 0 2px var(--mode-4-border); }
-
-        .themed-text { color: var(--grad-to); }
-        .themed-focus-ring:focus{ --tw-ring-color: var(--focus-ring) !important; }
-        .progress-bar-inner {
-            background: linear-gradient(to right, var(--grad-from), var(--grad-to));
-            transition: width 0.4s ease-out;
-        }
-        .bg-gradient-themed {
-            background-image: linear-gradient(to right, var(--grad-from), var(--grad-to));
-        }
-        .text-gradient-themed {
-            background-image: linear-gradient(to right, var(--grad-from), var(--grad-to));
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); } 20%, 40%, 60%, 80% { transform: translateX(5px); } }
-        .shake-incorrect { animation: shake 0.5s ease-in-out; }
-
-        @keyframes jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        .jump-correct { animation: jump 0.4s ease-out; }
     </style>
 </head>
-<body class="theme-inorganic flex items-start sm:items-center justify-center min-h-screen p-4 pt-6 sm:p-4">
+<body class="flex items-center justify-center min-h-screen p-4">
 
-    <button id="sound-toggle-btn" class="fixed top-4 right-4 p-2 rounded-full bg-slate-200/50 text-slate-800 z-10 backdrop-blur-sm">
-        <svg id="volume-on-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
-        <svg id="volume-off-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
-    </button>
-
-    <div class="w-full max-w-3xl main-card rounded-2xl shadow-2xl p-4 sm:p-8 transition-all duration-500">
-
-        <div id="setup-view">
-            <h1 class="text-4xl sm:text-5xl font-extrabold mb-10 text-center text-gradient-themed">Formula Challenge</h1>
-            
-            <div class="space-y-8">
-                 <div>
-                    <h2 class="text-lg font-bold text-slate-700 mb-3 text-center">Elige la formulación</h2>
-                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <input type="radio" name="type" value="inorganic" id="type_inorganic" class="hidden selection-radio" checked>
-                        <label for="type_inorganic" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
-                            <span class="font-semibold text-slate-800 text-base">Inorgánica</span>
-                        </label>
-                        <input type="radio" name="type" value="organic" id="type_organic" class="hidden selection-radio">
-                        <label for="type_organic" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
-                           <span class="font-semibold text-slate-800 text-base">Orgánica</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div>
-                    <h2 class="text-lg font-bold text-slate-700 mb-3 text-center">Elige el modo de práctica</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <input type="radio" name="mode" value="name_formula" id="mode_name" class="hidden selection-radio" checked>
-                        <label for="mode_name" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
-                            <span class="font-semibold text-green-800">Nombrar la fórmula</span>
-                        </label>
-                        <input type="radio" name="mode" value="write_formula" id="mode_write" class="hidden selection-radio">
-                        <label for="mode_write" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
-                            <span class="font-semibold text-cyan-800">Formular el nombre</span>
-                        </label>
-                        <input type="radio" name="mode" value="find_error" id="mode_error" class="hidden selection-radio">
-                        <label for="mode_error" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
-                            <span class="font-semibold text-red-800">Identificar el error</span>
-                        </label>
-                        <input type="radio" name="mode" value="timed_mode" id="mode_timed" class="hidden selection-radio">
-                        <label for="mode_timed" class="text-center p-4 border-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-300">
-                            <span class="font-semibold text-indigo-800">Contrarreloj</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div>
-                    <h2 class="text-lg font-bold text-slate-700 mb-3 text-center">Elige la(s) categoría(s)</h2>
-                    <div id="category-checkboxes" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 text-sm"></div>
-                </div>
-
-                <div>
-                    <h2 class="text-lg font-bold text-slate-700 mb-3 text-center">Número de preguntas</h2>
-                     <div class="grid grid-cols-3 gap-3">
-                        <input type="radio" name="quiz_length" value="10" id="length_10" class="hidden selection-radio" checked>
-                        <label for="length_10" class="text-center p-3 border-2 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
-                            <span class="font-semibold text-slate-800">10</span>
-                        </label>
-                        <input type="radio" name="quiz_length" value="15" id="length_15" class="hidden selection-radio">
-                        <label for="length_15" class="text-center p-3 border-2 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
-                           <span class="font-semibold text-slate-800">15</span>
-                        </label>
-                        <input type="radio" name="quiz_length" value="20" id="length_20" class="hidden selection-radio">
-                        <label for="length_20" class="text-center p-3 border-2 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
-                           <span class="font-semibold text-slate-800">20</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-8 flex items-center justify-center gap-2">
-                <div id="total-score" class="text-center text-amber-500 font-bold text-base bg-amber-500/10 p-3 rounded-lg flex-grow"></div>
-                <button id="reset-score-btn" class="p-3 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors" title="Reiniciar puntuación total">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                </button>
-            </div>
-
-            <button id="start-btn" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 themed-focus-ring mt-4 shadow-lg bg-gradient-themed">
-                Comenzar a Practicar
-            </button>
-        </div>
-
-        <div id="quiz-view" class="hidden">
-            <div class="flex justify-between items-start mb-2">
-                <div>
-                    <h1 id="quiz-title" class="text-xl sm:text-2xl font-bold text-slate-800"></h1>
-                    <p id="quiz-subtitle" class="text-slate-500 mt-1"></p>
-                </div>
-                 <div class="flex items-center gap-2">
-                    <div id="timer" class="text-lg font-bold themed-text hidden"></div>
-                    <button id="back-to-setup" class="text-sm bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-300 transition-colors">Salir</button>
-                </div>
-            </div>
-            
-            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-4">
-              <div id="progress-bar" class="progress-bar-inner h-2.5 rounded-full" style="width: 0%"></div>
-            </div>
-            
-            <div class="bg-gradient-to-br from-slate-100 to-slate-200 border border-slate-200 rounded-lg p-4 text-center main-card flex flex-col justify-center shadow-inner">
-                <p id="question-label" class="text-sm font-medium themed-text mb-2 tracking-widest"></p>
-                <div id="question" class="text-2xl sm:text-3xl font-extrabold text-slate-900 break-words tracking-tight flex items-center justify-center flex-wrap gap-x-4"></div>
-            </div>
-
-            <div class="mt-4">
-                <input type="text" id="answer" placeholder="Escribe tu respuesta aquí..." class="w-full p-3 border-2 border-slate-300 bg-white rounded-lg text-base focus:ring-2 themed-focus-ring focus:border-transparent transition-all" autocomplete="off" spellcheck="false">
-                <div id="feedback" class="mt-2 min-h-[48px] text-center text-slate-600 font-medium"></div>
-                <button id="check-btn" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-4 themed-focus-ring mt-2 shadow-lg bg-gradient-themed">
-                    Comprobar
-                </button>
-            </div>
-            
-            <div class="text-center mt-3 font-semibold text-slate-600 flex justify-center items-center gap-4">
-                <span id="score"></span>
-                <span id="streak" class="hidden items-center gap-1 text-orange-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.133 2.533c3.42.533 5.344 3.23 5.344 6.933 0 2.22-1.022 4.228-2.533 5.828-1.583 1.6-2.54 3.195-2.54 4.972h-2.82c0-2.618 1.433-4.633 2.82-6.195C15.42 12.65 16 11.23 16 9.466c0-2.94-1.333-4.89-3.9-5.34L11.133 2.533z"/></svg>
-                    <span id="streak-count"></span>
-                </span>
-            </div>
-        </div>
+    <div class="w-full max-w-4xl mx-auto glass-container rounded-2xl p-6 md:p-8">
         
-        <div id="final-score-view" class="hidden text-center">
-            <h1 class="text-3xl sm:text-4xl font-extrabold mb-4 text-gradient-themed">¡Prueba finalizada!</h1>
-            <p id="final-score-text" class="text-xl text-slate-700 mb-2"></p>
-            <p id="final-message" class="text-base text-slate-500 mb-6"></p>
-
-            <div id="results-review" class="mt-6 text-left max-h-60 overflow-y-auto border border-slate-200 rounded-lg p-2">
-                <h3 class="font-bold text-lg text-slate-800 mb-2 sticky top-0 bg-white/80 p-2">Revisión de respuestas</h3>
-                <div id="results-table-container"></div>
+        <div id="main-menu">
+            <div class="text-center mb-6">
+                <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 tracking-tight">Formula Challenge</h1>
+                <p class="text-gray-600 mt-2 text-lg">Pon a prueba tus conocimientos de formulación.</p>
             </div>
-            <button id="restart-btn" class="w-full max-w-xs mx-auto text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 themed-focus-ring mt-6 shadow-lg bg-gradient-themed">
-                Volver a empezar
-            </button>
+            <div id="stats-container" class="text-center mb-6 p-4 bg-white/50 rounded-lg border border-gray-200"></div>
+
+            <div>
+                <h2 class="text-xl font-bold text-center text-theme mb-4">1. Elige el tipo de formulación</h2>
+                <div class="flex justify-center gap-4" id="formulation-type-selector">
+                    <button data-value="inorganic" class="selection-card p-5 w-full bg-gradient-to-br from-sky-500 to-cyan-400 rounded-xl text-white">
+                        <h3 class="text-xl font-bold">Inorgánica</h3>
+                    </button>
+                    <button data-value="organic" class="selection-card p-5 w-full bg-gradient-to-br from-emerald-500 to-lime-500 rounded-xl text-white">
+                        <h3 class="text-xl font-bold">Orgánica</h3>
+                    </button>
+                </div>
+            </div>
+            <div class="mt-8">
+                <h2 class="text-xl font-bold text-center text-theme mb-4">2. Elige el modo de juego</h2>
+                <div class="grid grid-cols-2 gap-4" id="game-mode-selector">
+                    <button data-value="formulate" class="selection-card p-5 bg-white/60 rounded-xl border">
+                        <h3 class="text-xl font-bold text-gray-800">Formular</h3>
+                    </button>
+                    <button data-value="name" class="selection-card p-5 bg-white/60 rounded-xl border">
+                        <h3 class="text-xl font-bold text-gray-800">Nombrar</h3>
+                    </button>
+                    <button data-value="correct_error" class="selection-card p-5 bg-white/60 rounded-xl border">
+                        <h3 class="text-xl font-bold text-gray-800">Corrige el Error</h3>
+                    </button>
+                    <button data-value="time_trial" class="selection-card p-5 bg-white/60 rounded-xl border">
+                        <h3 class="text-xl font-bold text-gray-800">Contrarreloj</h3>
+                    </button>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <button id="continue-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Continuar</button>
+            </div>
         </div>
+
+        <div id="category-selection-view" class="hidden fade-in"></div>
+
+        <div id="game-view" class="hidden"></div>
+        
+        <div id="game-over-view" class="hidden fade-in text-center p-8"></div>
     </div>
-
+    
     <script>
-        // --- DATOS ---
-        const inorganicCategories = [ { value: 1, text: "Hidruros" }, { value: 2, text: "Óxidos" }, { value: 3, text: "Peróxidos" }, { value: 4, text: "Sales Binarias" }, { value: 5, text: "Hidróxidos" }, { value: 6, text: "Oxoácidos" }, { value: 7, text: "Oxisales" }, { value: 8, text: "Sales Ácidas" }];
-        const organicCategories = [ { value: 1, text: "Hidrocarburos" }, { value: 2, text: "Aromáticos y Halogenados" }, { value: 3, text: "Alcoholes y Éteres" }, { value: 4, text: "Aldehídos y Cetonas" }, { value: 5, text: "Ácidos y Ésteres" }, { value: 6, text: "Aminas y Amidas" } ];
-        
-        const inorganicCompounds = [
-            { formula: 'NaH', names: ['Hidruro de sodio'], category: 1, incorrectName: 'Óxido de sodio'},
-            { formula: 'LiH', names: ['Hidruro de litio'], category: 1, incorrectName: 'Cloruro de litio'},
-            { formula: 'KH', names: ['Hidruro de potasio'], category: 1, incorrectName: 'Hidróxido de potasio'},
-            { formula: 'RbH', names: ['Hidruro de rubidio'], category: 1, incorrectName: 'Hidruro de cesio'},
-            { formula: 'CsH', names: ['Hidruro de cesio'], category: 1, incorrectName: 'Hidruro de rubidio'},
-            { formula: 'BeH2', names: ['Hidruro de berilio', 'Dihidruro de berilio'], category: 1, incorrectName: 'Óxido de berilio'},
-            { formula: 'CaH2', names: ['Hidruro de calcio', 'Dihidruro de calcio'], category: 1, incorrectName: 'Hidruro de potasio'},
-            { formula: 'MgH2', names: ['Hidruro de magnesio', 'Dihidruro de magnesio'], category: 1, incorrectName: 'Cloruro de magnesio'},
-            { formula: 'SrH2', names: ['Hidruro de estroncio', 'Dihidruro de estroncio'], category: 1, incorrectName: 'Sulfuro de estroncio'},
-            { formula: 'BaH2', names: ['Hidruro de bario', 'Dihidruro de bario'], category: 1, incorrectName: 'Óxido de bario'},
-            { formula: 'AlH3', names: ['Hidruro de aluminio', 'Trihidruro de aluminio'], category: 1, incorrectName: 'Hidróxido de aluminio'},
-            { formula: 'GaH3', names: ['Hidruro de galio', 'Trihidruro de galio'], category: 1, incorrectName: 'Óxido de galio'},
-            { formula: 'FeH3', names: ['Hidruro de hierro(III)', 'Trihidruro de hierro'], category: 1, incorrectName: 'Hidruro de hierro(II)'},
-            { formula: 'FeH2', names: ['Hidruro de hierro(II)', 'Dihidruro de hierro'], category: 1, incorrectName: 'Hidruro de hierro(III)'},
-            { formula: 'CuH', names: ['Hidruro de cobre(I)', 'Monohidruro de cobre'], category: 1, incorrectName: 'Hidruro de cobre(II)'},
-            { formula: 'CuH2', names: ['Hidruro de cobre(II)', 'Dihidruro de cobre'], category: 1, incorrectName: 'Hidruro de cobre(I)'},
-            { formula: 'PbH4', names: ['Hidruro de plomo(IV)', 'Tetrahidruro de plomo'], category: 1, incorrectName: 'Hidruro de plomo(II)'},
-            { formula: 'PbH2', names: ['Hidruro de plomo(II)', 'Dihidruro de plomo'], category: 1, incorrectName: 'Hidruro de plomo(IV)'},
-            { formula: 'SnH4', names: ['Hidruro de estaño(IV)', 'Tetrahidruro de estaño'], category: 1, incorrectName: 'Hidruro de estaño(II)'},
-            { formula: 'SnH2', names: ['Hidruro de estaño(II)', 'Dihidruro de estaño'], category: 1, incorrectName: 'Hidruro de estaño(IV)'},
-            { formula: 'AuH3', names: ['Hidruro de oro(III)', 'Trihidruro de oro'], category: 1, incorrectName: 'Hidruro de oro(I)'},
-            { formula: 'AuH', names: ['Hidruro de oro(I)', 'Monohidruro de oro'], category: 1, incorrectName: 'Hidruro de oro(III)'},
-            { formula: 'HCl', names: ['Cloruro de hidrógeno', 'Ácido clorhídrico'], category: 1, incorrectName: 'Ácido sulfhídrico'},
-            { formula: 'HBr', names: ['Bromuro de hidrógeno', 'Ácido bromhídrico'], category: 1, incorrectName: 'Ácido clorhídrico'},
-            { formula: 'HF', names: ['Fluoruro de hidrógeno', 'Ácido fluorhídrico'], category: 1, incorrectName: 'Ácido yodhídrico'},
-            { formula: 'HI', names: ['Yoduro de hidrógeno', 'Ácido yodhídrico'], category: 1, incorrectName: 'Ácido fluorhídrico'},
-            { formula: 'H2S', names: ['Sulfuro de hidrógeno', 'Ácido sulfhídrico'], category: 1, incorrectName: 'Ácido selenhídrico'},
-            { formula: 'H2Se', names: ['Seleniuro de hidrógeno', 'Ácido selenhídrico'], category: 1, incorrectName: 'Ácido telurhídrico'},
-            { formula: 'H2Te', names: ['Telururo de hidrógeno', 'Ácido telurhídrico'], category: 1, incorrectName: 'Ácido sulfhídrico'},
-            { formula: 'NH3', names: ['Amoniaco', 'Trihidruro de nitrógeno'], category: 1, incorrectName: 'Metano'},
-            { formula: 'Na2O', names: ['Óxido de sodio'], category: 2, incorrectName: 'Hidruro de sodio'},
-            { formula: 'K2O', names: ['Óxido de potasio'], category: 2, incorrectName: 'Sulfuro de potasio'},
-            { formula: 'Li2O', names: ['Óxido de litio'], category: 2, incorrectName: 'Hidruro de litio'},
-            { formula: 'CaO', names: ['Óxido de calcio'], category: 2, incorrectName: 'Cloruro de calcio'},
-            { formula: 'MgO', names: ['Óxido de magnesio'], category: 2, incorrectName: 'Sulfuro de magnesio'},
-            { formula: 'BaO', names: ['Óxido de bario'], category: 2, incorrectName: 'Hidruro de bario'},
-            { formula: 'Al2O3', names: ['Óxido de aluminio', 'Trióxido de dialuminio'], category: 2, incorrectName: 'Sulfuro de aluminio'},
-            { formula: 'Fe2O3', names: ['Óxido de hierro(III)', 'Trióxido de dihierro'], category: 2, incorrectName: 'Óxido de hierro(II)'},
-            { formula: 'FeO', names: ['Óxido de hierro(II)', 'Monóxido de hierro'], category: 2, incorrectName: 'Óxido de hierro(III)'},
-            { formula: 'CuO', names: ['Óxido de cobre(II)', 'Monóxido de cobre'], category: 2, incorrectName: 'Óxido de cobre(I)'},
-            { formula: 'Cu2O', names: ['Óxido de cobre(I)', 'Monóxido de dicobre'], category: 2, incorrectName: 'Óxido de cobre(II)'},
-            { formula: 'PbO2', names: ['Óxido de plomo(IV)', 'Dióxido de plomo'], category: 2, incorrectName: 'Óxido de plomo(II)'},
-            { formula: 'PbO', names: ['Óxido de plomo(II)', 'Monóxido de plomo'], category: 2, incorrectName: 'Óxido de plomo(IV)'},
-            { formula: 'SnO2', names: ['Óxido de estaño(IV)', 'Dióxido de estaño'], category: 2, incorrectName: 'Óxido de estaño(II)'},
-            { formula: 'SnO', names: ['Óxido de estaño(II)', 'Monóxido de estaño'], category: 2, incorrectName: 'Óxido de estaño(IV)'},
-            { formula: 'ZnO', names: ['Óxido de zinc'], category: 2, incorrectName: 'Sulfuro de zinc'},
-            { formula: 'Ag2O', names: ['Óxido de plata'], category: 2, incorrectName: 'Sulfuro de plata'},
-            { formula: 'SO3', names: ['Trióxido de azufre', 'Óxido de azufre(VI)'], category: 2, incorrectName: 'Óxido de azufre(IV)'},
-            { formula: 'SO2', names: ['Dióxido de azufre', 'Óxido de azufre(IV)'], category: 2, incorrectName: 'Óxido de azufre(VI)'},
-            { formula: 'N2O5', names: ['Pentaóxido de dinitrógeno', 'Óxido de nitrógeno(V)'], category: 2, incorrectName: 'Trióxido de dinitrógeno'},
-            { formula: 'CO2', names: ['Dióxido de carbono'], category: 2, incorrectName: 'Monóxido de carbono'},
-            { formula: 'Cl2O7', names: ['Heptaóxido de dicloro', 'Óxido de cloro(VII)'], category: 2, incorrectName: 'Pentaóxido de dicloro'},
-            { formula: 'H2O2', names: ['Peróxido de hidrógeno', 'Agua oxigenada'], category: 3, incorrectName: 'Óxido de dihidrógeno'},
-            { formula: 'Na2O2', names: ['Peróxido de sodio'], category: 3, incorrectName: 'Óxido de sodio'},
-            { formula: 'K2O2', names: ['Peróxido de potasio'], category: 3, incorrectName: 'Óxido de potasio'},
-            { formula: 'Li2O2', names: ['Peróxido de litio'], category: 3, incorrectName: 'Óxido de litio'},
-            { formula: 'Rb2O2', names: ['Peróxido de rubidio'], category: 3, incorrectName: 'Óxido de rubidio'},
-            { formula: 'Cs2O2', names: ['Peróxido de cesio'], category: 3, incorrectName: 'Óxido de cesio'},
-            { formula: 'CaO2', names: ['Peróxido de calcio'], category: 3, incorrectName: 'Óxido de calcio'},
-            { formula: 'MgO2', names: ['Peróxido de magnesio'], category: 3, incorrectName: 'Óxido de magnesio'},
-            { formula: 'SrO2', names: ['Peróxido de estroncio'], category: 3, incorrectName: 'Óxido de estroncio'},
-            { formula: 'BaO2', names: ['Peróxido de bario'], category: 3, incorrectName: 'Óxido de bario'},
-            { formula: 'ZnO2', names: ['Peróxido de zinc'], category: 3, incorrectName: 'Óxido de zinc'},
-            { formula: 'CdO2', names: ['Peróxido de cadmio'], category: 3, incorrectName: 'Óxido de cadmio'},
-            { formula: 'CuO2', names: ['Peróxido de cobre(II)'], category: 3, incorrectName: 'Óxido de cobre(II)'},
-            { formula: 'HgO2', names: ['Peróxido de mercurio(II)'], category: 3, incorrectName: 'Óxido de mercurio(II)'},
-            { formula: 'Ag2O2', names: ['Peróxido de plata'], category: 3, incorrectName: 'Óxido de plata'},
-            { formula: 'NiO2', names: ['Peróxido de níquel(II)'], category: 3, incorrectName: 'Óxido de níquel(II)'},
-            { formula: 'FeO2', names: ['Peróxido de hierro(II)'], category: 3, incorrectName: 'Óxido de hierro(II)'},
-            { formula: 'CoO2', names: ['Peróxido de cobalto(II)'], category: 3, incorrectName: 'Óxido de cobalto(II)'},
-            { formula: 'SnO2', names: ['Peróxido de estaño(IV)'], category: 3, incorrectName: 'Óxido de estaño(IV)'},
-            { formula: 'PbO2', names: ['Peróxido de plomo(IV)'], category: 3, incorrectName: 'Óxido de plomo(IV)'},
-            { formula: 'NaCl', names: ['Cloruro de sodio'], category: 4, incorrectName: 'Bromuro de sodio'},
-            { formula: 'KBr', names: ['Bromuro de potasio'], category: 4, incorrectName: 'Cloruro de potasio'},
-            { formula: 'LiF', names: ['Fluoruro de litio'], category: 4, incorrectName: 'Yoduro de litio'},
-            { formula: 'CaF2', names: ['Fluoruro de calcio', 'Difluoruro de calcio'], category: 4, incorrectName: 'Cloruro de calcio'},
-            { formula: 'MgCl2', names: ['Cloruro de magnesio', 'Dicloruro de magnesio'], category: 4, incorrectName: 'Bromuro de magnesio'},
-            { formula: 'BaI2', names: ['Yoduro de bario', 'Diyoduro de bario'], category: 4, incorrectName: 'Fluoruro de bario'},
-            { formula: 'AlBr3', names: ['Bromuro de aluminio', 'Tribromuro de aluminio'], category: 4, incorrectName: 'Cloruro de aluminio'},
-            { formula: 'FeCl3', names: ['Cloruro de hierro(III)', 'Tricloruro de hierro'], category: 4, incorrectName: 'Cloruro de hierro(II)'},
-            { formula: 'FeI2', names: ['Yoduro de hierro(II)', 'Diyoduro de hierro'], category: 4, incorrectName: 'Yoduro de hierro(III)'},
-            { formula: 'CuS', names: ['Sulfuro de cobre(II)'], category: 4, incorrectName: 'Sulfuro de cobre(I)'},
-            { formula: 'Cu2S', names: ['Sulfuro de cobre(I)'], category: 4, incorrectName: 'Sulfuro de cobre(II)'},
-            { formula: 'AgCl', names: ['Cloruro de plata'], category: 4, incorrectName: 'Bromuro de plata'},
-            { formula: 'Ag2S', names: ['Sulfuro de plata'], category: 4, incorrectName: 'Óxido de plata'},
-            { formula: 'Na2S', names: ['Sulfuro de sodio'], category: 4, incorrectName: 'Óxido de sodio'},
-            { formula: 'K2Se', names: ['Seleniuro de potasio'], category: 4, incorrectName: 'Sulfuro de potasio'},
-            { formula: 'PbI2', names: ['Yoduro de plomo(II)', 'Diyoduro de plomo'], category: 4, incorrectName: 'Yoduro de plomo(IV)'},
-            { formula: 'PbS2', names: ['Sulfuro de plomo(IV)', 'Disulfuro de plomo'], category: 4, incorrectName: 'Sulfuro de plomo(II)'},
-            { formula: 'ZnS', names: ['Sulfuro de zinc'], category: 4, incorrectName: 'Óxido de zinc'},
-            { formula: 'CdSe', names: ['Seleniuro de cadmio'], category: 4, incorrectName: 'Sulfuro de cadmio'},
-            { formula: 'KI', names: ['Yoduro de potasio'], category: 4, incorrectName: 'Cloruro de potasio'},
-            { formula: 'NaOH', names: ['Hidróxido de sodio'], category: 5, incorrectName: 'Cloruro de sodio'},
-            { formula: 'KOH', names: ['Hidróxido de potasio'], category: 5, incorrectName: 'Óxido de potasio'},
-            { formula: 'LiOH', names: ['Hidróxido de litio'], category: 5, incorrectName: 'Hidruro de litio'},
-            { formula: 'Ca(OH)2', names: ['Hidróxido de calcio'], category: 5, incorrectName: 'Óxido de calcio'},
-            { formula: 'Mg(OH)2', names: ['Hidróxido de magnesio'], category: 5, incorrectName: 'Hidruro de magnesio'},
-            { formula: 'Ba(OH)2', names: ['Hidróxido de bario'], category: 5, incorrectName: 'Óxido de bario'},
-            { formula: 'Al(OH)3', names: ['Hidróxido de aluminio'], category: 5, incorrectName: 'Óxido de aluminio'},
-            { formula: 'Fe(OH)3', names: ['Hidróxido de hierro(III)'], category: 5, incorrectName: 'Hidróxido de hierro(II)'},
-            { formula: 'Fe(OH)2', names: ['Hidróxido de hierro(II)'], category: 5, incorrectName: 'Hidróxido de hierro(III)'},
-            { formula: 'Cu(OH)2', names: ['Hidróxido de cobre(II)'], category: 5, incorrectName: 'Hidróxido de cobre(I)'},
-            { formula: 'CuOH', names: ['Hidróxido de cobre(I)'], category: 5, incorrectName: 'Hidróxido de cobre(II)'},
-            { formula: 'Zn(OH)2', names: ['Hidróxido de zinc'], category: 5, incorrectName: 'Óxido de zinc'},
-            { formula: 'Cd(OH)2', names: ['Hidróxido de cadmio'], category: 5, incorrectName: 'Sulfuro de cadmio'},
-            { formula: 'Pb(OH)4', names: ['Hidróxido de plomo(IV)'], category: 5, incorrectName: 'Hidróxido de plomo(II)'},
-            { formula: 'Pb(OH)2', names: ['Hidróxido de plomo(II)'], category: 5, incorrectName: 'Hidróxido de plomo(IV)'},
-            { formula: 'Sn(OH)4', names: ['Hidróxido de estaño(IV)'], category: 5, incorrectName: 'Hidróxido de estaño(II)'},
-            { formula: 'Sn(OH)2', names: ['Hidróxido de estaño(II)'], category: 5, incorrectName: 'Hidróxido de estaño(IV)'},
-            { formula: 'Cr(OH)3', names: ['Hidróxido de cromo(III)'], category: 5, incorrectName: 'Hidróxido de cromo(VI)'},
-            { formula: 'Mn(OH)2', names: ['Hidróxido de manganeso(II)'], category: 5, incorrectName: 'Hidróxido de manganeso(IV)'},
-            { formula: 'Co(OH)3', names: ['Hidróxido de cobalto(III)'], category: 5, incorrectName: 'Hidróxido de cobalto(II)'},
-            { formula: 'H2SO4', names: ['Ácido sulfúrico'], category: 6, incorrectName: 'Ácido sulfuroso'},
-            { formula: 'H2SO3', names: ['Ácido sulfuroso'], category: 6, incorrectName: 'Ácido sulfúrico'},
-            { formula: 'HNO3', names: ['Ácido nítrico'], category: 6, incorrectName: 'Ácido nitroso'},
-            { formula: 'HNO2', names: ['Ácido nitroso'], category: 6, incorrectName: 'Ácido nítrico'},
-            { formula: 'H2CO3', names: ['Ácido carbónico'], category: 6, incorrectName: 'Ácido bórico'},
-            { formula: 'H3PO4', names: ['Ácido fosfórico'], category: 6, incorrectName: 'Ácido fosforoso'},
-            { formula: 'H3PO3', names: ['Ácido fosforoso'], category: 6, incorrectName: 'Ácido fosfórico'},
-            { formula: 'HClO4', names: ['Ácido perclórico'], category: 6, incorrectName: 'Ácido clórico'},
-            { formula: 'HClO3', names: ['Ácido clórico'], category: 6, incorrectName: 'Ácido perclórico'},
-            { formula: 'HClO2', names: ['Ácido cloroso'], category: 6, incorrectName: 'Ácido hipocloroso'},
-            { formula: 'HClO', names: ['Ácido hipocloroso'], category: 6, incorrectName: 'Ácido cloroso'},
-            { formula: 'HBrO3', names: ['Ácido brómico'], category: 6, incorrectName: 'Ácido perbrómico'},
-            { formula: 'HIO3', names: ['Ácido yódico'], category: 6, incorrectName: 'Ácido peryódico'},
-            { formula: 'H2CrO4', names: ['Ácido crómico'], category: 6, incorrectName: 'Ácido dicrómico'},
-            { formula: 'H2Cr2O7', names: ['Ácido dicrómico'], category: 6, incorrectName: 'Ácido crómico'},
-            { formula: 'HMnO4', names: ['Ácido permangánico'], category: 6, incorrectName: 'Ácido mangánico'},
-            { formula: 'H2MnO4', names: ['Ácido mangánico'], category: 6, incorrectName: 'Ácido permangánico'},
-            { formula: 'H3AsO4', names: ['Ácido arsénico'], category: 6, incorrectName: 'Ácido arsenioso'},
-            { formula: 'H3BO3', names: ['Ácido bórico'], category: 6, incorrectName: 'Ácido carbónico'},
-            { formula: 'H2SiO3', names: ['Ácido silícico'], category: 6, incorrectName: 'Ácido fosfórico'},
-            { formula: 'H2SeO4', names: ['Ácido selénico'], category: 6, incorrectName: 'Ácido selenioso'},
-            { formula: 'Na2SO4', names: ['Sulfato de sodio'], category: 7, incorrectName: 'Sulfito de sodio'},
-            { formula: 'K2CO3', names: ['Carbonato de potasio'], category: 7, incorrectName: 'Carbonato de sodio'},
-            { formula: 'LiNO3', names: ['Nitrato de litio'], category: 7, incorrectName: 'Nitrito de litio'},
-            { formula: 'MgSO3', names: ['Sulfito de magnesio'], category: 7, incorrectName: 'Sulfato de magnesio'},
-            { formula: 'Ca3(PO4)2', names: ['Fosfato de calcio'], category: 7, incorrectName: 'Fosfito de calcio'},
-            { formula: 'Al(NO3)3', names: ['Nitrato de aluminio'], category: 7, incorrectName: 'Nitrito de aluminio'},
-            { formula: 'Fe2(SO4)3', names: ['Sulfato de hierro(III)'], category: 7, incorrectName: 'Sulfato de hierro(II)'},
-            { formula: 'FeSO4', names: ['Sulfato de hierro(II)'], category: 7, incorrectName: 'Sulfato de hierro(III)'},
-            { formula: 'Cu3(PO4)2', names: ['Fosfato de cobre(II)'], category: 7, incorrectName: 'Fosfato de cobre(I)'},
-            { formula: 'CuNO3', names: ['Nitrato de cobre(I)'], category: 7, incorrectName: 'Nitrato de cobre(II)'},
-            { formula: 'KNO3', names: ['Nitrato de potasio'], category: 7, incorrectName: 'Nitrito de potasio'},
-            { formula: 'KNO2', names: ['Nitrito de potasio'], category: 7, incorrectName: 'Nitrato de potasio'},
-            { formula: 'AgClO3', names: ['Clorato de plata'], category: 7, incorrectName: 'Perclorato de plata'},
-            { formula: 'NaClO4', names: ['Perclorato de sodio'], category: 7, incorrectName: 'Clorato de sodio'},
-            { formula: 'KMnO4', names: ['Permanganato de potasio'], category: 7, incorrectName: 'Manganato de potasio'},
-            { formula: 'Na2CrO4', names: ['Cromato de sodio'], category: 7, incorrectName: 'Dicromato de sodio'},
-            { formula: 'K2Cr2O7', names: ['Dicromato de potasio'], category: 7, incorrectName: 'Cromato de potasio'},
-            { formula: 'Ca(ClO)2', names: ['Hipoclorito de calcio'], category: 7, incorrectName: 'Clorito de calcio'},
-            { formula: 'Fe(BrO3)2', names: ['Bromato de hierro(II)'], category: 7, incorrectName: 'Perbromato de hierro(II)'},
-            { formula: 'Al2(SO4)3', names: ['Sulfato de aluminio'], category: 7, incorrectName: 'Sulfito de aluminio'},
-            { formula: 'Pb(SO4)2', names: ['Sulfato de plomo(IV)'], category: 7, incorrectName: 'Sulfato de plomo(II)'},
-            { formula: 'NaHCO3', names: ['Hidrogenocarbonato de sodio', 'Bicarbonato de sodio'], category: 8, incorrectName: 'Carbonato de sodio'},
-            { formula: 'KHSO4', names: ['Hidrogenosulfato de potasio'], category: 8, incorrectName: 'Sulfato de potasio'},
-            { formula: 'Ca(HCO3)2', names: ['Hidrogenocarbonato de calcio'], category: 8, incorrectName: 'Carbonato de calcio'},
-            { formula: 'Mg(HCO3)2', names: ['Hidrogenocarbonato de magnesio'], category: 8, incorrectName: 'Carbonato de magnesio'},
-            { formula: 'NaH2PO4', names: ['Dihidrogenofosfato de sodio'], category: 8, incorrectName: 'Fosfato de sodio'},
-            { formula: 'Na2HPO4', names: ['Hidrogenofosfato de sodio'], category: 8, incorrectName: 'Fosfato de sodio'},
-            { formula: 'K2HPO4', names: ['Hidrogenofosfato de potasio'], category: 8, incorrectName: 'Fosfato de potasio'},
-            { formula: 'KH2PO4', names: ['Dihidrogenofosfato de potasio'], category: 8, incorrectName: 'Fosfato de potasio'},
-            { formula: 'Mg(HSO4)2', names: ['Hidrogenosulfato de magnesio'], category: 8, incorrectName: 'Sulfato de magnesio'},
-            { formula: 'LiHSO3', names: ['Hidrogenosulfito de litio'], category: 8, incorrectName: 'Sulfito de litio'},
-            { formula: 'NaHSO4', names: ['Hidrogenosulfato de sodio'], category: 8, incorrectName: 'Sulfato de sodio'},
-            { formula: 'KHCO3', names: ['Hidrogenocarbonato de potasio'], category: 8, incorrectName: 'Carbonato de potasio'},
-            { formula: 'Ca(HSO4)2', names: ['Hidrogenosulfato de calcio'], category: 8, incorrectName: 'Sulfato de calcio'},
-            { formula: 'Fe(HSO4)2', names: ['Hidrogenosulfato de hierro(II)'], category: 8, incorrectName: 'Sulfato de hierro(II)'},
-            { formula: 'Fe(HCO3)3', names: ['Hidrogenocarbonato de hierro(III)'], category: 8, incorrectName: 'Carbonato de hierro(III)'},
-            { formula: 'Al(HSO4)3', names: ['Hidrogenosulfato de aluminio'], category: 8, incorrectName: 'Sulfato de aluminio'},
-            { formula: 'CaHPO4', names: ['Hidrogenofosfato de calcio'], category: 8, incorrectName: 'Fosfato de calcio'},
-            { formula: 'CuHSO4', names: ['Hidrogenosulfato de cobre(I)'], category: 8, incorrectName: 'Sulfato de cobre(I)'},
-            { formula: 'Zn(HCO3)2', names: ['Hidrogenocarbonato de zinc'], category: 8, incorrectName: 'Carbonato de zinc'},
-            { formula: 'Mg(H2PO4)2', names: ['Dihidrogenofosfato de magnesio'], category: 8, incorrectName: 'Fosfato de magnesio'},
-        ];
-
-        const organicCompounds = [
-            { formula: 'CH4', names: ['Metano'], category: 1, incorrectName: 'Etano'},
-            { formula: 'CH3-CH3', names: ['Etano'], category: 1, incorrectName: 'Propano'},
-            { formula: 'CH2=CH2', names: ['Eteno'], category: 1, incorrectName: 'Etino'},
-            { formula: 'CH≡CH', names: ['Etino'], category: 1, incorrectName: 'Eteno'},
-            { formula: 'C6H12', names: ['Ciclohexano'], category: 1, incorrectName: 'Benceno'},
-            { formula: 'C6H6', names: ['Benceno'], category: 2, incorrectName: 'Ciclohexano'},
-            { formula: 'C6H5-Cl', names: ['Clorobenceno'], category: 2, incorrectName: 'Bromobenceno'},
-            { formula: 'CHCl3', names: ['Triclorometano', 'Cloroformo'], category: 2, incorrectName: 'Diclorometano'},
-            { formula: 'CH3-OH', names: ['Metanol'], category: 3, incorrectName: 'Etanol'},
-            { formula: 'CH3-CH2-OH', names: ['Etanol'], category: 3, incorrectName: 'Propanol'},
-            { formula: 'CH3-O-CH3', names: ['Metoximetano', 'Dimetil éter'], category: 3, incorrectName: 'Etoxietano'},
-            { formula: 'HCHO', names: ['Metanal', 'Formaldehído'], category: 4, incorrectName: 'Etanal'},
-            { formula: 'CH3-CHO', names: ['Etanal', 'Acetaldehído'], category: 4, incorrectName: 'Propanal'},
-            { formula: 'CH3-CO-CH3', names: ['Propanona', 'Acetona'], category: 4, incorrectName: 'Butanona'},
-            { formula: 'HCOOH', names: ['Ácido metanoico', 'Ácido fórmico'], category: 5, incorrectName: 'Ácido etanoico'},
-            { formula: 'CH3-COOH', names: ['Ácido etanoico', 'Ácido acético'], category: 5, incorrectName: 'Ácido propanoico'},
-            { formula: 'HCOO-CH3', names: ['Metanoato de metilo'], category: 5, incorrectName: 'Etanoato de metilo'},
-            { formula: 'CH3-NH2', names: ['Metanamina'], category: 6, incorrectName: 'Etanamina'},
-            { formula: 'C6H5-NH2', names: ['Fenilamina', 'Anilina'], category: 6, incorrectName: 'Nitrobenceno'},
-            { formula: 'CH3-CO-NH2', names: ['Etanamida'], category: 6, incorrectName: 'Propanamida'},
-            { formula: 'CH3-NO2', names: ['Nitrometano'], category: 6, incorrectName: 'Nitroetano'}
-        ];
-
-        // --- LÓGICA DE LA APLICACIÓN ---
-        const body = document.body;
-        const setupView = document.getElementById('setup-view');
-        const quizView = document.getElementById('quiz-view');
-        const finalScoreView = document.getElementById('final-score-view');
-        const startBtn = document.getElementById('start-btn');
-        const checkBtn = document.getElementById('check-btn');
-        const answerInput = document.getElementById('answer');
-        const categoryCheckboxesContainer = document.getElementById('category-checkboxes');
-        const backToSetupBtn = document.getElementById('back-to-setup');
-        const restartBtn = document.getElementById('restart-btn');
-        const typeRadios = document.querySelectorAll('input[name="type"]');
-        const questionEl = document.getElementById('question');
-        const totalScoreEl = document.getElementById('total-score');
-        const resetScoreBtn = document.getElementById('reset-score-btn');
-        const feedbackEl = document.getElementById('feedback');
-        const timerEl = document.getElementById('timer');
-        
-        let currentCompound = null;
-        let quizSessionCompounds = [];
-        let score = { correct: 0, total: 0 };
-        let state = 'waiting';
-        let sessionResults = [];
-        let currentStreak = 0;
-        let timerInterval;
-
-        const loadTotalScore = () => {
-            const totalCorrect = parseInt(localStorage.getItem('totalCorrect')) || 0;
-            const totalPlayed = parseInt(localStorage.getItem('totalPlayed')) || 0;
-            if (totalPlayed > 0) {
-                totalScoreEl.textContent = `Puntuación Total: ${totalCorrect} / ${totalPlayed}`;
-            } else {
-                totalScoreEl.textContent = '¡Completa tu primera prueba para ver tu puntuación!';
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- DATA & CONFIG ---
+        const compounds = {
+            inorganic: {
+                'Óxidos': [
+                    { formula: 'Fe2O3', name: 'óxido de hierro (III)' }, { formula: 'CuO', name: 'óxido de cobre (II)' }, { formula: 'CO2', name: 'dióxido de carbono' }, { formula: 'N2O5', name: 'pentaóxido de dinitrógeno' }, { formula: 'PbO2', name: 'óxido de plomo (IV)' }
+                ],
+                'Hidruros Metálicos': [
+                    { formula: 'NaH', name: 'hidruro de sodio' }, { formula: 'CaH2', name: 'hidruro de calcio' }, { formula: 'AlH3', name: 'hidruro de aluminio' }, { formula: 'LiH', name: 'hidruro de litio' }
+                ],
+                'Hidróxidos': [
+                    { formula: 'NaOH', name: 'hidróxido de sodio' }, { formula: 'Ca(OH)2', name: 'hidróxido de calcio' }, { formula: 'Fe(OH)3', name: 'hidróxido de hierro (III)' }
+                ],
+                'Sales Binarias': [
+                    { formula: 'NaCl', name: 'cloruro de sodio' }, { formula: 'FeCl3', name: 'cloruro de hierro (III)' }, { formula: 'CaS', name: 'sulfuro de calcio' }, { formula: 'AlBr3', name: 'bromuro de aluminio' }
+                ]
+            },
+            organic: {
+                'Alcanos': [
+                    { formula: 'CH4', name: 'metano' }, { formula: 'C2H6', name: 'etano' }, { formula: 'C3H8', name: 'propano' }, { formula: 'C4H10', name: 'butano' }, { formula: 'C5H12', name: 'pentano' }
+                ],
+                'Alquenos': [
+                    { formula: 'C2H4', name: 'eteno' }, { formula: 'C3H6', name: 'propeno' }, { formula: 'C4H8', name: 'buteno' },
+                ],
+                'Alquinos': [
+                    { formula: 'C2H2', name: 'etino' }, { formula: 'C3H4', name: 'propino' }, { formula: 'C4H6', name: 'butino' },
+                ],
+                'Alcoholes': [
+                    { formula: 'CH3OH', name: 'metanol' }, { formula: 'C2H5OH', name: 'etanol' }, { formula: 'CH3CH2CH2OH', name: 'propan-1-ol' },
+                ]
             }
         };
 
-        const saveTotalScore = (correctAnswers, playedQuestions) => {
-            let totalCorrect = parseInt(localStorage.getItem('totalCorrect')) || 0;
-            let totalPlayed = parseInt(localStorage.getItem('totalPlayed')) || 0;
-            totalCorrect += correctAnswers;
-            totalPlayed += playedQuestions;
-            localStorage.setItem('totalCorrect', totalCorrect);
-            localStorage.setItem('totalPlayed', totalPlayed);
+        const themes = {
+            default: {
+                '--theme-color-600': '#5dd699', '--theme-color-800': '#10b981', '--theme-gradient-from': '#5dd699',
+                '--theme-gradient-to': '#34d399', '--theme-shadow-color': 'rgba(93, 214, 153, 0.5)', '--theme-focus-ring-color': '#5dd699',
+                '--theme-bg-from': '#ecfdf5', '--theme-bg-to': '#f0fdfa'
+            },
+            inorganic: {
+                '--theme-color-600': '#0284c7', '--theme-color-800': '#0369a1', '--theme-gradient-from': '#0ea5e9',
+                '--theme-gradient-to': '#06b6d4', '--theme-shadow-color': 'rgba(14, 165, 233, 0.5)', '--theme-focus-ring-color': '#0ea5e9',
+                '--theme-bg-from': '#bae6fd', '--theme-bg-to': '#a5f3fc'
+            },
+            organic: {
+                '--theme-color-600': '#16a34a', '--theme-color-800': '#14532d', '--theme-gradient-from': '#22c55e',
+                '--theme-gradient-to': '#84cc16', '--theme-shadow-color': 'rgba(34, 197, 94, 0.5)', '--theme-focus-ring-color': '#22c55e',
+                '--theme-bg-from': '#a7f3d0', '--theme-bg-to': '#d9f99d'
+            }
         };
 
-        const resetTotalScore = () => {
-            localStorage.removeItem('totalCorrect');
-            localStorage.removeItem('totalPlayed');
-            loadTotalScore();
+        // --- STATE & DOM ---
+        let gameState = {};
+        const allViews = {
+            mainMenu: document.getElementById('main-menu'),
+            categorySelection: document.getElementById('category-selection-view'),
+            game: document.getElementById('game-view'),
+            gameOver: document.getElementById('game-over-view')
         };
+        const formulationTypeSelector = document.getElementById('formulation-type-selector');
+        const gameModeSelector = document.getElementById('game-mode-selector');
 
-        const populateCategories = (type) => {
-            const categories = type === 'inorganic' ? inorganicCategories : organicCategories;
-            categoryCheckboxesContainer.innerHTML = '';
-            categories.forEach(cat => {
-                const div = document.createElement('div');
-                div.innerHTML = `
-                    <input type="checkbox" name="category" value="${cat.value}" id="cat_${type}_${cat.value}" class="hidden selection-checkbox">
-                    <label for="cat_${type}_${cat.value}" class="block text-center p-2 border-2 rounded-lg cursor-pointer hover:border-slate-400 transition-all duration-300">
-                        <span class="font-semibold text-slate-800">${cat.text}</span>
-                    </label>
-                `;
-                categoryCheckboxesContainer.appendChild(div);
+        // --- THEME & UI FUNCTIONS ---
+        const applyThemeColors = (theme = 'default') => {
+            const colors = themes[theme];
+            Object.entries(colors).forEach(([key, value]) => document.documentElement.style.setProperty(key, value));
+        };
+        const showView = (viewToShow) => Object.values(allViews).forEach(v => v.classList.toggle('hidden', v !== viewToShow));
+        
+        const updateStatsDisplay = () => {
+            const stats = JSON.parse(localStorage.getItem('formulaChallengeStats')) || { correct: 0, total: 0 };
+            const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
+            document.getElementById('stats-container').innerHTML = `
+                <div class="flex items-center justify-center gap-4">
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-lg">Estadísticas Globales</h3>
+                        <p class="text-sm text-gray-700">Aciertos: <span class="font-semibold text-green-600">${stats.correct}</span> de <span class="font-semibold text-blue-600">${stats.total}</span> | Precisión: <span class="font-semibold text-yellow-600">${accuracy}%</span></p>
+                    </div>
+                    <button id="reset-stats-btn" class="p-2 rounded-full hover:bg-red-500/10" title="Borrar datos">
+                        <svg class="w-5 h-5 text-gray-500 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                </div>`;
+            document.getElementById('reset-stats-btn').addEventListener('click', () => {
+                if (confirm('¿Estás seguro? Se borrarán todas tus estadísticas.')) {
+                    localStorage.removeItem('formulaChallengeStats');
+                    updateStatsDisplay();
+                }
             });
         };
+        
+        // --- SETUP & NAVIGATION ---
+        const handleSelection = (selector, selectedBtn) => {
+            if (!selectedBtn) return;
+            selector.querySelectorAll('.selection-card').forEach(btn => btn.classList.remove('selected'));
+            selectedBtn.classList.add('selected');
+        };
 
-        const setTheme = (type) => {
-            body.classList.remove('theme-inorganic', 'theme-organic');
-            body.classList.add(type === 'inorganic' ? 'theme-inorganic' : 'theme-organic');
-        };
+        formulationTypeSelector.addEventListener('click', e => handleSelection(formulationTypeSelector, e.target.closest('.selection-card')));
+        gameModeSelector.addEventListener('click', e => handleSelection(gameModeSelector, e.target.closest('.selection-card')));
 
-        const normalizeText = (str) => {
-            if (typeof str !== 'string') return '';
-            return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+\(/g, '(').replace(/\s*=\s*/g, "=").replace(/\s*≡\s*/g, "≡").replace(/\s*-\s*/g, "-").replace(/,/g, '');
-        };
-        
-        const capitalize = (str) => {
-            if (typeof str !== 'string' || str.length === 0) return '';
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        };
-        
-        const renderFormula = (formula) => {
-            const simpleRender = (text) => text.replace(/(\d+)/g, '<sub>$1</sub>');
-            if (formula === 'C6H6') return `<svg viewBox="0 0 100 100" width="150" height="150"><polygon stroke="currentColor" stroke-width="3" fill="none" points="50,10 93,35 93,85 50,100 7,85 7,35"></polygon><circle cx="50" cy="60" r="20" stroke="currentColor" stroke-width="2" fill="none"></circle></svg>`;
-            return simpleRender(formula);
-        };
-        
-        const setupGame = () => {
-            const currentType = document.querySelector('input[name="type"]:checked').value;
-            const allCompounds = currentType === 'inorganic' ? inorganicCompounds : organicCompounds;
-            
-            const currentMode = document.querySelector('input[name="mode"]:checked').value;
-            
-            const selectedCategoryNodes = document.querySelectorAll('input[name="category"]:checked');
-            if (selectedCategoryNodes.length === 0) {
-                alert("Por favor, selecciona al menos una categoría para empezar.");
+        document.getElementById('continue-btn').addEventListener('click', () => {
+            const type = formulationTypeSelector.querySelector('.selected')?.dataset.value;
+            const mode = gameModeSelector.querySelector('.selected')?.dataset.value;
+
+            if (!type || !mode) {
+                alert('Por favor, selecciona el tipo de formulación y el modo de juego.');
                 return;
             }
-            const selectedCategories = Array.from(selectedCategoryNodes).map(node => parseInt(node.value));
+
+            gameState.type = type;
+            gameState.mode = mode;
+            applyThemeColors(type);
+
+            const categories = Object.keys(compounds[type]);
+            const isTimeTrial = mode === 'time_trial';
+            allViews.categorySelection.innerHTML = `
+                <h2 class="text-3xl font-bold text-theme mb-2">Configura tu partida</h2>
+                <div class="grid grid-cols-1 ${isTimeTrial ? '' : 'md:grid-cols-2'} gap-x-8 gap-y-4">
+                    ${!isTimeTrial ? `
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-700 mb-3">Número de preguntas</h3>
+                        <div class="flex justify-center space-x-3" id="question-count-selector">
+                            ${[10, 15, 20].map(n => `<button data-value="${n}" class="selection-card w-20 h-14 text-xl font-bold rounded-lg bg-white/60 border">${n}</button>`).join('')}
+                        </div>
+                    </div>` : ''}
+                    <div class="${isTimeTrial ? 'col-span-1' : ''}">
+                        <h3 class="font-bold text-lg text-gray-700 mb-3">Categorías de compuestos</h3>
+                        <div class="space-y-2 text-left max-w-xs mx-auto" id="category-checkboxes">
+                            ${categories.map(cat => `
+                                <label class="flex items-center p-3 bg-white/60 rounded-lg border cursor-pointer">
+                                    <input type="checkbox" value="${cat}" checked class="h-5 w-5 rounded border-gray-300 text-theme focus:ring-theme">
+                                    <span class="ml-3 text-gray-800 font-medium">${cat}</span>
+                                </label>`).join('')}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center gap-4 mt-8">
+                    <button id="back-to-main-btn" class="text-theme hover:text-theme-dark flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                        Volver
+                    </button>
+                    <button id="start-game-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Empezar a jugar</button>
+                </div>`;
             
-            const allCats = currentType === 'inorganic' ? inorganicCategories : organicCategories;
-            let categoryText = 'Práctica Personalizada';
-            if (selectedCategories.length === 1) {
-                categoryText = allCats.find(c => c.value === selectedCategories[0])?.text || '';
+            if (!isTimeTrial) {
+                document.getElementById('question-count-selector').addEventListener('click', e => handleSelection(document.getElementById('question-count-selector'), e.target.closest('.selection-card')));
+                document.querySelector('#question-count-selector button').classList.add('selected');
+            }
+            document.getElementById('back-to-main-btn').addEventListener('click', () => { applyThemeColors(); showView(allViews.mainMenu); });
+            document.getElementById('start-game-btn').addEventListener('click', startGame);
+            
+            showView(allViews.categorySelection);
+        });
+        
+        // --- GAME LOGIC ---
+        let timerInterval;
+
+        const startGame = () => {
+            const isTimeTrial = gameState.mode === 'time_trial';
+            const count = isTimeTrial ? 999 : parseInt(document.querySelector('#question-count-selector .selected')?.dataset.value);
+            const selectedCategories = Array.from(document.querySelectorAll('#category-checkboxes input:checked')).map(cb => cb.value);
+
+            if (!count || selectedCategories.length === 0) {
+                alert('Por favor, selecciona un número de preguntas y al menos una categoría.');
+                return;
             }
 
-            const QUIZ_LENGTH = parseInt(document.querySelector('input[name="quiz_length"]:checked').value);
-
-            let filteredCompounds;
+            let questionPool = [];
+            selectedCategories.forEach(cat => questionPool.push(...compounds[gameState.type][cat]));
             
-            if (currentMode === 'find_error') {
-                 let compoundsWithError = allCompounds.filter(c => c.incorrectName);
-                 filteredCompounds = compoundsWithError.filter(c => selectedCategories.includes(c.category));
-            } else {
-                 filteredCompounds = allCompounds.filter(c => selectedCategories.includes(c.category));
-            }
-            
-            let shuffled = [...filteredCompounds].sort(() => 0.5 - Math.random());
-            
-            quizSessionCompounds = [];
-            if (shuffled.length > 0) {
-                for (let i = 0; i < QUIZ_LENGTH; i++) {
-                    quizSessionCompounds.push(shuffled[i % shuffled.length]);
-                }
-                quizSessionCompounds.sort(() => 0.5 - Math.random());
-            }
-
-
-            if (quizSessionCompounds.length < 1) {
-                 alert("No hay suficientes compuestos en la(s) categoría(s) seleccionada(s) para este modo de juego.");
+            if (questionPool.length === 0) {
+                 alert('La categoría seleccionada no tiene compuestos. Por favor, elige otra.');
                  return;
             }
 
-            score = { correct: 0, total: 0 };
-            sessionResults = [];
-            currentStreak = 0;
-            updateStreak();
-            updateScore();
-            
-            const titles = { name_formula: 'Nombra el siguiente compuesto:', write_formula: 'Formula el siguiente compuesto:', find_error: 'Identifica el error y escribe el nombre correcto:', timed_mode: '¡Rápido! Nombra el compuesto:' };
-            const labels = { name_formula: 'FÓRMULA', write_formula: 'NOMBRE', find_error: 'FÓRMULA Y NOMBRE INCORRECTO', timed_mode: 'FÓRMULA' }
+            gameState.totalQuestions = count;
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.questionPool = questionPool;
+            gameState.questions = Array.from({ length: count }, () => questionPool[Math.floor(Math.random() * questionPool.length)]);
+            if(isTimeTrial) gameState.timeLeft = 60;
 
-            document.getElementById('quiz-title').textContent = categoryText;
-            document.getElementById('quiz-subtitle').textContent = titles[currentMode];
-            document.getElementById('question-label').textContent = labels[currentMode];
-            
-            if (currentMode === 'timed_mode') startTimer();
-            else timerEl.classList.add('hidden');
-
-            setupView.classList.add('hidden');
-            finalScoreView.classList.add('hidden');
-            quizView.classList.remove('hidden');
+            setupGameView();
             nextQuestion();
+        };
+
+        const setupGameView = () => {
+            const isTimeTrial = gameState.mode === 'time_trial';
+            allViews.game.innerHTML = `
+                <div class="flex items-center justify-between mb-2 text-base">
+                    <button id="back-to-menu-btn" class="text-theme hover:text-theme-dark flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                        Salir
+                    </button>
+                    <div id="game-score" class="font-semibold text-gray-700"></div>
+                    ${isTimeTrial ? `<div id="timer" class="font-bold text-2xl text-theme"></div>` : ''}
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4"><div id="progress-bar" class="bg-yellow-400 h-2 rounded-full"></div></div>
+                <div class="bg-white/50 p-6 rounded-lg text-center border border-gray-200 min-h-[120px] flex flex-col justify-center">
+                    <p id="question-text" class="text-gray-600 mb-2 text-lg"></p>
+                    <p id="challenge" class="text-3xl md:text-4xl font-bold text-theme tracking-wider"></p>
+                </div>
+                <div class="mt-6">
+                    <input id="answer-input" type="text" class="w-full p-4 text-2xl text-center rounded-lg border focus:ring-2 focus:ring-theme" placeholder="Tu respuesta...">
+                </div>
+                <div id="feedback" class="mt-4 min-h-[70px]"></div>
+                <div class="mt-4 flex justify-center">
+                    <button id="check-btn" class="btn-primary px-8 py-3 text-white font-semibold rounded-lg w-full md:w-auto text-lg">Comprobar</button>
+                </div>`;
+            
+            document.getElementById('back-to-menu-btn').addEventListener('click', () => { clearInterval(timerInterval); applyThemeColors(); showView(allViews.mainMenu); });
+            const checkBtn = document.getElementById('check-btn');
+            const answerInput = document.getElementById('answer-input');
+
+            checkBtn.addEventListener('click', () => (checkBtn.textContent === 'Comprobar') ? checkAnswer() : nextQuestion());
+            answerInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); checkBtn.click(); }});
+            
+            showView(allViews.game);
+        };
+
+        const generateError = (compound) => {
+            const { formula, name } = compound;
+            if (Math.random() > 0.5) { // Error in name
+                let wrongName = name;
+                if (name.includes('(')) {
+                    wrongName = name.replace(/\(I+\)/, (match) => (match === '(III)' ? '(II)' : '(III)'));
+                } else if (name.includes('óxido')) {
+                    wrongName = name.replace('penta', 'di').replace('di', 'tri');
+                } else {
+                    wrongName = wrongName.replace('ano', 'eno').replace('ol', 'al');
+                }
+                return { challenge: `<strong>${formula}</strong> se nombra: <br><em>${wrongName}</em>`, answer: name, type: 'name' };
+            } else { // Error in formula
+                let wrongFormula = formula.replace(/(\d)/, (d) => parseInt(d) + 1);
+                if (wrongFormula === formula) wrongFormula = formula + '2';
+                return { challenge: `<strong>${name}</strong> tiene la fórmula: <br><em>${wrongFormula}</em>`, answer: formula, type: 'formula' };
+            }
         };
         
         const nextQuestion = () => {
-            updateProgressBar();
-            if (score.total >= quizSessionCompounds.length) {
-                showFinalScore();
+            if (gameState.currentQuestion >= gameState.totalQuestions) {
+                endGame();
                 return;
             }
 
-            state = 'waiting';
-            checkBtn.textContent = 'Comprobar';
-            checkBtn.disabled = false;
-            feedbackEl.innerHTML = '';
-            answerInput.value = '';
-            answerInput.disabled = false;
-            answerInput.focus();
-            
-            currentCompound = quizSessionCompounds[score.total];
-            const currentMode = document.querySelector('input[name="mode"]:checked').value;
+            const questionData = gameState.questions[gameState.currentQuestion];
+            const challengeEl = document.getElementById('challenge');
+            const questionTextEl = document.getElementById('question-text');
 
-            if (currentMode === 'name_formula' || currentMode === 'timed_mode') {
-                questionEl.innerHTML = renderFormula(currentCompound.formula);
-            } else if (currentMode === 'write_formula') {
-                questionEl.innerHTML = `<span>${capitalize(currentCompound.names[0])}</span>`;
-            } else if (currentMode === 'find_error') {
-                questionEl.innerHTML = `${renderFormula(currentCompound.formula)} <span class="text-red-500 font-medium ml-2">${capitalize(currentCompound.incorrectName)}</span>`;
+            if (gameState.mode === 'correct_error') {
+                const { challenge, answer, type } = generateError(questionData);
+                questionTextEl.textContent = `Hay un error en la ${type === 'name' ? 'nomenclatura' : 'fórmula'}. ¡Corrígelo!`;
+                challengeEl.innerHTML = challenge;
+                gameState.currentAnswer = answer;
+            } else {
+                const isFormulateMode = gameState.mode === 'formulate';
+                questionTextEl.textContent = isFormulateMode ? 'Escribe la fórmula para:' : 'Nombra el siguiente compuesto:';
+                challengeEl.textContent = isFormulateMode ? questionData.name : questionData.formula;
+                gameState.currentAnswer = isFormulateMode ? questionData.formula : questionData.name;
             }
+
+            document.getElementById('answer-input').value = '';
+            document.getElementById('answer-input').disabled = false;
+            document.getElementById('answer-input').focus();
+            document.getElementById('feedback').innerHTML = '';
+            document.getElementById('check-btn').textContent = 'Comprobar';
+            document.getElementById('check-btn').disabled = false;
+            
+            if (gameState.mode === 'time_trial' && !timerInterval) startTimer();
+            updateGameUI();
+            gameState.currentQuestion++;
         };
 
         const checkAnswer = () => {
-            if (!answerInput.value.trim()) return;
-            const currentMode = document.querySelector('input[name="mode"]:checked').value;
-            const userAnswer = answerInput.value.trim();
-            let isCorrect = false;
-            
-            if (currentMode === 'write_formula') {
-                isCorrect = (normalizeText(userAnswer) === normalizeText(currentCompound.formula));
-            } else { 
-                const userNormalized = normalizeText(userAnswer);
-                isCorrect = currentCompound.names.some(name => normalizeText(name) === userNormalized);
-            }
-            
-            score.total++;
-            let explanationHTML = '';
+            const userAnswer = document.getElementById('answer-input').value.trim().toLowerCase();
+            const correctAnswer = gameState.currentAnswer.toLowerCase();
+            const isCorrect = userAnswer === correctAnswer;
             
             if (isCorrect) {
-                score.correct++;
-                currentStreak++;
-                feedbackEl.innerHTML = `<div class="flex items-center justify-center gap-2 text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>¡Correcto!</span></div>`;
+                gameState.score++;
+                if (gameState.mode === 'time_trial') gameState.timeLeft += 3;
             } else {
-                currentStreak = 0;
-                let correctAnswerHTML = (currentMode === 'write_formula')
-                    ? currentCompound.formula
-                    : capitalize(currentCompound.names[0]);
-                explanationHTML = `<p class="text-sm feedback-text">La respuesta correcta es: <strong>${correctAnswerHTML}</strong></p>`;
-                feedbackEl.innerHTML = `<div class="flex items-center justify-center gap-2 text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg><span>Incorrecto.</span></div>${explanationHTML}`;
+                if (gameState.mode === 'time_trial') gameState.timeLeft -= 2;
             }
 
-            sessionResults.push({ question: currentCompound, userAnswer: userAnswer, isCorrect: isCorrect });
-            updateScore();
-            updateStreak();
-            state = 'checked';
-            checkBtn.textContent = score.total >= quizSessionCompounds.length ? 'Ver Resultados' : 'Siguiente';
-            answerInput.disabled = true;
-        };
-        
-        const showFinalScore = () => {
-            clearInterval(timerInterval);
-            updateProgressBar();
-            const totalQuestions = quizSessionCompounds.length;
-            document.getElementById('final-score-text').textContent = `Tu nota final es: ${score.correct} sobre ${totalQuestions}`;
-            let message = '';
-            const percentage = totalQuestions > 0 ? (score.correct / totalQuestions) * 100 : 0;
-            if (percentage >= 80) {
-                message = '¡Excelente! Tienes un gran dominio del tema.';
-            } else if (percentage >= 50) {
-                message = '¡Buen trabajo! Sigue practicando para perfeccionar.';
-            } else {
-                message = 'Necesitas repasar un poco más. ¡No te rindas!';
-            }
-            document.getElementById('final-message').textContent = message;
+            document.getElementById('answer-input').disabled = true;
+            document.getElementById('check-btn').textContent = 'Siguiente';
 
-            saveTotalScore(score.correct, score.total);
-            renderResultsTable();
-            quizView.classList.add('hidden');
-            finalScoreView.classList.remove('hidden');
-        };
-
-        const updateScore = () => {
-            const totalQuestions = quizSessionCompounds.length;
-            document.getElementById('score').textContent = `Pregunta: ${score.total + 1} / ${totalQuestions}`;
-        };
-        
-        const updateProgressBar = () => {
-            const progress = (score.total / quizSessionCompounds.length) * 100;
-            document.getElementById('progress-bar').style.width = `${progress}%`;
-        };
-
-        const updateStreak = () => {
-            const streakEl = document.getElementById('streak');
-            if(currentStreak > 1) {
-                streakEl.classList.remove('hidden');
-                streakEl.classList.add('flex');
-                document.getElementById('streak-count').textContent = currentStreak;
-            } else {
-                streakEl.classList.add('hidden');
-            }
+            const feedbackEl = document.getElementById('feedback');
+            feedbackEl.innerHTML = `
+                <div class="p-4 rounded-lg ${isCorrect ? 'bg-green-100 border-green-300' : 'bg-red-100 border-red-300'} border">
+                    <h3 class="font-bold ${isCorrect ? 'text-green-800' : 'text-red-800'}">${isCorrect ? '¡Correcto!' : 'Incorrecto'}</h3>
+                    ${!isCorrect ? `<p class="text-gray-700 mt-1">La respuesta correcta es: <strong class="text-theme">${gameState.currentAnswer}</strong></p>` : ''}
+                </div>`;
+            updateGameUI();
         };
 
         const startTimer = () => {
-            let timeLeft = 180; // 3 minutos
-            timerEl.classList.remove('hidden');
-            const updateTimer = () => {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                timerEl.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                if (timeLeft <= 0) { showFinalScore(); }
-                timeLeft--;
-            };
-            updateTimer();
-            timerInterval = setInterval(updateTimer, 1000);
+            const timerEl = document.getElementById('timer');
+            timerInterval = setInterval(() => {
+                gameState.timeLeft--;
+                timerEl.textContent = `${gameState.timeLeft}s`;
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    endGame();
+                }
+            }, 1000);
         };
         
-        const renderResultsTable = () => {
-            const container = document.getElementById('results-table-container');
-            let tableHTML = `<table class="w-full text-sm"><thead><tr class="border-b"><th class="p-2 text-left">Pregunta</th><th class="p-2 text-left">Tu Respuesta</th><th class="p-2 text-left">Correcta</th></tr></thead><tbody>`;
-            sessionResults.forEach(result => {
-                const mode = result.question.incorrectName ? 'find_error' : (document.querySelector('input[name="mode"]:checked').value);
-                let questionText = '';
-                if(mode === 'write_formula') questionText = capitalize(result.question.names[0]);
-                else if (mode === 'find_error') questionText = `${renderFormula(result.question.formula)} <span class="text-red-500 font-medium">${capitalize(result.question.incorrectName)}</span>`;
-                else questionText = renderFormula(result.question.formula);
-                const correctAnswer = (mode === 'write_formula') ? result.question.formula : capitalize(result.question.names[0]);
-                const isCorrectClass = result.isCorrect ? 'text-green-600' : 'text-red-600';
-                tableHTML += `<tr class="border-b"><td class="p-2 font-mono">${questionText}</td><td class="p-2 ${isCorrectClass}">${result.userAnswer || '-'}</td><td class="p-2 text-slate-500">${correctAnswer}</td></tr>`;
-            });
-            tableHTML += `</tbody></table>`;
-            container.innerHTML = tableHTML;
+        const updateGameUI = () => {
+            if (gameState.mode === 'time_trial') {
+                document.getElementById('game-score').textContent = `Aciertos: ${gameState.score}`;
+            } else {
+                const progress = (gameState.currentQuestion / gameState.totalQuestions) * 100;
+                document.getElementById('progress-bar').style.width = `${progress}%`;
+                document.getElementById('game-score').textContent = `Pregunta: ${gameState.currentQuestion} / ${gameState.totalQuestions} | Aciertos: ${gameState.score}`;
+            }
         };
 
-        // --- INICIALIZACIÓN Y EVENTOS ---
-        document.addEventListener('DOMContentLoaded', () => {
-            populateCategories('inorganic');
-            loadTotalScore();
+        const endGame = () => {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            const stats = JSON.parse(localStorage.getItem('formulaChallengeStats')) || { correct: 0, total: 0 };
+            stats.correct += gameState.score;
+            stats.total += gameState.mode === 'time_trial' ? gameState.currentQuestion -1 : gameState.totalQuestions;
+            localStorage.setItem('formulaChallengeStats', JSON.stringify(stats));
 
-            resetScoreBtn.addEventListener('click', resetTotalScore);
-
-            typeRadios.forEach(radio => radio.addEventListener('change', (e) => {
-                setTheme(e.target.value);
-                populateCategories(e.target.value);
-            }));
-
-            startBtn.addEventListener('click', setupGame);
-            restartBtn.addEventListener('click', () => {
-                finalScoreView.classList.add('hidden');
-                setupView.classList.remove('hidden');
-                loadTotalScore();
-            });
-            backToSetupBtn.addEventListener('click', () => {
-                clearInterval(timerInterval);
-                quizView.classList.add('hidden');
-                setupView.classList.remove('hidden');
-                loadTotalScore();
-            });
-
-            checkBtn.addEventListener('click', () => {
-                if (state === 'waiting') {
-                    checkAnswer();
-                } else {
-                    nextQuestion();
-                }
-            });
+            allViews.gameOver.innerHTML = `
+                <h2 class="text-3xl font-bold text-theme mb-4">¡Partida Terminada!</h2>
+                <p class="text-xl text-gray-700 mb-8">Tu puntuación fue: ${gameState.score} aciertos.</p>
+                <button id="play-again-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Jugar de Nuevo</button>`;
             
-            answerInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    checkBtn.click();
-                }
+            document.getElementById('play-again-btn').addEventListener('click', () => {
+                applyThemeColors();
+                updateStatsDisplay();
+                showView(allViews.mainMenu);
             });
-        });
+            showView(allViews.gameOver);
+        };
+
+        // --- INITIALIZATION ---
+        applyThemeColors();
+        updateStatsDisplay();
+        showView(allViews.mainMenu);
+        formulationTypeSelector.querySelector('[data-value="inorganic"]').classList.add('selected');
+        gameModeSelector.querySelector('[data-value="formulate"]').classList.add('selected');
+    });
     </script>
 </body>
 </html>
