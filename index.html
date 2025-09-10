@@ -309,7 +309,7 @@
             { formula: 'Mg(H2PO4)2', names: ['Dihidrogenofosfato de magnesio'], category: 8, incorrectName: 'Fosfato de magnesio'},
         ];
 
-        const organicCompounds = [
+      const organicCompounds = [
     // Hidrocarburos (Categoría 1)
     { formula: 'CH4', names: ['Metano'], category: 1, incorrectName: 'Etano' },
     { formula: 'CH3CH3', names: ['Etano'], category: 1, incorrectName: 'Propano' },
@@ -335,10 +335,10 @@
 
     // Aromáticos y Halogenados (Categoría 2)
     { formula: 'C6H6', names: ['Benceno'], category: 2, incorrectName: 'Ciclohexano' },
-    { formula: 'C6H5CH3', names: ['Metilbenceno', 'Tolueno'], category: 2, incorrectName: 'Etilbenceno' },
-    { formula: 'C6H4(CH3)2', names: ['Dimetilbenceno', 'Xileno'], category: 2, incorrectName: 'Etilbenceno' },
+    { formula: 'C6H5CH3', names: ['Metilbenceno'], category: 2, incorrectName: 'Etilbenceno' },
+    { formula: 'C6H4(CH3)2', names: ['Dimetilbenceno'], category: 2, incorrectName: 'Etilbenceno' },
     { formula: 'C6H5-Cl', names: ['Clorobenceno'], category: 2, incorrectName: 'Bromobenceno' },
-    { formula: 'CHCl3', names: ['Triclorometano', 'Cloroformo'], category: 2, incorrectName: 'Diclorometano' },
+    { formula: 'CHCl3', names: ['Triclorometano'], category: 2, incorrectName: 'Diclorometano' },
     { formula: 'CH3Cl', names: ['Clorometano'], category: 2, incorrectName: 'Cloroetano' },
     { formula: 'CH3CH2Cl', names: ['Cloroetano'], category: 2, incorrectName: 'Clorometano' },
     { formula: 'CH3CH2CH2Cl', names: ['Cloropropano'], category: 2, incorrectName: 'Clorobutano' },
@@ -353,7 +353,7 @@
     { formula: 'CH2F2', names: ['Difluorometano'], category: 2, incorrectName: 'Fluorometano' },
     { formula: 'C6H5CH2Cl', names: ['Cloruro de bencilo'], category: 2, incorrectName: 'Clorobenceno' },
     { formula: 'C6H4BrCl', names: ['1-bromo-4-clorobenceno'], category: 2, incorrectName: '2-bromo-1-clorobenceno' },
-    { formula: 'C6H4(OH)CH3', names: ['Cresol'], category: 2, incorrectName: 'Fenol' },
+    { formula: 'C6H4(OH)CH3', names: ['Metilfenol'], category: 2, incorrectName: 'Fenol' },
 
     // Alcoholes y Éteres (Categoría 3)
     { formula: 'CH3OH', names: ['Metanol'], category: 3, incorrectName: 'Etanol' },
@@ -362,24 +362,24 @@
     { formula: 'CH3CH(OH)CH3', names: ['Propan-2-ol'], category: 3, incorrectName: 'Propan-1-ol' },
     { formula: 'CH3CH2CH2CH2OH', names: ['Butan-1-ol'], category: 3, incorrectName: 'Butan-2-ol' },
     { formula: 'CH3CH(OH)CH2CH3', names: ['Butan-2-ol'], category: 3, incorrectName: 'Butan-1-ol' },
-    { formula: 'CH2(OH)CH(OH)CH2OH', names: ['Propano-1,2,3-triol', 'Glicerol'], category: 3, incorrectName: 'Etanodiol' },
-    { formula: 'CH3OCH3', names: ['Metoximetano', 'Dimetiléter'], category: 3, incorrectName: 'Metoxietano' },
+    { formula: 'CH2(OH)CH(OH)CH2OH', names: ['Propano-1,2,3-triol'], category: 3, incorrectName: 'Etanodiol' },
+    { formula: 'CH3OCH3', names: ['Metoximetano'], category: 3, incorrectName: 'Metoxietano' },
     { formula: 'CH3OCH2CH3', names: ['Metoxietano'], category: 3, incorrectName: 'Dietiléter' },
     { formula: 'CH3CH2OCH2CH3', names: ['Dietiléter'], category: 3, incorrectName: 'Metoxietano' },
     { formula: 'C6H5OH', names: ['Fenol'], category: 3, incorrectName: 'Alcohol bencílico' },
     { formula: 'C6H4(OH)2', names: ['Hidroquinona'], category: 3, incorrectName: 'Fenol' },
     { formula: 'C6H5CH2OH', names: ['Alcohol bencílico'], category: 3, incorrectName: 'Fenol' },
-    { formula: 'CH2OHCH2OH', names: ['Etano-1,2-diol', 'Glicol'], category: 3, incorrectName: 'Propanodiol' },
+    { formula: 'CH2OHCH2OH', names: ['Etano-1,2-diol'], category: 3, incorrectName: 'Propanodiol' },
     { formula: 'CH3CH2CH2CH2CH2OH', names: ['Pentan-1-ol'], category: 3, incorrectName: 'Pentan-2-ol' },
     { formula: 'CH3CH2(CH3)CHOH', names: ['2-Metilbutan-2-ol'], category: 3, incorrectName: '3-Metilbutan-2-ol' },
     { formula: 'CH3OCH(CH3)2', names: ['Metoxi-isopropano'], category: 3, incorrectName: 'Metoxi-propano' },
 
     // Aldehídos y Cetonas (Categoría 4)
-    { formula: 'HCHO', names: ['Metanal', 'Formaldehído'], category: 4, incorrectName: 'Etanal' },
+    { formula: 'HCHO', names: ['Metanal'], category: 4, incorrectName: 'Etanal' },
     { formula: 'CH3CHO', names: ['Etanal'], category: 4, incorrectName: 'Propanal' },
     { formula: 'CH3CH2CHO', names: ['Propanal'], category: 4, incorrectName: 'Butanal' },
     { formula: 'CH3CH2CH2CHO', names: ['Butanal'], category: 4, incorrectName: 'Propanal' },
-    { formula: 'CH3COCH3', names: ['Propanona', 'Acetona'], category: 4, incorrectName: 'Butanona' },
+    { formula: 'CH3COCH3', names: ['Propanona'], category: 4, incorrectName: 'Butanona' },
     { formula: 'CH3COCH2CH3', names: ['Butanona'], category: 4, incorrectName: 'Propanona' },
     { formula: 'CH3COCH2CH2CH3', names: ['Pentan-2-ona'], category: 4, incorrectName: 'Pentan-3-ona' },
     { formula: 'CH3CH2COCH2CH3', names: ['Pentan-3-ona'], category: 4, incorrectName: 'Pentan-2-ona' },
@@ -390,8 +390,8 @@
     { formula: 'C6H4(CHO)2', names: ['1,2-Bencenodicarbaldehído'], category: 4, incorrectName: '1,3-Bencenodicarbaldehído' },
 
     // Ácidos y Ésteres (Categoría 5)
-    { formula: 'HCOOH', names: ['Ácido metanoico', 'Ácido fórmico'], category: 5, incorrectName: 'Ácido etanoico' },
-    { formula: 'CH3COOH', names: ['Ácido etanoico', 'Ácido acético'], category: 5, incorrectName: 'Ácido propanoico' },
+    { formula: 'HCOOH', names: ['Ácido metanoico'], category: 5, incorrectName: 'Ácido etanoico' },
+    { formula: 'CH3COOH', names: ['Ácido etanoico'], category: 5, incorrectName: 'Ácido propanoico' },
     { formula: 'CH3CH2COOH', names: ['Ácido propanoico'], category: 5, incorrectName: 'Ácido butanoico' },
     { formula: 'CH3CH2CH2COOH', names: ['Ácido butanoico'], category: 5, incorrectName: 'Ácido pentanoico' },
     { formula: 'CH3CH2CH2CH2COOH', names: ['Ácido pentanoico'], category: 5, incorrectName: 'Ácido butanoico' },
@@ -410,7 +410,7 @@
     { formula: 'CH3(CH2)4COOH', names: ['Ácido hexanoico'], category: 5, incorrectName: 'Ácido pentanoico' },
     { formula: 'HCOOCH2CH3', names: ['Metanoato de etilo'], category: 5, incorrectName: 'Etanoato de etilo' },
     { formula: 'HOOC-C6H4-COOH', names: ['Ácido ftálico'], category: 5, incorrectName: 'Ácido benzoico' },
-    { formula: 'CH3CH(OH)COOH', names: ['Ácido láctico'], category: 5, incorrectName: 'Ácido propanoico' },
+    { formula: 'CH3CH(OH)COOH', names: ['Ácido 2-hidroxipropanoico'], category: 5, incorrectName: 'Ácido propanoico' },
 
     // Aminas, Amidas y Nitrilos (Categoría 6)
     { formula: 'CH3NH2', names: ['Metilamina'], category: 6, incorrectName: 'Etilamina' },
@@ -425,7 +425,7 @@
     { formula: 'CH3CN', names: ['Acetonitrilo'], category: 6, incorrectName: 'Propanonitrilo' },
     { formula: 'CH3CH2CN', names: ['Propanonitrilo'], category: 6, incorrectName: 'Acetonitrilo' },
     { formula: 'CH3CH2CH2CN', names: ['Butanonitrilo'], category: 6, incorrectName: 'Propanonitrilo' },
-    { formula: 'C6H5NH2', names: ['Fenilamina', 'Anilina'], category: 6, incorrectName: 'Nitroanilina' },
+    { formula: 'C6H5NH2', names: ['Fenilamina'], category: 6, incorrectName: 'Nitroanilina' },
     { formula: 'C6H4(NH2)(OH)', names: ['Aminofenol'], category: 6, incorrectName: 'Anilina' },
     { formula: 'CH3CH2CH2CH2NH2', names: ['Butanamina'], category: 6, incorrectName: 'Pentanamina' },
     { formula: 'HCONH2', names: ['Metanamida'], category: 6, incorrectName: 'Etanamida' },
@@ -650,5 +650,6 @@
     </script>
 </body>
 </html>
+
 
 
