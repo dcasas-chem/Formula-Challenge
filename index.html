@@ -454,6 +454,21 @@
             game: document.getElementById('game-view'),
             gameOver: document.getElementById('game-over-view')
         };
+        // --- HELPER FUNCTIONS ---
+        const applyThemeColors = (theme) => Object.entries(themes[theme]).forEach(([key, value]) => document.documentElement.style.setProperty(key, value));
+        const showView = (viewToShow) => { Object.values(allViews).forEach(view => view.classList.add('hidden')); viewToShow.classList.remove('hidden'); };
+
+        /**
+         * ESTA ES LA FUNCIÓN CLAVE
+         * Formatea una fórmula química para que los números sean subíndices.
+         * @param {string} formula - La fórmula química (ej. "H2SO4").
+         * @returns {string} La fórmula con formato HTML (ej. "H<sub>2</sub>SO<sub>4</sub>").
+         */
+        const formatFormula = (formula) => {
+            if (!formula) return '';
+            // Usa una expresión regular para encontrar todos los números y los envuelve en <sub></sub>
+            return formula.replace(/(\d+)/g, '<sub>$1</sub>');
+        };
         const mainTitle = document.getElementById('main-title');
 
         const applyThemeColors = (theme) => Object.entries(themes[theme]).forEach(([key, value]) => document.documentElement.style.setProperty(key, value));
@@ -651,6 +666,7 @@
     </script>
 </body>
 </html>
+
 
 
 
